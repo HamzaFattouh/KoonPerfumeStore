@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Link, NavLink, useNavigate, useLocation } from 'react-router-dom';
 import { useCart } from '../../context/CartContext';
+import { useLanguage } from '../../context/LanguageContext';
 import { 
   ShoppingBag, 
   Heart, 
@@ -12,12 +13,14 @@ import {
   Truck, 
   PhoneCall, 
   User, 
-  ChevronDown 
+  ChevronDown,
+  Globe
 } from 'lucide-react';
 import { PRODUCTS } from '../../data/products';
 
 const Navbar = () => {
   const { cartCount, wishlist, setIsCartOpen, setQuickViewProduct } = useCart();
+  const { language, setLanguage, t } = useLanguage();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
@@ -62,13 +65,13 @@ const Navbar = () => {
   };
 
   const navLinks = [
-    { to: '/', label: 'الرئيسية' },
-    { to: '/shop', label: 'المتجر والكتالوج' },
-    { to: '/shop?filter=bestseller', label: 'الأكثر مبيعاً ⭐' },
-    { to: '/quiz', label: 'مستكشف العطور 🪐' },
-    { to: '/about', label: 'عن كون بيرفيوم' },
-    { to: '/track-order', label: 'تتبع طلبك' },
-    { to: '/contact', label: 'اتصل بنا' },
+    { to: '/', label: t.nav.home },
+    { to: '/shop', label: t.nav.shop },
+    { to: '/shop?filter=bestseller', label: t.nav.bestsellers },
+    { to: '/quiz', label: t.nav.quiz },
+    { to: '/about', label: t.nav.about },
+    { to: '/track-order', label: t.nav.track },
+    { to: '/contact', label: t.nav.contact },
   ];
 
   return (
@@ -83,14 +86,14 @@ const Navbar = () => {
         <div className="bg-gradient-to-r from-slate-950 via-slate-900 to-slate-950 border-b border-amber-500/20 text-xs py-2 px-4 text-center text-slate-300 flex items-center justify-center gap-4">
           <div className="flex items-center gap-2">
             <Sparkles className="w-3.5 h-3.5 text-amber-400 animate-pulse" />
-            <span>شحن كوني مجاني للطلبات فوق <strong>350 ر.س</strong> | كود الخصم <strong>KOON10</strong> لخصم 10% | عينة فاخرة مجاناً مع كل طلب</span>
+            <span>{t.announcement}</span>
           </div>
         </div>
 
         {/* Main Navbar Header */}
         <header className="bg-slate-950/95 backdrop-blur-md border-b border-slate-800/80 py-2.5 transition-all">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="flex items-center justify-between gap-4">
+            <div className="flex items-center justify-between gap-3 sm:gap-4">
               
               {/* Logo and Brand */}
               <Link to="/" className="flex items-center gap-3 group shrink-0">
@@ -103,16 +106,16 @@ const Navbar = () => {
                 </div>
                 <div className="flex flex-col">
                   <span className="text-xl sm:text-2xl font-black tracking-wide text-white group-hover:text-amber-400 transition">
-                    كون بيرفيوم
+                    {t.brandName}
                   </span>
                   <span className="text-[10px] font-serif uppercase tracking-[0.25em] text-slate-400 group-hover:text-slate-200 transition">
-                    KOON PERFUME
+                    {t.brandSub}
                   </span>
                 </div>
               </Link>
 
               {/* Desktop Navigation Links */}
-              <nav className="hidden lg:flex items-center gap-6">
+              <nav className="hidden lg:flex items-center gap-5 xl:gap-6">
                 {navLinks.map((link) => (
                   <NavLink
                     key={link.to}
@@ -126,15 +129,60 @@ const Navbar = () => {
                 ))}
               </nav>
 
-              {/* Actions: Search, Wishlist, Cart, Profile */}
+              {/* Actions: Language Switcher, Search, Wishlist, Cart, Profile */}
               <div className="flex items-center gap-2 sm:gap-3">
                 
+                {/* 🌐 Two Language Switcher Buttons (عربي / עברית) */}
+                <div className="flex items-center p-1 bg-slate-900/90 border border-slate-700/80 rounded-xl gap-1 backdrop-blur-md shadow-inner">
+                  {/* Arabic Button (زر اللغة العربية) */}
+                  <button
+                    type="button"
+                    onClick={() => setLanguage('ar')}
+                    className={`flex items-center gap-1.5 px-2 sm:px-2.5 py-1.5 rounded-lg text-xs font-bold transition-all duration-300 cursor-pointer ${
+                      language === 'ar'
+                        ? 'bg-gradient-to-r from-amber-500 to-amber-600 text-slate-950 shadow-md shadow-amber-500/30 border border-amber-400'
+                        : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800/60 border border-transparent'
+                    }`}
+                    title="اللغة العربية (Arabic)"
+                    aria-label="اللغة العربية"
+                  >
+                    {/* Arabic Letter Emblem Badge */}
+                    <span className={`w-4 h-4 rounded-full flex items-center justify-center text-[10px] font-black leading-none ${
+                      language === 'ar' ? 'bg-slate-950 text-amber-400' : 'bg-slate-800 text-slate-300'
+                    }`}>
+                      ع
+                    </span>
+                    <span className="hidden sm:inline">عربي</span>
+                  </button>
+
+                  {/* Hebrew Button (زر اللغة العبرية) */}
+                  <button
+                    type="button"
+                    onClick={() => setLanguage('he')}
+                    className={`flex items-center gap-1.5 px-2 sm:px-2.5 py-1.5 rounded-lg text-xs font-bold transition-all duration-300 cursor-pointer ${
+                      language === 'he'
+                        ? 'bg-gradient-to-r from-amber-500 to-amber-600 text-slate-950 shadow-md shadow-amber-500/30 border border-amber-400'
+                        : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800/60 border border-transparent'
+                    }`}
+                    title="עברית (Hebrew)"
+                    aria-label="עברית"
+                  >
+                    {/* Hebrew Letter Emblem Badge */}
+                    <span className={`w-4 h-4 rounded-full flex items-center justify-center text-[10px] font-black leading-none ${
+                      language === 'he' ? 'bg-slate-950 text-amber-400' : 'bg-slate-800 text-slate-300'
+                    }`}>
+                      ע
+                    </span>
+                    <span className="hidden sm:inline">עברית</span>
+                  </button>
+                </div>
+
                 {/* Search Toggle */}
                 <button
                   onClick={() => setSearchOpen(true)}
-                  className="p-2 sm:p-2.5 text-slate-300 hover:text-amber-400 hover:bg-slate-800/80 rounded-xl transition"
-                  title="بحث عن عطر"
-                  aria-label="بحث"
+                  className="p-2 sm:p-2.5 text-slate-300 hover:text-amber-400 hover:bg-slate-800/80 rounded-xl transition cursor-pointer"
+                  title={t.actions.search}
+                  aria-label={t.actions.search}
                 >
                   <Search className="w-5 h-5" />
                 </button>
@@ -143,8 +191,8 @@ const Navbar = () => {
                 <Link
                   to="/wishlist"
                   className="relative p-2 sm:p-2.5 text-slate-300 hover:text-rose-400 hover:bg-slate-800/80 rounded-xl transition"
-                  title="المفضلة"
-                  aria-label="المفضلة"
+                  title={t.actions.wishlist}
+                  aria-label={t.actions.wishlist}
                 >
                   <Heart className="w-5 h-5" />
                   {wishlist.length > 0 && (
@@ -158,8 +206,8 @@ const Navbar = () => {
                 <Link
                   to="/profile"
                   className="p-2 sm:p-2.5 text-slate-300 hover:text-amber-400 hover:bg-slate-800/80 rounded-xl transition hidden sm:flex"
-                  title="حسابي"
-                  aria-label="حسابي"
+                  title={t.nav.profile}
+                  aria-label={t.nav.profile}
                 >
                   <User className="w-5 h-5" />
                 </Link>
@@ -167,8 +215,8 @@ const Navbar = () => {
                 {/* Cart Drawer Trigger */}
                 <button
                   onClick={() => setIsCartOpen(true)}
-                  className="flex items-center gap-2.5 px-3.5 py-2 bg-gradient-to-r from-amber-500/15 to-amber-600/25 hover:from-amber-500/25 hover:to-amber-600/35 border border-amber-500/40 text-amber-300 rounded-xl transition shadow-sm active:scale-95"
-                  aria-label="سلة المشتريات"
+                  className="flex items-center gap-2.5 px-3 sm:px-3.5 py-2 bg-gradient-to-r from-amber-500/15 to-amber-600/25 hover:from-amber-500/25 hover:to-amber-600/35 border border-amber-500/40 text-amber-300 rounded-xl transition shadow-sm active:scale-95 cursor-pointer"
+                  aria-label={t.actions.cartTitle}
                 >
                   <div className="relative">
                     <ShoppingBag className="w-5 h-5" />
@@ -178,13 +226,13 @@ const Navbar = () => {
                       </span>
                     )}
                   </div>
-                  <span className="text-xs font-bold hidden md:inline">السلة</span>
+                  <span className="text-xs font-bold hidden md:inline">{t.nav.cart}</span>
                 </button>
 
                 {/* Mobile Menu Button */}
                 <button
                   onClick={() => setMobileMenuOpen(true)}
-                  className="lg:hidden p-2 text-slate-300 hover:text-white hover:bg-slate-800 rounded-xl transition"
+                  className="lg:hidden p-2 text-slate-300 hover:text-white hover:bg-slate-800 rounded-xl transition cursor-pointer"
                   aria-label="القائمة"
                 >
                   <Menu className="w-6 h-6" />
@@ -210,7 +258,7 @@ const Navbar = () => {
                 type="text"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                placeholder="ابحث بالاسم، العائلة العطرية، النوتات (مثال: عود، فانيليا، الشفق، نيش)..."
+                placeholder={t.actions.searchPlaceholder}
                 className="w-full bg-transparent text-slate-100 placeholder-slate-500 text-base focus:outline-none"
               />
               {searchQuery && (
@@ -270,7 +318,7 @@ const Navbar = () => {
                       <div className="flex-1 min-w-0">
                         <div className="flex items-center justify-between">
                           <h4 className="text-sm font-bold text-white truncate">{product.name}</h4>
-                          <span className="text-sm font-mono font-bold text-amber-400">{product.price} ر.س</span>
+                          <span className="text-sm font-mono font-bold text-amber-400">{product.price} {t.currency}</span>
                         </div>
                         <div className="flex items-center gap-2 text-xs text-slate-400 mt-0.5">
                           <span>{product.nameEn}</span>
@@ -301,8 +349,8 @@ const Navbar = () => {
                 <div className="flex items-center gap-3">
                   <img src="/koon-logo.jpg" alt="Logo" className="w-10 h-10 rounded-full object-cover border border-amber-400/40" />
                   <div>
-                    <h3 className="font-bold text-white text-base">كون بيرفيوم</h3>
-                    <span className="text-[10px] text-slate-400 font-serif tracking-widest">KOON PERFUME</span>
+                    <h3 className="font-bold text-white text-base">{t.brandName}</h3>
+                    <span className="text-[10px] text-slate-400 font-serif tracking-widest">{t.brandSub}</span>
                   </div>
                 </div>
                 <button
@@ -313,8 +361,40 @@ const Navbar = () => {
                 </button>
               </div>
 
+              {/* Language Switcher inside Mobile Drawer */}
+              <div className="py-4 border-b border-slate-800">
+                <span className="text-xs text-slate-400 block mb-2 font-semibold">اختر اللغة / בחר שפה:</span>
+                <div className="grid grid-cols-2 gap-2">
+                  <button
+                    type="button"
+                    onClick={() => setLanguage('ar')}
+                    className={`flex items-center justify-center gap-2 py-2 px-3 rounded-xl text-xs font-bold border transition ${
+                      language === 'ar'
+                        ? 'bg-amber-500 text-slate-950 border-amber-400 shadow-md shadow-amber-500/25'
+                        : 'bg-slate-900 text-slate-300 border-slate-700'
+                    }`}
+                  >
+                    <span className="w-4 h-4 rounded-full bg-slate-950 text-amber-400 flex items-center justify-center text-[10px] font-black">ع</span>
+                    <span>عربي</span>
+                  </button>
+
+                  <button
+                    type="button"
+                    onClick={() => setLanguage('he')}
+                    className={`flex items-center justify-center gap-2 py-2 px-3 rounded-xl text-xs font-bold border transition ${
+                      language === 'he'
+                        ? 'bg-amber-500 text-slate-950 border-amber-400 shadow-md shadow-amber-500/25'
+                        : 'bg-slate-900 text-slate-300 border-slate-700'
+                    }`}
+                  >
+                    <span className="w-4 h-4 rounded-full bg-slate-950 text-amber-400 flex items-center justify-center text-[10px] font-black">ע</span>
+                    <span>עברית</span>
+                  </button>
+                </div>
+              </div>
+
               {/* Links */}
-              <nav className="py-6 space-y-2">
+              <nav className="py-4 space-y-2">
                 {navLinks.map((link) => (
                   <NavLink
                     key={link.to}
@@ -334,23 +414,20 @@ const Navbar = () => {
                   onClick={() => setMobileMenuOpen(false)}
                   className="block px-4 py-3 rounded-xl text-sm font-semibold text-slate-300 hover:bg-slate-900 hover:text-white transition"
                 >
-                  حسابي والطلبات
+                  {t.nav.profile}
                 </NavLink>
                 <NavLink
                   to="/faq"
                   onClick={() => setMobileMenuOpen(false)}
                   className="block px-4 py-3 rounded-xl text-sm font-semibold text-slate-300 hover:bg-slate-900 hover:text-white transition"
                 >
-                  الأسئلة الشائعة والضمان
+                  {t.nav.faq}
                 </NavLink>
               </nav>
             </div>
 
             {/* Bottom contact info */}
-            <div className="pt-6 border-t border-slate-800 space-y-3">
-              <div className="text-xs text-slate-400 leading-relaxed">
-                خدمة العملاء متوفرة يومياً لمساعدتك في اختيار عطرك الفلكي.
-              </div>
+            <div className="pt-4 border-t border-slate-800 space-y-3">
               <a 
                 href="https://wa.me/966500000000" 
                 target="_blank" 

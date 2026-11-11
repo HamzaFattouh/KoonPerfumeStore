@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <title>خلفية كون بيرفيوم الفلكية - Koon Perfume Background</title>
+  <style>
+    body {
+      margin: 0;
+      background: #06070a;
+      color: #fff;
+      font-family: sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      overflow: hidden;
+    }
+    canvas {
+      box-shadow: 0 0 50px rgba(0,0,0,0.8);
+      max-width: 90vw;
+      max-height: 75vh;
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 12px;
+    }
+    .btn {
+      margin-top: 20px;
+      padding: 12px 28px;
+      background: linear-gradient(135deg, #f59e0b, #d97706);
+      color: #000;
+      font-weight: bold;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 14px;
+      box-shadow: 0 4px 15px rgba(245, 158, 11, 0.3);
+      transition: all 0.2s;
+    }
+    .btn:hover {
+      transform: scale(1.05);
+      background: linear-gradient(135deg, #fbbf24, #f59e0b);
+    }
+  </style>
+</head>
+<body>
+  <canvas id="bgCanvas" width="1920" height="1080"></canvas>
+  <button class="btn" id="dlBtn">تحميل خلفية الموقع بدقة 1920x1080 (PNG) 📥</button>
+
+  <script>
+    const canvas = document.getElementById('bgCanvas');
+    const ctx = canvas.getContext('2d');
+    const w = 1920;
+    const h = 1080;
+
+    // 1. Deep Space Obsidian Base
+    ctx.fillStyle = '#06070a';
+    ctx.fillRect(0, 0, w, h);
+
+    // 2. Nebula Glows
+    // Top-Right Indigo Glow
+    const g1 = ctx.createRadialGradient(w * 0.75, h * 0.2, 0, w * 0.75, h * 0.2, 600);
+    g1.addColorStop(0, 'rgba(49, 46, 129, 0.22)');
+    g1.addColorStop(1, 'rgba(49, 46, 129, 0)');
+    ctx.fillStyle = g1;
+    ctx.fillRect(0, 0, w, h);
+
+    // Top-Left Warm Gold Nebula
+    const g2 = ctx.createRadialGradient(w * 0.2, h * 0.35, 0, w * 0.2, h * 0.35, 500);
+    g2.addColorStop(0, 'rgba(180, 83, 9, 0.16)');
+    g2.addColorStop(1, 'rgba(180, 83, 9, 0)');
+    ctx.fillStyle = g2;
+    ctx.fillRect(0, 0, w, h);
+
+    // Bottom Ambient Space
+    const g3 = ctx.createRadialGradient(w * 0.6, h * 0.85, 0, w * 0.6, h * 0.85, 700);
+    g3.addColorStop(0, 'rgba(30, 41, 59, 0.3)');
+    g3.addColorStop(1, 'rgba(30, 41, 59, 0)');
+    ctx.fillStyle = g3;
+    ctx.fillRect(0, 0, w, h);
+
+    // 3. Starlight Field
+    const colors = [
+      'rgba(255, 255, 255, ',
+      'rgba(254, 243, 199, ',
+      'rgba(212, 175, 55, ',
+      'rgba(224, 231, 255, ',
+      'rgba(186, 230, 253, '
+    ];
+
+    for (let i = 0; i < 280; i++) {
+      const x = Math.random() * w;
+      const y = Math.random() * h;
+      const radius = Math.random() * 1.8 + 0.4;
+      const alpha = Math.random() * 0.75 + 0.25;
+      const color = colors[Math.floor(Math.random() * colors.length)];
+
+      ctx.beginPath();
+      ctx.arc(x, y, radius, 0, Math.PI * 2);
+      ctx.fillStyle = color + alpha + ')';
+      ctx.fill();
+
+      // Flare cross for prominent stars
+      if (Math.random() > 0.88) {
+        const flare = radius * 4;
+        ctx.strokeStyle = color + (alpha * 0.4) + ')';
+        ctx.lineWidth = 0.8;
+        ctx.beginPath();
+        ctx.moveTo(x - flare, y);
+        ctx.lineTo(x + flare, y);
+        ctx.moveTo(x, y - flare);
+        ctx.lineTo(x, y + flare);
+        ctx.stroke();
+      }
+    }
+
+    // 4. Elegant Golden Shooting Star (شهاب مضيء)
+    const mHeadX = w * 0.62;
+    const mHeadY = h * 0.38;
+    const mAngle = (Math.PI / 180) * 140; // 140 deg
+    const mLen = 220;
+    const mTailX = mHeadX - Math.cos(mAngle) * mLen;
+    const mTailY = mHeadY - Math.sin(mAngle) * mLen;
+
+    const mGrad = ctx.createLinearGradient(mHeadX, mHeadY, mTailX, mTailY);
+    mGrad.addColorStop(0, 'rgba(255, 255, 255, 1)');
+    mGrad.addColorStop(0.12, 'rgba(253, 224, 71, 0.9)');
+    mGrad.addColorStop(0.5, 'rgba(212, 175, 55, 0.4)');
+    mGrad.addColorStop(1, 'rgba(212, 175, 55, 0)');
+
+    ctx.beginPath();
+    ctx.moveTo(mHeadX, mHeadY);
+    ctx.lineTo(mTailX, mTailY);
+    ctx.strokeStyle = mGrad;
+    ctx.lineWidth = 2.2;
+    ctx.lineCap = 'round';
+    ctx.stroke();
+
+    // Meteor glowing head
+    ctx.beginPath();
+    ctx.arc(mHeadX, mHeadY, 2.5, 0, Math.PI * 2);
+    ctx.fillStyle = '#ffffff';
+    ctx.shadowColor = '#d4af37';
+    ctx.shadowBlur = 12;
+    ctx.fill();
+
+    // Download handler
+    document.getElementById('dlBtn').addEventListener('click', () => {
+      const link = document.createElement('a');
+      link.download = 'koon-website-background.png';
+      link.href = canvas.toDataURL('image/png');
+      link.click();
+    });
+  </script>
+</body>
+</html>
+

@@ -17,8 +17,10 @@ import {
 } from 'lucide-react';
 import { PRODUCTS, TESTIMONIALS } from '../data/products';
 import ProductCard from '../components/products/ProductCard';
+import { useLanguage } from '../context/LanguageContext';
 
 const Home = () => {
+  const { t } = useLanguage();
   // Video Intro States
   const [videoEnded, setVideoEnded] = useState(false);
   const [isMuted, setIsMuted] = useState(true);
@@ -145,7 +147,7 @@ const Home = () => {
               to="/shop"
               className="px-8 py-3.5 bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-slate-950 font-black text-xs sm:text-sm rounded-xl shadow-2xl shadow-amber-500/30 transition transform hover:-translate-y-0.5 active:scale-95 flex items-center gap-2"
             >
-              <span>استكشف عطور كون الفلكية</span>
+              <span>{t.actions.exploreBtn}</span>
               <ArrowLeft className="w-4 h-4" />
             </Link>
 
@@ -154,7 +156,7 @@ const Home = () => {
               className="px-6 py-3.5 bg-slate-950/85 hover:bg-slate-900 text-slate-200 border border-slate-700/80 font-bold text-xs sm:text-sm rounded-xl transition flex items-center gap-2 backdrop-blur-md hover:border-amber-400/50"
             >
               <Compass className="w-4 h-4 text-amber-400" />
-              <span>مستكشف العطور (Quiz)</span>
+              <span>{t.actions.quizBtn}</span>
             </Link>
           </div>
 
@@ -163,7 +165,7 @@ const Home = () => {
             onClick={scrollToContent}
             className="flex items-center gap-2 text-xs text-slate-400 hover:text-amber-300 transition pt-1 animate-bounce cursor-pointer group"
           >
-            <span>مرر للأسفل لاكتشاف المجموعات</span>
+            <span>{t.actions.scrollDown}</span>
             <ChevronDown className="w-4 h-4 text-amber-400 group-hover:translate-y-0.5 transition" />
           </button>
         </div>
