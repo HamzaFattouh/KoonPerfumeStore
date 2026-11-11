@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import { 
   Sparkles, 
@@ -7,26 +7,64 @@ import {
   ShieldCheck, 
   Clock, 
   Star, 
-  ChevronRight, 
+  ChevronDown, 
   Gift, 
   Flame, 
-  Award 
+  Award,
+  Volume2,
+  VolumeX,
+  RotateCcw
 } from 'lucide-react';
 import { PRODUCTS, TESTIMONIALS } from '../data/products';
 import ProductCard from '../components/products/ProductCard';
 
 const Home = () => {
-  // Track scroll position for grand logo shrink-and-dock transition
-  const [scrollY, setScrollY] = useState(0);
+  // Video Intro States
+  const [videoEnded, setVideoEnded] = useState(false);
+  const [isMuted, setIsMuted] = useState(true);
+  const videoRef = useRef(null);
+  const heroRef = useRef(null);
 
+  // Auto-play opening video
   useEffect(() => {
-    const handleScroll = () => {
-      setScrollY(window.scrollY);
-    };
-    handleScroll();
-    window.addEventListener('scroll', handleScroll, { passive: true });
-    return () => window.removeEventListener('scroll', handleScroll);
+    if (videoRef.current) {
+      videoRef.current.play().catch(e => {
+        console.log('Autoplay handled', e);
+      });
+    }
   }, []);
+
+  const handleVideoEnded = () => {
+    setVideoEnded(true);
+    // Freeze on the last frame
+    if (videoRef.current) {
+      videoRef.current.pause();
+    }
+  };
+
+  const handleReplay = () => {
+    if (videoRef.current) {
+      videoRef.current.currentTime = 0;
+      videoRef.current.play();
+      setVideoEnded(false);
+    }
+  };
+
+  const toggleMute = () => {
+    if (videoRef.current) {
+      videoRef.current.muted = !videoRef.current.muted;
+      setIsMuted(videoRef.current.muted);
+    }
+  };
+
+  const scrollToContent = () => {
+    const target = document.getElementById('brand-pillars');
+    if (target) {
+      target.scrollIntoView({ behavior: 'smooth' });
+    } else {
+      window.scrollTo({ top: window.innerHeight - 40, behavior: 'smooth' });
+    }
+  };
 
   // Countdown timer for Cosmic Limited Offer
   const [timeLeft, setTimeLeft] = useState({
@@ -57,159 +95,82 @@ const Home = () => {
   return (
     <div className="space-y-20 pb-20">
       
-      {/* 1. Hero Section */}
-      <section className="relative min-h-[90vh] flex flex-col items-center justify-start pt-4 sm:pt-6 overflow-hidden">
-        
-        {/* Grand Brand Logo & Name (اللوغو الكبير مع الاسم الذي يصغر عند السكرول ليدخل في الـ Navbar) */}
-        <div 
-          className="w-full max-w-7xl mx-auto px-4 z-20 transition-all duration-300 ease-out"
-          style={{
-            transform: `scale(${Math.max(0.6, 1 - scrollY * 0.004)}) translateY(-${Math.min(30, scrollY * 0.3)}px)`,
-            opacity: Math.max(0, 1 - scrollY / 75),
-            display: scrollY > 95 ? 'none' : 'block'
-          }}
-        >
-          <div className="flex flex-col items-center justify-center text-center pt-2 pb-6">
-            
-            {/* Big Orbit Logo */}
-            <div className="relative mb-3 group cursor-pointer">
-              {/* Subtle orbiting celestial glow rings */}
-              <div className="absolute -inset-4 rounded-full border border-slate-700/60 animate-spin-slow pointer-events-none" />
-              <div className="absolute -inset-2 rounded-full border border-dashed border-amber-500/30 pointer-events-none" />
-              <div className="absolute inset-0 rounded-full bg-amber-500/15 blur-xl pointer-events-none" />
+      {/* 1. Opening Video Hero Section (الفيديو الافتتاحي بكامل مساحة الصفحة مع الثبات على اللوغو) */}
+      <section 
+        ref={heroRef}
+        className="relative w-full h-[100dvh] min-h-[600px] flex items-center justify-center bg-[#050608] overflow-hidden"
+      >
+        {/* Cinematic Intro Video */}
+        <video
+          ref={videoRef}
+          src="/intro.mp4"
+          autoPlay
+          muted={isMuted}
+          playsInline
+          onEnded={handleVideoEnded}
+          className="w-full h-full object-contain sm:object-cover select-none transition-all duration-700"
+        />
 
-              <div className="relative w-28 h-28 sm:w-36 sm:h-36 rounded-full overflow-hidden border-2 border-slate-600/80 shadow-2xl p-0.5 bg-slate-950 flex items-center justify-center group-hover:border-amber-400/80 transition-all duration-500">
-                <img 
-                  src="/koon-logo.jpg" 
-                  alt="Koon Perfume Logo" 
-                  className="w-full h-full object-cover rounded-full group-hover:scale-105 transition-transform duration-500"
-                />
-              </div>
-            </div>
+        {/* Ambient Dark Cosmic Vignette Edge */}
+        <div className="absolute inset-0 pointer-events-none bg-gradient-to-t from-[#06070a] via-transparent to-[#06070a]/40" />
 
-            {/* Large Brand Typography */}
-            <div className="space-y-1">
-              <h2 className="text-3xl sm:text-5xl font-black text-white tracking-wide drop-shadow-md">
-                كون بيرفيوم
-              </h2>
-              <p className="text-xs sm:text-sm font-serif uppercase tracking-[0.35em] text-slate-400 font-medium">
-                KOON PERFUME
-              </p>
-            </div>
-          </div>
+        {/* Video Controls (Sound Toggle & Replay) */}
+        <div className="absolute top-6 left-6 z-20 flex items-center gap-2.5">
+          <button
+            onClick={toggleMute}
+            className="p-2.5 rounded-full bg-slate-950/75 hover:bg-slate-900 border border-slate-700/60 text-slate-300 hover:text-amber-400 backdrop-blur-md transition shadow-lg cursor-pointer"
+            title={isMuted ? 'تشغيل الصوت' : 'كتم الصوت'}
+            aria-label="التحكم بالصوت"
+          >
+            {isMuted ? <VolumeX className="w-4 h-4" /> : <Volume2 className="w-4 h-4 text-amber-400" />}
+          </button>
+
+          <button
+            onClick={handleReplay}
+            className="p-2.5 rounded-full bg-slate-950/75 hover:bg-slate-900 border border-slate-700/60 text-slate-300 hover:text-amber-400 backdrop-blur-md transition shadow-lg cursor-pointer"
+            title="إعادة تشغيل الفيديو الافتتاحي"
+            aria-label="إعادة التشغيل"
+          >
+            <RotateCcw className="w-4 h-4" />
+          </button>
         </div>
 
-        {/* Celestial Ring Animation behind Hero */}
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[350px] sm:w-[650px] h-[350px] sm:h-[650px] rounded-full border border-slate-700/30 pointer-events-none animate-spin-slow" />
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[280px] sm:w-[500px] h-[280px] sm:h-[500px] rounded-full border border-dashed border-amber-500/20 pointer-events-none" />
+        {/* Floating Actions when video plays/freezes on logo */}
+        <div className={`absolute bottom-8 inset-x-0 z-20 flex flex-col items-center justify-center gap-4 transition-all duration-700 ${
+          videoEnded ? 'opacity-100 translate-y-0' : 'opacity-90 translate-y-0'
+        }`}>
+          {/* Quick CTA Buttons */}
+          <div className="flex flex-wrap items-center justify-center gap-3 px-4">
+            <Link
+              to="/shop"
+              className="px-8 py-3.5 bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-slate-950 font-black text-xs sm:text-sm rounded-xl shadow-2xl shadow-amber-500/30 transition transform hover:-translate-y-0.5 active:scale-95 flex items-center gap-2"
+            >
+              <span>استكشف عطور كون الفلكية</span>
+              <ArrowLeft className="w-4 h-4" />
+            </Link>
 
-        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-10 flex flex-col lg:flex-row items-center justify-between gap-12 z-10 w-full">
-          
-          {/* Left Text Column */}
-          <div className="flex-1 text-center lg:text-right space-y-6">
-            <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-slate-900/90 border border-amber-500/30 text-amber-300 text-xs font-semibold backdrop-blur-md shadow-lg shadow-amber-500/10">
-              <Sparkles className="w-4 h-4 text-amber-400" />
-              <span>إصدارات فلكية مستوحاة من مدارات وأسرار الكون</span>
-            </div>
-
-            <h1 className="text-4xl sm:text-6xl font-black text-white leading-tight">
-              الفخامة في <br />
-              <span className="text-gold-gradient">أبعاد كوكبية لا نهائية</span>
-            </h1>
-
-            <p className="text-base sm:text-lg text-slate-300 max-w-xl mx-auto lg:mx-0 leading-relaxed font-light">
-              مرحباً بك في دار <strong className="text-white font-semibold">كون بيرفيوم</strong>. نبتكر عطور نيش استثنائية تمزج بين عراقة العود والعنبر الشرقي وأرقى مستخلصات الطبيعة، لتمنحك حضوراً آسراً يدوم طويلاً كخلود النجوم.
-            </p>
-
-            {/* CTAs */}
-            <div className="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4 pt-4">
-              <Link
-                to="/shop"
-                className="w-full sm:w-auto px-8 py-4 bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-slate-950 font-extrabold text-sm rounded-xl shadow-xl shadow-amber-500/25 transition-all transform hover:-translate-y-0.5 active:translate-y-0 flex items-center justify-center gap-2"
-              >
-                <span>استكشف التشكيلة الفلكية</span>
-                <ArrowLeft className="w-4 h-4" />
-              </Link>
-
-              <Link
-                to="/quiz"
-                className="w-full sm:w-auto px-7 py-4 bg-slate-900/80 hover:bg-slate-800 text-slate-200 border border-slate-700 font-bold text-sm rounded-xl transition flex items-center justify-center gap-2 backdrop-blur-md"
-              >
-                <Compass className="w-4 h-4 text-amber-400" />
-                <span>اكتشف عطرك المناسب (Quiz)</span>
-              </Link>
-            </div>
-
-            {/* Social Proof */}
-            <div className="pt-6 flex items-center justify-center lg:justify-start gap-6 text-xs text-slate-400 border-t border-slate-800/80">
-              <div className="flex items-center gap-1.5">
-                <div className="flex text-amber-400">
-                  {[...Array(5)].map((_, i) => (
-                    <Star key={i} className="w-3.5 h-3.5 fill-amber-400" />
-                  ))}
-                </div>
-                <span className="font-bold text-slate-200">4.9 / 5</span>
-              </div>
-              <span>•</span>
-              <span>أكثر من <strong>12,000+</strong> عميل في المملكة والخليج</span>
-            </div>
+            <Link
+              to="/quiz"
+              className="px-6 py-3.5 bg-slate-950/85 hover:bg-slate-900 text-slate-200 border border-slate-700/80 font-bold text-xs sm:text-sm rounded-xl transition flex items-center gap-2 backdrop-blur-md hover:border-amber-400/50"
+            >
+              <Compass className="w-4 h-4 text-amber-400" />
+              <span>مستكشف العطور (Quiz)</span>
+            </Link>
           </div>
 
-          {/* Right Visual Column: Signature Bottle Highlight */}
-          <div className="flex-1 relative flex items-center justify-center">
-            
-            {/* Glowing Backdrop */}
-            <div className="absolute inset-0 bg-gradient-to-r from-amber-500/20 via-indigo-500/10 to-transparent rounded-full blur-3xl pointer-events-none" />
-
-            {/* Floating Orbit Cards */}
-            <div className="relative w-full max-w-md aspect-square flex items-center justify-center">
-              
-              {/* Centerpiece Image */}
-              <div className="relative z-10 w-72 h-80 sm:w-80 sm:h-96 rounded-3xl bg-slate-950/80 border border-slate-800/80 p-6 flex flex-col items-center justify-between shadow-2xl backdrop-blur-xl group hover:border-amber-500/50 transition-all duration-500">
-                <div className="w-full flex justify-between items-center text-xs">
-                  <span className="px-2.5 py-1 rounded-full bg-amber-500/20 text-amber-300 font-bold border border-amber-500/30">
-                    توقيع الدار الأيقوني
-                  </span>
-                  <span className="font-mono text-slate-400 text-[11px]">KOON-01</span>
-                </div>
-
-                <img 
-                  src={PRODUCTS[0].images[0]} 
-                  alt="Koon Absolute Perfume Bottle"
-                  className="w-48 h-48 object-contain rounded-2xl shadow-inner group-hover:scale-105 transition-transform duration-700" 
-                />
-
-                <div className="w-full text-center">
-                  <h3 className="text-xl font-black text-white">كون أبسولوت</h3>
-                  <p className="text-xs text-amber-400 font-serif tracking-widest mt-0.5">KOON ABSOLUTE</p>
-                  <div className="mt-2 text-sm font-bold text-slate-200 font-mono">480 ر.س</div>
-                </div>
-              </div>
-
-              {/* Floating Badge 1: Longevity */}
-              <div className="absolute -top-3 -right-2 sm:right-0 z-20 bg-slate-900/90 border border-slate-700/80 px-4 py-2.5 rounded-2xl shadow-xl backdrop-blur-md flex items-center gap-2.5 animate-float">
-                <Clock className="w-4 h-4 text-amber-400" />
-                <div className="text-right">
-                  <div className="text-[11px] font-bold text-white">ثبات 24 ساعة</div>
-                  <div className="text-[10px] text-slate-400">تركيز Extrait 35%</div>
-                </div>
-              </div>
-
-              {/* Floating Badge 2: Natural Ingredients */}
-              <div className="absolute -bottom-3 -left-2 sm:left-0 z-20 bg-slate-900/90 border border-slate-700/80 px-4 py-2.5 rounded-2xl shadow-xl backdrop-blur-md flex items-center gap-2.5 animate-float" style={{ animationDelay: '2s' }}>
-                <Award className="w-4 h-4 text-emerald-400" />
-                <div className="text-right">
-                  <div className="text-[11px] font-bold text-white">زيوت نقية 100%</div>
-                  <div className="text-[10px] text-slate-400">مستوردة من غراس وفرنسا</div>
-                </div>
-              </div>
-            </div>
-          </div>
+          {/* Smooth Scroll Cue */}
+          <button
+            onClick={scrollToContent}
+            className="flex items-center gap-2 text-xs text-slate-400 hover:text-amber-300 transition pt-1 animate-bounce cursor-pointer group"
+          >
+            <span>مرر للأسفل لاكتشاف المجموعات</span>
+            <ChevronDown className="w-4 h-4 text-amber-400 group-hover:translate-y-0.5 transition" />
+          </button>
         </div>
       </section>
 
       {/* 2. Brand Value Pillars */}
-      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <section id="brand-pillars" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-8">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           <div className="bg-slate-900/40 border border-slate-800/80 p-8 rounded-2xl backdrop-blur-sm hover:border-slate-700 transition">
             <span className="text-3xl mb-4 block">🪐</span>

@@ -28,14 +28,10 @@ const Navbar = () => {
 
   const isHome = location.pathname === '/';
 
-  // Handle scroll effect: on Home page, navbar appears when scrolled > 65px
+  // On Home page, navbar appears when scrolled past the opening video (> 80px)
   useEffect(() => {
     const handleScroll = () => {
-      if (window.scrollY > 65) {
-        setScrolled(true);
-      } else {
-        setScrolled(false);
-      }
+      setScrolled(window.scrollY > 80);
     };
     handleScroll();
     window.addEventListener('scroll', handleScroll, { passive: true });
@@ -77,7 +73,7 @@ const Navbar = () => {
 
   return (
     <>
-      {/* Wrapper that hides when at top of Home page, and slides down on scroll */}
+      {/* Fixed Navbar Container: hidden during full-screen video, slides in on scroll */}
       <div className={`fixed top-0 inset-x-0 z-40 transition-all duration-500 ease-in-out ${
         isHome && !scrolled
           ? '-translate-y-full opacity-0 pointer-events-none'
@@ -91,12 +87,12 @@ const Navbar = () => {
           </div>
         </div>
 
-        {/* Main Header */}
+        {/* Main Navbar Header */}
         <header className="bg-slate-950/95 backdrop-blur-md border-b border-slate-800/80 py-2.5 transition-all">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="flex items-center justify-between gap-4">
               
-              {/* Logo and Brand (Docked in Navbar) */}
+              {/* Logo and Brand */}
               <Link to="/" className="flex items-center gap-3 group shrink-0">
                 <div className="relative w-11 h-11 sm:w-12 sm:h-12 rounded-full overflow-hidden border-2 border-slate-700/80 group-hover:border-amber-400/80 transition-all shadow-md group-hover:shadow-amber-500/20">
                   <img 
@@ -115,89 +111,89 @@ const Navbar = () => {
                 </div>
               </Link>
 
-            {/* Desktop Navigation Links */}
-            <nav className="hidden lg:flex items-center gap-6">
-              {navLinks.map((link) => (
-                <NavLink
-                  key={link.to}
-                  to={link.to}
-                  className={({ isActive }) => `text-sm font-medium transition-colors hover:text-amber-400 relative py-1 ${
-                    isActive ? 'text-amber-400 font-semibold' : 'text-slate-300'
-                  }`}
+              {/* Desktop Navigation Links */}
+              <nav className="hidden lg:flex items-center gap-6">
+                {navLinks.map((link) => (
+                  <NavLink
+                    key={link.to}
+                    to={link.to}
+                    className={({ isActive }) => `text-sm font-medium transition-colors hover:text-amber-400 relative py-1 ${
+                      isActive ? 'text-amber-400 font-semibold' : 'text-slate-300'
+                    }`}
+                  >
+                    {link.label}
+                  </NavLink>
+                ))}
+              </nav>
+
+              {/* Actions: Search, Wishlist, Cart, Profile */}
+              <div className="flex items-center gap-2 sm:gap-3">
+                
+                {/* Search Toggle */}
+                <button
+                  onClick={() => setSearchOpen(true)}
+                  className="p-2 sm:p-2.5 text-slate-300 hover:text-amber-400 hover:bg-slate-800/80 rounded-xl transition"
+                  title="بحث عن عطر"
+                  aria-label="بحث"
                 >
-                  {link.label}
-                </NavLink>
-              ))}
-            </nav>
+                  <Search className="w-5 h-5" />
+                </button>
 
-            {/* Actions: Search, Wishlist, Cart, Profile */}
-            <div className="flex items-center gap-2 sm:gap-3">
-              
-              {/* Search Toggle */}
-              <button
-                onClick={() => setSearchOpen(true)}
-                className="p-2 sm:p-2.5 text-slate-300 hover:text-amber-400 hover:bg-slate-800/80 rounded-xl transition"
-                title="بحث عن عطر"
-                aria-label="بحث"
-              >
-                <Search className="w-5 h-5" />
-              </button>
-
-              {/* Wishlist Link */}
-              <Link
-                to="/wishlist"
-                className="relative p-2 sm:p-2.5 text-slate-300 hover:text-rose-400 hover:bg-slate-800/80 rounded-xl transition"
-                title="المفضلة"
-                aria-label="المفضلة"
-              >
-                <Heart className="w-5 h-5" />
-                {wishlist.length > 0 && (
-                  <span className="absolute top-1 right-1 w-4 h-4 bg-rose-500 text-white text-[10px] font-bold rounded-full flex items-center justify-center animate-scale-up">
-                    {wishlist.length}
-                  </span>
-                )}
-              </Link>
-
-              {/* Profile Link */}
-              <Link
-                to="/profile"
-                className="p-2 sm:p-2.5 text-slate-300 hover:text-amber-400 hover:bg-slate-800/80 rounded-xl transition hidden sm:flex"
-                title="حسابي"
-                aria-label="حسابي"
-              >
-                <User className="w-5 h-5" />
-              </Link>
-
-              {/* Cart Drawer Trigger */}
-              <button
-                onClick={() => setIsCartOpen(true)}
-                className="flex items-center gap-2.5 px-3.5 py-2 bg-gradient-to-r from-amber-500/15 to-amber-600/25 hover:from-amber-500/25 hover:to-amber-600/35 border border-amber-500/40 text-amber-300 rounded-xl transition shadow-sm active:scale-95"
-                aria-label="سلة المشتريات"
-              >
-                <div className="relative">
-                  <ShoppingBag className="w-5 h-5" />
-                  {cartCount > 0 && (
-                    <span className="absolute -top-2 -right-2 w-4 h-4 bg-amber-500 text-slate-950 text-[10px] font-black rounded-full flex items-center justify-center">
-                      {cartCount}
+                {/* Wishlist Link */}
+                <Link
+                  to="/wishlist"
+                  className="relative p-2 sm:p-2.5 text-slate-300 hover:text-rose-400 hover:bg-slate-800/80 rounded-xl transition"
+                  title="المفضلة"
+                  aria-label="المفضلة"
+                >
+                  <Heart className="w-5 h-5" />
+                  {wishlist.length > 0 && (
+                    <span className="absolute top-1 right-1 w-4 h-4 bg-rose-500 text-white text-[10px] font-bold rounded-full flex items-center justify-center animate-scale-up">
+                      {wishlist.length}
                     </span>
                   )}
-                </div>
-                <span className="text-xs font-bold hidden md:inline">السلة</span>
-              </button>
+                </Link>
 
-              {/* Mobile Menu Button */}
-              <button
-                onClick={() => setMobileMenuOpen(true)}
-                className="lg:hidden p-2 text-slate-300 hover:text-white hover:bg-slate-800 rounded-xl transition"
-                aria-label="القائمة"
-              >
-                <Menu className="w-6 h-6" />
-              </button>
+                {/* Profile Link */}
+                <Link
+                  to="/profile"
+                  className="p-2 sm:p-2.5 text-slate-300 hover:text-amber-400 hover:bg-slate-800/80 rounded-xl transition hidden sm:flex"
+                  title="حسابي"
+                  aria-label="حسابي"
+                >
+                  <User className="w-5 h-5" />
+                </Link>
+
+                {/* Cart Drawer Trigger */}
+                <button
+                  onClick={() => setIsCartOpen(true)}
+                  className="flex items-center gap-2.5 px-3.5 py-2 bg-gradient-to-r from-amber-500/15 to-amber-600/25 hover:from-amber-500/25 hover:to-amber-600/35 border border-amber-500/40 text-amber-300 rounded-xl transition shadow-sm active:scale-95"
+                  aria-label="سلة المشتريات"
+                >
+                  <div className="relative">
+                    <ShoppingBag className="w-5 h-5" />
+                    {cartCount > 0 && (
+                      <span className="absolute -top-2 -right-2 w-4 h-4 bg-amber-500 text-slate-950 text-[10px] font-black rounded-full flex items-center justify-center">
+                        {cartCount}
+                      </span>
+                    )}
+                  </div>
+                  <span className="text-xs font-bold hidden md:inline">السلة</span>
+                </button>
+
+                {/* Mobile Menu Button */}
+                <button
+                  onClick={() => setMobileMenuOpen(true)}
+                  className="lg:hidden p-2 text-slate-300 hover:text-white hover:bg-slate-800 rounded-xl transition"
+                  aria-label="القائمة"
+                >
+                  <Menu className="w-6 h-6" />
+                </button>
+              </div>
             </div>
           </div>
-        </div>
-      </header>
-    </div>
+        </header>
+      </div>
 
       {/* Search Overlay Modal */}
       {searchOpen && (
@@ -372,4 +368,3 @@ const Navbar = () => {
 };
 
 export default Navbar;
-
