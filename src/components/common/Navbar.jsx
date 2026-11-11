@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Link, NavLink, useNavigate } from 'react-router-dom';
+import { Link, NavLink, useNavigate, useLocation } from 'react-router-dom';
 import { useCart } from '../../context/CartContext';
 import { 
   ShoppingBag, 
@@ -24,17 +24,21 @@ const Navbar = () => {
   const [scrolled, setScrolled] = useState(false);
   const searchInputRef = useRef(null);
   const navigate = useNavigate();
+  const location = useLocation();
 
-  // Handle scroll effect
+  const isHome = location.pathname === '/';
+
+  // Handle scroll effect: on Home page, navbar appears when scrolled > 65px
   useEffect(() => {
     const handleScroll = () => {
-      if (window.scrollY > 20) {
+      if (window.scrollY > 65) {
         setScrolled(true);
       } else {
         setScrolled(false);
       }
     };
-    window.addEventListener('scroll', handleScroll);
+    handleScroll();
+    window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
@@ -73,41 +77,43 @@ const Navbar = () => {
 
   return (
     <>
-      {/* Top Announcement Bar */}
-      <div className="bg-gradient-to-r from-slate-950 via-slate-900 to-slate-950 border-b border-amber-500/20 text-xs py-2 px-4 text-center text-slate-300 flex items-center justify-center gap-4 relative z-40">
-        <div className="flex items-center gap-2">
-          <Sparkles className="w-3.5 h-3.5 text-amber-400 animate-pulse" />
-          <span>شحن كوني مجاني للطلبات فوق <strong>350 ر.س</strong> | كود الخصم <strong>KOON10</strong> لخصم 10% | عينة فاخرة مجاناً مع كل طلب</span>
-        </div>
-      </div>
-
-      {/* Main Navbar */}
-      <header className={`sticky top-0 z-40 transition-all duration-300 ${
-        scrolled 
-          ? 'bg-slate-950/90 backdrop-blur-md border-b border-slate-800 shadow-xl py-2.5' 
-          : 'bg-slate-950/70 backdrop-blur-sm border-b border-slate-800/60 py-3.5'
+      {/* Wrapper that hides when at top of Home page, and slides down on scroll */}
+      <div className={`fixed top-0 inset-x-0 z-40 transition-all duration-500 ease-in-out ${
+        isHome && !scrolled
+          ? '-translate-y-full opacity-0 pointer-events-none'
+          : 'translate-y-0 opacity-100 pointer-events-auto shadow-2xl'
       }`}>
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-between gap-4">
-            
-            {/* Logo and Brand */}
-            <Link to="/" className="flex items-center gap-3 group shrink-0">
-              <div className="relative w-11 h-11 sm:w-12 sm:h-12 rounded-full overflow-hidden border-2 border-slate-700/80 group-hover:border-amber-400/80 transition-all shadow-md group-hover:shadow-amber-500/20">
-                <img 
-                  src="/koon-logo.jpg" 
-                  alt="Koon Perfume Logo" 
-                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                />
-              </div>
-              <div className="flex flex-col">
-                <span className="text-xl sm:text-2xl font-black tracking-wide text-white group-hover:text-amber-400 transition">
-                  كون بيرفيوم
-                </span>
-                <span className="text-[10px] font-serif uppercase tracking-[0.25em] text-slate-400 group-hover:text-slate-200 transition">
-                  KOON PERFUME
-                </span>
-              </div>
-            </Link>
+        {/* Top Announcement Bar */}
+        <div className="bg-gradient-to-r from-slate-950 via-slate-900 to-slate-950 border-b border-amber-500/20 text-xs py-2 px-4 text-center text-slate-300 flex items-center justify-center gap-4">
+          <div className="flex items-center gap-2">
+            <Sparkles className="w-3.5 h-3.5 text-amber-400 animate-pulse" />
+            <span>شحن كوني مجاني للطلبات فوق <strong>350 ر.س</strong> | كود الخصم <strong>KOON10</strong> لخصم 10% | عينة فاخرة مجاناً مع كل طلب</span>
+          </div>
+        </div>
+
+        {/* Main Header */}
+        <header className="bg-slate-950/95 backdrop-blur-md border-b border-slate-800/80 py-2.5 transition-all">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="flex items-center justify-between gap-4">
+              
+              {/* Logo and Brand (Docked in Navbar) */}
+              <Link to="/" className="flex items-center gap-3 group shrink-0">
+                <div className="relative w-11 h-11 sm:w-12 sm:h-12 rounded-full overflow-hidden border-2 border-slate-700/80 group-hover:border-amber-400/80 transition-all shadow-md group-hover:shadow-amber-500/20">
+                  <img 
+                    src="/koon-logo.jpg" 
+                    alt="Koon Perfume Logo" 
+                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                  />
+                </div>
+                <div className="flex flex-col">
+                  <span className="text-xl sm:text-2xl font-black tracking-wide text-white group-hover:text-amber-400 transition">
+                    كون بيرفيوم
+                  </span>
+                  <span className="text-[10px] font-serif uppercase tracking-[0.25em] text-slate-400 group-hover:text-slate-200 transition">
+                    KOON PERFUME
+                  </span>
+                </div>
+              </Link>
 
             {/* Desktop Navigation Links */}
             <nav className="hidden lg:flex items-center gap-6">
@@ -191,6 +197,7 @@ const Navbar = () => {
           </div>
         </div>
       </header>
+    </div>
 
       {/* Search Overlay Modal */}
       {searchOpen && (

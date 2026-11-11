@@ -32,6 +32,33 @@ const ScrollToTop = () => {
   return null;
 };
 
+// Inner Content to handle conditional padding for fixed navbar
+const MainContent = () => {
+  const location = useLocation();
+  const isHome = location.pathname === '/';
+
+  return (
+    <main className={`flex-1 relative z-10 transition-all ${isHome ? '' : 'pt-24'}`}>
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/shop" element={<Shop />} />
+        <Route path="/product/:id" element={<ProductDetails />} />
+        <Route path="/cart" element={<Cart />} />
+        <Route path="/checkout" element={<Checkout />} />
+        <Route path="/order-confirmation" element={<OrderConfirmation />} />
+        <Route path="/wishlist" element={<Wishlist />} />
+        <Route path="/quiz" element={<PerfumeQuiz />} />
+        <Route path="/about" element={<About />} />
+        <Route path="/contact" element={<Contact />} />
+        <Route path="/track-order" element={<TrackOrder />} />
+        <Route path="/faq" element={<FAQ />} />
+        <Route path="/profile" element={<Profile />} />
+        <Route path="*" element={<Home />} />
+      </Routes>
+    </main>
+  );
+};
+
 function App() {
   return (
     <CartProvider>
@@ -45,24 +72,7 @@ function App() {
           <Navbar />
 
           {/* Main App Routes */}
-          <main className="flex-1 relative z-10">
-            <Routes>
-              <Route path="/" element={<Home />} />
-              <Route path="/shop" element={<Shop />} />
-              <Route path="/product/:id" element={<ProductDetails />} />
-              <Route path="/cart" element={<Cart />} />
-              <Route path="/checkout" element={<Checkout />} />
-              <Route path="/order-confirmation" element={<OrderConfirmation />} />
-              <Route path="/wishlist" element={<Wishlist />} />
-              <Route path="/quiz" element={<PerfumeQuiz />} />
-              <Route path="/about" element={<About />} />
-              <Route path="/contact" element={<Contact />} />
-              <Route path="/track-order" element={<TrackOrder />} />
-              <Route path="/faq" element={<FAQ />} />
-              <Route path="/profile" element={<Profile />} />
-              <Route path="*" element={<Home />} />
-            </Routes>
-          </main>
+          <MainContent />
 
           {/* Global Drawers & Modals */}
           <CartDrawer />

@@ -16,6 +16,18 @@ import { PRODUCTS, TESTIMONIALS } from '../data/products';
 import ProductCard from '../components/products/ProductCard';
 
 const Home = () => {
+  // Track scroll position for grand logo shrink-and-dock transition
+  const [scrollY, setScrollY] = useState(0);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setScrollY(window.scrollY);
+    };
+    handleScroll();
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
   // Countdown timer for Cosmic Limited Offer
   const [timeLeft, setTimeLeft] = useState({
     hours: 14,
@@ -46,13 +58,52 @@ const Home = () => {
     <div className="space-y-20 pb-20">
       
       {/* 1. Hero Section */}
-      <section className="relative min-h-[85vh] flex items-center justify-center pt-8 overflow-hidden">
+      <section className="relative min-h-[90vh] flex flex-col items-center justify-start pt-4 sm:pt-6 overflow-hidden">
         
-        {/* Celestial Ring Animation behind Hero */}
-        <div className="absolute w-[350px] sm:w-[600px] h-[350px] sm:h-[600px] rounded-full border border-slate-700/40 pointer-events-none animate-spin-slow" />
-        <div className="absolute w-[280px] sm:w-[480px] h-[280px] sm:h-[480px] rounded-full border border-dashed border-amber-500/20 pointer-events-none" />
+        {/* Grand Brand Logo & Name (اللوغو الكبير مع الاسم الذي يصغر عند السكرول ليدخل في الـ Navbar) */}
+        <div 
+          className="w-full max-w-7xl mx-auto px-4 z-20 transition-all duration-300 ease-out"
+          style={{
+            transform: `scale(${Math.max(0.6, 1 - scrollY * 0.004)}) translateY(-${Math.min(30, scrollY * 0.3)}px)`,
+            opacity: Math.max(0, 1 - scrollY / 75),
+            display: scrollY > 95 ? 'none' : 'block'
+          }}
+        >
+          <div className="flex flex-col items-center justify-center text-center pt-2 pb-6">
+            
+            {/* Big Orbit Logo */}
+            <div className="relative mb-3 group cursor-pointer">
+              {/* Subtle orbiting celestial glow rings */}
+              <div className="absolute -inset-4 rounded-full border border-slate-700/60 animate-spin-slow pointer-events-none" />
+              <div className="absolute -inset-2 rounded-full border border-dashed border-amber-500/30 pointer-events-none" />
+              <div className="absolute inset-0 rounded-full bg-amber-500/15 blur-xl pointer-events-none" />
 
-        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 flex flex-col lg:flex-row items-center justify-between gap-12 z-10">
+              <div className="relative w-28 h-28 sm:w-36 sm:h-36 rounded-full overflow-hidden border-2 border-slate-600/80 shadow-2xl p-0.5 bg-slate-950 flex items-center justify-center group-hover:border-amber-400/80 transition-all duration-500">
+                <img 
+                  src="/koon-logo.jpg" 
+                  alt="Koon Perfume Logo" 
+                  className="w-full h-full object-cover rounded-full group-hover:scale-105 transition-transform duration-500"
+                />
+              </div>
+            </div>
+
+            {/* Large Brand Typography */}
+            <div className="space-y-1">
+              <h2 className="text-3xl sm:text-5xl font-black text-white tracking-wide drop-shadow-md">
+                كون بيرفيوم
+              </h2>
+              <p className="text-xs sm:text-sm font-serif uppercase tracking-[0.35em] text-slate-400 font-medium">
+                KOON PERFUME
+              </p>
+            </div>
+          </div>
+        </div>
+
+        {/* Celestial Ring Animation behind Hero */}
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[350px] sm:w-[650px] h-[350px] sm:h-[650px] rounded-full border border-slate-700/30 pointer-events-none animate-spin-slow" />
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[280px] sm:w-[500px] h-[280px] sm:h-[500px] rounded-full border border-dashed border-amber-500/20 pointer-events-none" />
+
+        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-10 flex flex-col lg:flex-row items-center justify-between gap-12 z-10 w-full">
           
           {/* Left Text Column */}
           <div className="flex-1 text-center lg:text-right space-y-6">
@@ -123,8 +174,8 @@ const Home = () => {
                 </div>
 
                 <img 
-                  src="/koon-logo.jpg" 
-                  alt="Koon Absolute Logo"
+                  src={PRODUCTS[0].images[0]} 
+                  alt="Koon Absolute Perfume Bottle"
                   className="w-48 h-48 object-contain rounded-2xl shadow-inner group-hover:scale-105 transition-transform duration-700" 
                 />
 
