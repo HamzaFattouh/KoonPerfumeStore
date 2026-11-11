@@ -18,55 +18,10 @@ import {
 import { PRODUCTS, TESTIMONIALS } from '../data/products';
 import ProductCard from '../components/products/ProductCard';
 import { useLanguage } from '../context/LanguageContext';
+import CosmicHeroAnimation from '../components/home/CosmicHeroAnimation';
 
 const Home = () => {
   const { t } = useLanguage();
-  // Video Intro States
-  const [videoEnded, setVideoEnded] = useState(false);
-  const [isMuted, setIsMuted] = useState(true);
-  const videoRef = useRef(null);
-  const heroRef = useRef(null);
-
-  // Auto-play opening video
-  useEffect(() => {
-    if (videoRef.current) {
-      videoRef.current.play().catch(e => {
-        console.log('Autoplay handled', e);
-      });
-    }
-  }, []);
-
-  const handleVideoEnded = () => {
-    setVideoEnded(true);
-    // Freeze on the last frame
-    if (videoRef.current) {
-      videoRef.current.pause();
-    }
-  };
-
-  const handleReplay = () => {
-    if (videoRef.current) {
-      videoRef.current.currentTime = 0;
-      videoRef.current.play();
-      setVideoEnded(false);
-    }
-  };
-
-  const toggleMute = () => {
-    if (videoRef.current) {
-      videoRef.current.muted = !videoRef.current.muted;
-      setIsMuted(videoRef.current.muted);
-    }
-  };
-
-  const scrollToContent = () => {
-    const target = document.getElementById('brand-pillars');
-    if (target) {
-      target.scrollIntoView({ behavior: 'smooth' });
-    } else {
-      window.scrollTo({ top: window.innerHeight - 40, behavior: 'smooth' });
-    }
-  };
 
   // Countdown timer for Cosmic Limited Offer
   const [timeLeft, setTimeLeft] = useState({
@@ -97,79 +52,8 @@ const Home = () => {
   return (
     <div className="space-y-20 pb-20">
       
-      {/* 1. Opening Video Hero Section (الفيديو الافتتاحي بكامل مساحة الصفحة مع الثبات على اللوغو) */}
-      <section 
-        ref={heroRef}
-        className="relative w-full h-[100dvh] min-h-[600px] flex items-center justify-center bg-[#050608] overflow-hidden"
-      >
-        {/* Cinematic Intro Video */}
-        <video
-          ref={videoRef}
-          src="/intro.mp4"
-          autoPlay
-          muted={isMuted}
-          playsInline
-          onEnded={handleVideoEnded}
-          className="w-full h-full object-contain sm:object-cover select-none transition-all duration-700"
-        />
-
-        {/* Ambient Dark Cosmic Vignette Edge */}
-        <div className="absolute inset-0 pointer-events-none bg-gradient-to-t from-[#06070a] via-transparent to-[#06070a]/40" />
-
-        {/* Video Controls (Sound Toggle & Replay) */}
-        <div className="absolute top-6 left-6 z-20 flex items-center gap-2.5">
-          <button
-            onClick={toggleMute}
-            className="p-2.5 rounded-full bg-slate-950/75 hover:bg-slate-900 border border-slate-700/60 text-slate-300 hover:text-amber-400 backdrop-blur-md transition shadow-lg cursor-pointer"
-            title={isMuted ? 'تشغيل الصوت' : 'كتم الصوت'}
-            aria-label="التحكم بالصوت"
-          >
-            {isMuted ? <VolumeX className="w-4 h-4" /> : <Volume2 className="w-4 h-4 text-amber-400" />}
-          </button>
-
-          <button
-            onClick={handleReplay}
-            className="p-2.5 rounded-full bg-slate-950/75 hover:bg-slate-900 border border-slate-700/60 text-slate-300 hover:text-amber-400 backdrop-blur-md transition shadow-lg cursor-pointer"
-            title="إعادة تشغيل الفيديو الافتتاحي"
-            aria-label="إعادة التشغيل"
-          >
-            <RotateCcw className="w-4 h-4" />
-          </button>
-        </div>
-
-        {/* Floating Actions when video plays/freezes on logo */}
-        <div className={`absolute bottom-8 inset-x-0 z-20 flex flex-col items-center justify-center gap-4 transition-all duration-700 ${
-          videoEnded ? 'opacity-100 translate-y-0' : 'opacity-90 translate-y-0'
-        }`}>
-          {/* Quick CTA Buttons */}
-          <div className="flex flex-wrap items-center justify-center gap-3 px-4">
-            <Link
-              to="/shop"
-              className="px-8 py-3.5 bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-slate-950 font-black text-xs sm:text-sm rounded-xl shadow-2xl shadow-amber-500/30 transition transform hover:-translate-y-0.5 active:scale-95 flex items-center gap-2"
-            >
-              <span>{t.actions.exploreBtn}</span>
-              <ArrowLeft className="w-4 h-4" />
-            </Link>
-
-            <Link
-              to="/quiz"
-              className="px-6 py-3.5 bg-slate-950/85 hover:bg-slate-900 text-slate-200 border border-slate-700/80 font-bold text-xs sm:text-sm rounded-xl transition flex items-center gap-2 backdrop-blur-md hover:border-amber-400/50"
-            >
-              <Compass className="w-4 h-4 text-amber-400" />
-              <span>{t.actions.quizBtn}</span>
-            </Link>
-          </div>
-
-          {/* Smooth Scroll Cue */}
-          <button
-            onClick={scrollToContent}
-            className="flex items-center gap-2 text-xs text-slate-400 hover:text-amber-300 transition pt-1 animate-bounce cursor-pointer group"
-          >
-            <span>{t.actions.scrollDown}</span>
-            <ChevronDown className="w-4 h-4 text-amber-400 group-hover:translate-y-0.5 transition" />
-          </button>
-        </div>
-      </section>
+      {/* 1. Opening Transparent Cosmic Animation Hero Section (أنيميشن الفيديو المفرغة بدون خلفية على نجوم الموقع) */}
+      <CosmicHeroAnimation />
 
       {/* 2. Brand Value Pillars */}
       <section id="brand-pillars" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-8">
