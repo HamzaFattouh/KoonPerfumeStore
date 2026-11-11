@@ -31,6 +31,11 @@ const CosmicHeroAnimation = () => {
     setVideoEnded(true);
     if (videoRef.current) {
       videoRef.current.pause();
+      try {
+        videoRef.current.currentTime = 7.95;
+      } catch (e) {
+        // ignore
+      }
     }
   };
 
@@ -44,7 +49,7 @@ const CosmicHeroAnimation = () => {
 
   const handleSkip = () => {
     if (videoRef.current) {
-      videoRef.current.currentTime = 9.9;
+      videoRef.current.currentTime = 7.9;
       videoRef.current.pause();
       setVideoEnded(true);
     }
