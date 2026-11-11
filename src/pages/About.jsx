@@ -29,9 +29,9 @@ const About = () => {
         <div className="relative aspect-square max-w-md mx-auto bg-slate-950 rounded-3xl border border-slate-800 p-8 flex items-center justify-center shadow-2xl">
           <div className="absolute inset-0 bg-indigo-500/10 rounded-full blur-3xl pointer-events-none" />
           <img 
-            src="/koon-logo.webp" 
+            src="/koon-logo.jpg" 
             alt="شعار كون بيرفيوم" 
-            className="w-80 h-80 object-contain rounded-2xl shadow-inner relative z-10 hover:scale-105 transition-transform duration-500"
+            className="w-72 h-72 object-contain rounded-2xl shadow-inner relative z-10 hover:scale-105 transition-transform duration-500"
           />
         </div>
 

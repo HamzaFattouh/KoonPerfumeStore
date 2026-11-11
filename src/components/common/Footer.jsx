@@ -83,13 +83,13 @@ const Footer = () => {
           <div className="lg:col-span-2 space-y-4">
             <Link to="/" className="flex items-center gap-3">
               <img 
-                src="/koon-logo.webp" 
+                src="/koon-logo.jpg" 
                 alt="كون بيرفيوم" 
-                className="w-16 h-16 rounded-full object-cover border-2 border-amber-500/50 shadow-xl shadow-amber-500/20" 
+                className="w-14 h-14 rounded-full object-cover border-2 border-slate-700/80 shadow-lg shadow-amber-500/10" 
               />
               <div>
                 <h3 className="text-2xl font-black text-white">كون بيرفيوم</h3>
-                <span className="text-xs font-serif text-amber-400/90 tracking-[0.2em] uppercase">KOON PERFUME</span>
+                <span className="text-xs font-serif text-slate-400 tracking-[0.2em] uppercase">KOON PERFUME</span>
               </div>
             </Link>
 

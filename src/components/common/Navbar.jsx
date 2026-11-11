@@ -92,18 +92,18 @@ const Navbar = () => {
             
             {/* Logo and Brand */}
             <Link to="/" className="flex items-center gap-3 group shrink-0">
-              <div className="relative w-11 h-11 sm:w-12 sm:h-12 rounded-full overflow-hidden border-2 border-amber-500/40 group-hover:border-amber-400 transition-all shadow-lg group-hover:shadow-amber-500/30">
+              <div className="relative w-11 h-11 sm:w-12 sm:h-12 rounded-full overflow-hidden border-2 border-slate-700/80 group-hover:border-amber-400/80 transition-all shadow-md group-hover:shadow-amber-500/20">
                 <img 
-                  src="/koon-logo.webp" 
+                  src="/koon-logo.jpg" 
                   alt="Koon Perfume Logo" 
-                  className="w-full h-full object-cover group-hover:scale-108 transition-transform duration-500"
+                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                 />
               </div>
               <div className="flex flex-col">
                 <span className="text-xl sm:text-2xl font-black tracking-wide text-white group-hover:text-amber-400 transition">
                   كون بيرفيوم
                 </span>
-                <span className="text-[10px] font-serif uppercase tracking-[0.25em] text-amber-400/90 group-hover:text-amber-300 transition">
+                <span className="text-[10px] font-serif uppercase tracking-[0.25em] text-slate-400 group-hover:text-slate-200 transition">
                   KOON PERFUME
                 </span>
               </div>
@@ -296,10 +296,10 @@ const Navbar = () => {
               {/* Header */}
               <div className="flex items-center justify-between pb-6 border-b border-slate-800">
                 <div className="flex items-center gap-3">
-                  <img src="/koon-logo.webp" alt="Logo" className="w-11 h-11 rounded-full object-cover border-2 border-amber-500/40 shadow-md shadow-amber-500/20" />
+                  <img src="/koon-logo.jpg" alt="Logo" className="w-10 h-10 rounded-full object-cover border border-amber-400/40" />
                   <div>
                     <h3 className="font-bold text-white text-base">كون بيرفيوم</h3>
-                    <span className="text-[10px] text-amber-400/90 font-serif tracking-widest">KOON PERFUME</span>
+                    <span className="text-[10px] text-slate-400 font-serif tracking-widest">KOON PERFUME</span>
                   </div>
                 </div>
                 <button

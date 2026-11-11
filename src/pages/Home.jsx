@@ -123,9 +123,9 @@ const Home = () => {
                 </div>
 
                 <img 
-                  src="/koon-logo.webp" 
+                  src="/koon-logo.jpg" 
                   alt="Koon Absolute Logo"
-                  className="w-52 h-52 object-contain rounded-2xl shadow-inner group-hover:scale-108 transition-transform duration-700" 
+                  className="w-48 h-48 object-contain rounded-2xl shadow-inner group-hover:scale-105 transition-transform duration-700" 
                 />
 
                 <div className="w-full text-center">
