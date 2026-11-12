@@ -88,7 +88,7 @@ const CosmicHeroAnimation = () => {
           muted={isMuted}
           playsInline
           onEnded={handleVideoEnded}
-          className="w-auto h-auto max-h-[58vh] max-w-[90vw] md:max-w-[850px] object-contain pointer-events-none transition-all duration-700 select-none z-10"
+          className="w-full h-auto max-h-[64vh] max-w-[1150px] object-contain pointer-events-none transition-all duration-700 select-none z-10"
         >
           {/* Native 100% Transparent WebM with yuva420p alpha channel */}
           <source src="/intro_transparent.webm" type="video/webm" />
