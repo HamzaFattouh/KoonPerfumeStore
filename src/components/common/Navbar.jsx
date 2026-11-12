@@ -259,11 +259,13 @@ const Navbar = () => {
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 placeholder={t.actions.searchPlaceholder}
+                aria-label={t.actions.search}
                 className="w-full bg-transparent text-slate-100 placeholder-slate-500 text-base focus:outline-none"
               />
               {searchQuery && (
                 <button 
                   onClick={() => setSearchQuery('')}
+                  aria-label="مسح نص البحث"
                   className="text-xs text-slate-400 hover:text-white px-2 py-1 bg-slate-800 rounded"
                 >
                   مسح
@@ -271,6 +273,7 @@ const Navbar = () => {
               )}
               <button 
                 onClick={() => setSearchOpen(false)}
+                aria-label="إغلاق نافذة البحث"
                 className="p-1.5 text-slate-400 hover:text-white hover:bg-slate-800 rounded-lg transition"
               >
                 <X className="w-5 h-5" />
@@ -355,7 +358,8 @@ const Navbar = () => {
                 </div>
                 <button
                   onClick={() => setMobileMenuOpen(false)}
-                  className="p-1.5 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800"
+                  aria-label="إغلاق القائمة الجانبية"
+                  className="p-1.5 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800 cursor-pointer"
                 >
                   <X className="w-6 h-6" />
                 </button>

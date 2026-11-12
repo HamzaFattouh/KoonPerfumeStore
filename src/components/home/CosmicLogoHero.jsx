@@ -396,12 +396,19 @@ const CosmicLogoHero = () => {
               animStage === 'revealed' ? 'opacity-100 scale-100 z-10' : 'opacity-0 scale-95 pointer-events-none z-0'
             }`}
           >
-            {/* The Pristine 1024x1024 Transparent RGBA Emblem */}
-            <img
-              src="/koon_emblem_hq.png"
-              alt="Koon Perfume Astronomical Emblem"
-              className="w-full h-full object-contain filter drop-shadow-[0_15px_35px_rgba(245,158,11,0.25)] select-none pointer-events-none"
-            />
+            {/* The Pristine 1024x1024 Transparent RGBA Emblem (WebP prioritized with PNG fallback) */}
+            <picture className="w-full h-full flex items-center justify-center">
+              <source srcSet="/koon_emblem_hq.webp" type="image/webp" />
+              <img
+                src="/koon_emblem_hq.png"
+                alt="Koon Perfume Astronomical Emblem"
+                width="1024"
+                height="1024"
+                loading="eager"
+                fetchPriority="high"
+                className="w-full h-full object-contain filter drop-shadow-[0_15px_35px_rgba(245,158,11,0.25)] select-none pointer-events-none"
+              />
+            </picture>
 
             {/* Specular Liquid Light Shimmer Sweep across the emblem */}
             <div 

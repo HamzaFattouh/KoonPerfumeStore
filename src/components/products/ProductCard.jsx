@@ -152,8 +152,9 @@ const ProductCard = ({ product }) => {
 
           <button
             onClick={handleAddToCart}
-            className="flex items-center gap-1.5 px-3.5 py-2 bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-slate-950 font-bold text-xs rounded-xl shadow-md shadow-amber-500/15 transition transform active:scale-95"
+            className="flex items-center gap-1.5 px-3.5 py-2 bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-slate-950 font-bold text-xs rounded-xl shadow-md shadow-amber-500/15 transition transform active:scale-95 cursor-pointer"
             title="إضافة للسلة"
+            aria-label={`إضافة ${product.name} للسلة`}
           >
             <ShoppingBag className="w-3.5 h-3.5" />
             <span>أضف</span>

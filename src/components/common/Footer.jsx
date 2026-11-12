@@ -152,6 +152,7 @@ const Footer = () => {
                   type="email"
                   required
                   placeholder="بريدك الإلكتروني..."
+                  aria-label="البريد الإلكتروني للاشتراك في النشرة"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   className="w-full bg-slate-900 border border-slate-700 rounded-xl px-3.5 py-2.5 text-xs text-slate-100 placeholder-slate-500 focus:outline-none focus:border-amber-400"

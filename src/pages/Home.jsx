@@ -362,9 +362,9 @@ const Home = () => {
               <span className="px-3.5 py-1 rounded-full bg-rose-500/20 text-rose-300 border border-rose-500/30 text-xs font-bold inline-block">
                 {language === 'ar' ? 'عرض المدار الاستثنائي • خصم 20% + هدايا مجانية' : 'מבצע מיוחד • 20% הנחה + מתנות'}
               </span>
-              <h3 className="text-2xl sm:text-4xl font-black text-white">
+              <h2 className="text-2xl sm:text-4xl font-black text-white">
                 {language === 'ar' ? 'باقة المجرة الفاخرة: عطرين + عينة نيش + تغليف ملكي' : 'מארז הגלקסיה: 2 בשמים + דוגמית נישה + אריזה מלכותית'}
-              </h3>
+              </h2>
               <p className="text-xs sm:text-sm text-slate-300 leading-relaxed">
                 {language === 'ar'
                   ? 'اقتنِ عطر "كون أبسولوت" الأيقوني مع "سديم الفانيليا" في صندوق إهداء أسود فاخر مع شحن مجاني مبرد لكافة المناطق. استخدم كود الخصم الحصري أدناه.'
@@ -431,9 +431,9 @@ const Home = () => {
               <Compass className="w-4 h-4" />
               <span>{language === 'ar' ? 'مستكشف العطور الكوني الذكي' : 'בוחן התאמת בושם חכם'}</span>
             </div>
-            <h3 className="text-2xl sm:text-3xl font-black text-white">
+            <h2 className="text-2xl sm:text-3xl font-black text-white">
               {language === 'ar' ? 'محتار أي عطر يناسب شخصيتك أو مناسبتك؟' : 'מתלבט איזה בושם מתאים בדיוק עבורך?'}
-            </h3>
+            </h2>
             <p className="text-xs sm:text-sm text-slate-300 leading-relaxed">
               {language === 'ar'
                 ? 'أجب على 4 أسئلة فلكية بسيطة وسيقوم نظامنا الذكي باقتراح العطر النيش الأمثل لك بناءً على ذوقك في النوتات مع كود خصم فوري.'
@@ -467,7 +467,7 @@ const Home = () => {
             <div className="w-10 h-10 rounded-full bg-amber-500/10 border border-amber-500/20 text-amber-400 flex items-center justify-center mx-auto">
               <ShieldCheck className="w-5 h-5" />
             </div>
-            <h4 className="font-bold text-sm text-white">{language === 'ar' ? 'عينة تجربة مجانية' : 'דוגמית חינם'}</h4>
+            <h3 className="font-bold text-sm text-white">{language === 'ar' ? 'عينة تجربة مجانية' : 'דוגמית חינם'}</h3>
             <p className="text-xs text-slate-400 leading-relaxed">
               {language === 'ar' ? 'جرب العينة المرفقة قبل فتح الصندوق الرئيسي.' : 'התנסה בדוגמית לפני פתיחת הבקבוק.'}
             </p>
@@ -477,7 +477,7 @@ const Home = () => {
             <div className="w-10 h-10 rounded-full bg-amber-500/10 border border-amber-500/20 text-amber-400 flex items-center justify-center mx-auto">
               <Truck className="w-5 h-5" />
             </div>
-            <h4 className="font-bold text-sm text-white">{language === 'ar' ? 'شحن مبرد آمن' : 'משלוח מבוקר טמפרטורה'}</h4>
+            <h3 className="font-bold text-sm text-white">{language === 'ar' ? 'شحن مبرد آمن' : 'משלוח מבוקר טמפרטורה'}</h3>
             <p className="text-xs text-slate-400 leading-relaxed">
               {language === 'ar' ? 'مركبات مبردة لحماية الزيوت من حرارة الصيف.' : 'רכבים ממוזגים לשמירה על איכות השמנים.'}
             </p>
@@ -487,7 +487,7 @@ const Home = () => {
             <div className="w-10 h-10 rounded-full bg-amber-500/10 border border-amber-500/20 text-amber-400 flex items-center justify-center mx-auto">
               <Award className="w-5 h-5" />
             </div>
-            <h4 className="font-bold text-sm text-white">{language === 'ar' ? 'أصالة مستوردة 100%' : '100% שמנים מקוריים'}</h4>
+            <h3 className="font-bold text-sm text-white">{language === 'ar' ? 'أصالة مستوردة 100%' : '100% שמנים מקוריים'}</h3>
             <p className="text-xs text-slate-400 leading-relaxed">
               {language === 'ar' ? 'زيوت نقية مستوردة مباشرة من غراس الفرنسية.' : 'שמנים טהורים ישירות מצרפת ושוויץ.'}
             </p>
@@ -497,7 +497,7 @@ const Home = () => {
             <div className="w-10 h-10 rounded-full bg-amber-500/10 border border-amber-500/20 text-amber-400 flex items-center justify-center mx-auto">
               <RotateCcw className="w-5 h-5" />
             </div>
-            <h4 className="font-bold text-sm text-white">{language === 'ar' ? 'استرجاع فوري وسهل' : 'החזרה מהירה ופשוטה'}</h4>
+            <h3 className="font-bold text-sm text-white">{language === 'ar' ? 'استرجاع فوري وسهل' : 'החזרה מהירה ופשוטה'}</h3>
             <p className="text-xs text-slate-400 leading-relaxed">
               {language === 'ar' ? 'استرجاع كامل المبلغ خلال 7 أيام دون أي تعقيد.' : 'החזר כספי מלא תוך 7 ימים ללא שאלות.'}
             </p>
