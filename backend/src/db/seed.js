@@ -257,3 +257,4 @@ export async function seedDatabase() {
 if (process.argv[1]?.endsWith('seed.js')) {
   seedDatabase();
 }
+

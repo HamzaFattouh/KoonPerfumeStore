@@ -3,6 +3,7 @@ import cors from 'cors';
 import dotenv from 'dotenv';
 import productRoutes from './routes/productRoutes.js';
 import { supabase } from './config/supabase.js';
+import { autoMigrateDatabase } from './db/migrate.js';
 
 dotenv.config();
 
@@ -58,7 +59,9 @@ app.use((err, req, res, next) => {
   res.status(500).json({ success: false, message: 'خطأ داخلي في الخادم', error: err.message });
 });
 
-app.listen(PORT, () => {
+app.listen(PORT, async () => {
   console.log(`✨ Koon Perfume Backend running at http://localhost:${PORT}`);
   console.log(`📦 Database Mode: ${supabase ? 'Supabase PostgreSQL' : 'Local Fallback'}`);
+  await autoMigrateDatabase();
 });
+

@@ -102,3 +102,4 @@ CREATE POLICY "Admins have full access"
     TO authenticated
     USING (true)
     WITH CHECK (true);
+
