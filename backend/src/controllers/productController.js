@@ -366,3 +366,49 @@ export const deleteProduct = async (req, res) => {
   }
 };
 
+/**
+ * Endpoint to seed initial products into Supabase on demand
+ */
+export const handleSeedProducts = async (req, res) => {
+  try {
+    if (!supabase) {
+      return res.status(500).json({ 
+        success: false, 
+        message: 'Supabase client is not configured. Check SUPABASE_URL and SUPABASE_KEY.' 
+      });
+    }
+
+    const results = [];
+    for (const product of INITIAL_PRODUCTS) {
+      const { data, error } = await supabase
+        .from('products')
+        .upsert(product, { onConflict: 'id' });
+
+      if (error) {
+        results.push({ id: product.id, name: product.name, status: 'error', error: error.message });
+      } else {
+        results.push({ id: product.id, name: product.name, status: 'seeded' });
+      }
+    }
+
+    const errors = results.filter(r => r.status === 'error');
+    if (errors.length > 0 && errors.length === INITIAL_PRODUCTS.length) {
+      return res.status(400).json({
+        success: false,
+        message: 'تعذر بذر المنتجات لأن جدول products لم يتم إنشاؤه بعد في Supabase. يرجى تشغيل كود schema.sql في Supabase SQL Editor أولاً.',
+        details: errors
+      });
+    }
+
+    return res.json({
+      success: true,
+      message: '🎉 تم بذر وتحديث منتجات كون الفلكية بنجاح في Supabase!',
+      count: results.filter(r => r.status === 'seeded').length,
+      results
+    });
+  } catch (err) {
+    return res.status(500).json({ success: false, message: err.message });
+  }
+};
+
+

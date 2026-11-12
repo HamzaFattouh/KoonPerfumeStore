@@ -5,7 +5,8 @@ import {
   getFilterOptions, 
   createProduct, 
   updateProduct, 
-  deleteProduct 
+  deleteProduct,
+  handleSeedProducts
 } from '../controllers/productController.js';
 
 const router = Router();
@@ -13,7 +14,11 @@ const router = Router();
 // 1. Get available dynamic filter options (must be above /:id)
 router.get('/filters', getFilterOptions);
 
-// 2. Products CRUD and filtering
+// 2. On-demand Seeding endpoint
+router.get('/seed', handleSeedProducts);
+router.post('/seed', handleSeedProducts);
+
+// 3. Products CRUD and filtering
 router.get('/', getProducts);
 router.get('/:id', getProductById);
 router.post('/', createProduct);
