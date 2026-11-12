@@ -376,10 +376,10 @@ const CosmicLogoHero = () => {
             </svg>
           </div>
 
-          {/* Fully Revealed Crystal Emblem Image (Instant LCP Element) */}
+          {/* Fully Revealed Crystal Emblem Image (Appears only after calligraphy finishes) */}
           <div 
-            className={`absolute inset-0 flex items-center justify-center transition-all duration-700 ${
-              animStage === 'revealed' ? 'opacity-100 scale-100 z-10' : 'opacity-85 scale-100 z-0'
+            className={`absolute inset-0 flex items-center justify-center transition-all duration-1000 ${
+              animStage === 'revealed' ? 'opacity-100 scale-100 z-10' : 'opacity-0 scale-95 pointer-events-none z-0'
             }`}
           >
             {/* The Pristine 1024x1024 Transparent RGBA Emblem (WebP prioritized with PNG fallback) */}
