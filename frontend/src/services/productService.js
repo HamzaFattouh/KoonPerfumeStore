@@ -1,23 +1,77 @@
 import { supabase } from '../utils/supabase';
-import { PRODUCTS } from '../data/products';
 
-const API_BASE = import.meta.env.VITE_API_URL || '';
+const API_BASE = import.meta.env.VITE_API_URL || 'https://koonperfume-backend.onrender.com';
 
 /**
- * Fetch products with advanced multi-dimensional filtering
- * @param {Object} filters
- * @param {string} filters.gender - 'men' | 'women' | 'unisex' | 'all'
- * @param {string} filters.season - 'summer' | 'winter' | 'all_seasons' | 'all'
- * @param {string} filters.scentFamily - Scent category
- * @param {string} filters.note - Specific note or ingredient (oud, amber, vanilla, etc.)
- * @param {string} filters.brand - Brand name
- * @param {number} filters.minPrice - Minimum price
- * @param {number} filters.maxPrice - Maximum price
- * @param {string} filters.search - Search text
- * @param {string} filters.sort - 'price_asc' | 'price_desc' | 'rating' | 'newest'
+ * Standardize product fields between Supabase/PostgreSQL (snake_case)
+ * and React components (camelCase) to ensure zero UI regressions.
+ */
+export function normalizeProduct(p) {
+  if (!p) return null;
+
+  // Handle images array & fallback image
+  let images = [];
+  if (Array.isArray(p.images) && p.images.length > 0) {
+    images = p.images;
+  } else if (p.image_url) {
+    images = [p.image_url];
+  } else {
+    images = ['https://images.unsplash.com/photo-1594035910387-fea47794261f?q=80&w=1000&auto=format&fit=crop'];
+  }
+
+  const category = p.gender || p.category || 'unisex';
+  const categoryName = p.categoryName || (
+    category === 'men' ? 'عطور رجالية' :
+    category === 'women' ? 'عطور نسائية' : 'للجنسين'
+  );
+
+  return {
+    ...p,
+    id: p.id,
+    name: p.name,
+    nameEn: p.name_en || p.nameEn || '',
+    name_en: p.name_en || p.nameEn || '',
+    brand: p.brand || 'KOON PERFUME',
+    tagline: p.tagline || '',
+    description: p.description || '',
+    category,
+    gender: category,
+    categoryName,
+    season: p.season || 'all_seasons',
+    scentFamily: p.scent_family || p.scentFamily || 'شرقي فاخر',
+    scent_family: p.scent_family || p.scentFamily || 'شرقي فاخر',
+    concentration: p.concentration || 'Extrait de Parfum',
+    longevity: p.longevity || 'ثبات عالي',
+    projection: p.projection || 'فوحان ممتاز',
+    price: Number(p.price) || 0,
+    originalPrice: p.original_price != null ? Number(p.original_price) : Number(p.price),
+    original_price: p.original_price != null ? Number(p.original_price) : Number(p.price),
+    discount: p.discount || '',
+    rating: Number(p.rating) || 4.9,
+    reviewsCount: Number(p.reviews_count ?? p.reviewsCount ?? 0),
+    reviews_count: Number(p.reviews_count ?? p.reviewsCount ?? 0),
+    badge: p.badge || (p.is_bestseller ? 'الأكثر مبيعاً' : ''),
+    isBestseller: Boolean(p.is_bestseller ?? p.isBestseller),
+    is_bestseller: Boolean(p.is_bestseller ?? p.isBestseller),
+    isFeatured: Boolean(p.is_featured ?? p.isFeatured),
+    is_featured: Boolean(p.is_featured ?? p.isFeatured),
+    images,
+    image_url: images[0],
+    video_url: p.video_url || '',
+    notes: p.notes || { top: [], heart: [], base: [] },
+    sizes: Array.isArray(p.sizes) && p.sizes.length > 0 ? p.sizes : [
+      { size: '50ml', price: Math.round((Number(p.price) || 0) * 0.75), stock: 10 },
+      { size: '100ml', price: Number(p.price) || 0, stock: 20, isDefault: true }
+    ]
+  };
+}
+
+/**
+ * Fetch products directly from Database / Backend API
+ * Strictly returns database data; no static mock arrays.
  */
 export async function getProducts(filters = {}) {
-  // 1. Try Backend API if API_BASE is configured
+  // 1. Try Backend API first
   if (API_BASE) {
     try {
       const params = new URLSearchParams();
@@ -36,19 +90,19 @@ export async function getProducts(filters = {}) {
       const res = await fetch(`${API_BASE}/api/products?${params.toString()}`);
       if (res.ok) {
         const json = await res.json();
-        if (json.success && json.data?.length > 0) {
-          return json.data;
+        if (json.success && Array.isArray(json.data)) {
+          return json.data.map(normalizeProduct);
         }
       }
     } catch (e) {
-      console.warn('Backend API request failed, falling back to Supabase/local', e);
+      console.warn('Backend API unreachable, connecting directly to Supabase client...', e);
     }
   }
 
-  // 2. Try Supabase Client directly
+  // 2. Direct Supabase Query fallback
   if (supabase) {
     try {
-      let query = supabase.from('products').select('*');
+      let query = supabase.from('products').select('*').eq('is_active', true);
 
       if (filters.gender && filters.gender !== 'all') {
         query = query.eq('gender', filters.gender);
@@ -76,71 +130,72 @@ export async function getProducts(filters = {}) {
       }
 
       const { data, error } = await query;
-      if (!error && data && data.length > 0) {
-        return data;
+      if (!error && Array.isArray(data)) {
+        return data.map(normalizeProduct);
+      }
+      if (error) {
+        console.error('Supabase query error:', error);
       }
     } catch (e) {
-      console.warn('Supabase query failed, falling back to local dataset', e);
+      console.error('Supabase direct connection error:', e);
     }
   }
 
-  // 3. Resilient In-Memory Fallback
-  let result = [...PRODUCTS];
-
-  if (filters.gender && filters.gender !== 'all') {
-    result = result.filter(p => p.category === filters.gender || p.gender === filters.gender);
-  }
-  if (filters.season && filters.season !== 'all') {
-    result = result.filter(p => p.season === filters.season || p.season?.includes(filters.season) || p.season?.includes('جميع الفصول'));
-  }
-  if (filters.scentFamily && filters.scentFamily !== 'all') {
-    result = result.filter(p => p.scentFamily?.includes(filters.scentFamily) || p.scent_family?.includes(filters.scentFamily));
-  }
-  if (filters.note && filters.note !== 'all') {
-    const qNote = filters.note.toLowerCase();
-    result = result.filter(p => {
-      const allNotes = [
-        ...(p.notes?.top || []),
-        ...(p.notes?.heart || []),
-        ...(p.notes?.base || [])
-      ].map(n => n.toLowerCase());
-      return allNotes.some(n => n.includes(qNote));
-    });
-  }
-  if (filters.minPrice) {
-    result = result.filter(p => p.price >= filters.minPrice);
-  }
-  if (filters.maxPrice) {
-    result = result.filter(p => p.price <= filters.maxPrice);
-  }
-  if (filters.bestseller) {
-    result = result.filter(p => p.isBestseller || p.is_bestseller);
-  }
-  if (filters.featured) {
-    result = result.filter(p => p.isFeatured || p.is_featured);
-  }
-  if (filters.search) {
-    const q = filters.search.toLowerCase();
-    result = result.filter(p => 
-      p.name?.toLowerCase().includes(q) ||
-      p.nameEn?.toLowerCase().includes(q) ||
-      p.description?.toLowerCase().includes(q)
-    );
-  }
-
-  if (filters.sort === 'price_asc') {
-    result.sort((a, b) => a.price - b.price);
-  } else if (filters.sort === 'price_desc') {
-    result.sort((a, b) => b.price - a.price);
-  } else if (filters.sort === 'rating') {
-    result.sort((a, b) => (b.rating || 5) - (a.rating || 5));
-  }
-
-  return result;
+  // Pure database mode: return empty array if unreachable rather than fake static data
+  return [];
 }
 
 /**
- * Fetch available filter options
+ * Fetch a single product by ID from Database
+ */
+export async function getProductById(id) {
+  if (!id) return null;
+
+  // 1. Try Backend API
+  if (API_BASE) {
+    try {
+      const res = await fetch(`${API_BASE}/api/products/${id}`);
+      if (res.ok) {
+        const json = await res.json();
+        if (json.success && json.data) {
+          return normalizeProduct(json.data);
+        }
+      }
+    } catch (e) {
+      console.warn('Backend API single product fetch failed, trying Supabase direct...', e);
+    }
+  }
+
+  // 2. Try Supabase direct
+  if (supabase) {
+    try {
+      const { data, error } = await supabase
+        .from('products')
+        .select('*')
+        .eq('id', id)
+        .single();
+
+      if (!error && data) {
+        return normalizeProduct(data);
+      }
+    } catch (e) {
+      console.error('Supabase getProductById error:', e);
+    }
+  }
+
+  return null;
+}
+
+/**
+ * Fetch related products (excluding the current one)
+ */
+export async function getRelatedProducts(currentId, limit = 3) {
+  const all = await getProducts();
+  return all.filter(p => p.id !== currentId).slice(0, limit);
+}
+
+/**
+ * Fetch filter options from Database / Backend
  */
 export async function getFilterOptions() {
   if (API_BASE) {
@@ -150,12 +205,9 @@ export async function getFilterOptions() {
         const json = await res.json();
         if (json.success && json.data) return json.data;
       }
-    } catch (e) {
-      // fallback
-    }
+    } catch (e) {}
   }
 
-  // Local fallback filter options
   return {
     genders: [
       { id: 'all', labelAr: 'الكل' },
@@ -191,4 +243,3 @@ export async function getFilterOptions() {
     ]
   };
 }
-

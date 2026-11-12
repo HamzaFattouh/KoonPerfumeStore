@@ -18,7 +18,8 @@ import {
   Layers,
   ChevronRight
 } from 'lucide-react';
-import { PRODUCTS, TESTIMONIALS } from '../data/products';
+import { TESTIMONIALS } from '../data/products';
+import { getProducts } from '../services/productService';
 import ProductCard from '../components/products/ProductCard';
 import { useLanguage } from '../context/LanguageContext';
 import CosmicLogoHero from '../components/home/CosmicLogoHero';
@@ -28,6 +29,26 @@ const Home = () => {
 
   // Active Category Filter for Bestsellers
   const [activeCategory, setActiveCategory] = useState('all');
+  const [products, setProducts] = useState([]);
+  const [isLoadingProducts, setIsLoadingProducts] = useState(true);
+
+  // Fetch live products directly from Supabase / Backend API
+  useEffect(() => {
+    let isMounted = true;
+    setIsLoadingProducts(true);
+    getProducts()
+      .then((data) => {
+        if (isMounted) {
+          setProducts(data || []);
+          setIsLoadingProducts(false);
+        }
+      })
+      .catch((err) => {
+        console.error('Error loading products for Home:', err);
+        if (isMounted) setIsLoadingProducts(false);
+      });
+    return () => { isMounted = false; };
+  }, []);
 
   // Active Olfactory Pyramid Level ('top' | 'heart' | 'base')
   const [activePyramidLevel, setActivePyramidLevel] = useState('heart');
@@ -67,19 +88,19 @@ const Home = () => {
   // Filter products based on active tab
   const getFilteredProducts = () => {
     if (activeCategory === 'bestseller') {
-      return PRODUCTS.filter(p => p.isBestseller).slice(0, 4);
+      return products.filter(p => p.isBestseller).slice(0, 4);
     }
     if (activeCategory === 'oriental') {
-      return PRODUCTS.filter(p => p.category === 'unisex' || p.category === 'men').slice(0, 4);
+      return products.filter(p => p.category === 'unisex' || p.category === 'men').slice(0, 4);
     }
     if (activeCategory === 'floral') {
-      return PRODUCTS.filter(p => p.category === 'women').slice(0, 4);
+      return products.filter(p => p.category === 'women').slice(0, 4);
     }
     if (activeCategory === 'niche') {
-      return PRODUCTS.filter(p => p.badge?.includes('فاخر') || p.badge?.includes('كوني')).slice(0, 4);
+      return products.filter(p => p.badge?.includes('فاخر') || p.badge?.includes('كوني') || p.category === 'unisex').slice(0, 4);
     }
     // 'all' default: bestsellers + featured
-    return PRODUCTS.slice(0, 4);
+    return products.slice(0, 4);
   };
 
   const filteredProducts = getFilteredProducts();

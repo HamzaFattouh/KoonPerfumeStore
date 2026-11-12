@@ -14,7 +14,8 @@ import {
   Flame,
   Droplets
 } from 'lucide-react';
-import { PRODUCTS, FRAGRANCE_FAMILIES } from '../data/products';
+import { FRAGRANCE_FAMILIES } from '../data/products';
+import { getProducts } from '../services/productService';
 import ProductCard from '../components/products/ProductCard';
 
 const POPULAR_INGREDIENTS = [
@@ -44,6 +45,26 @@ const Shop = () => {
   const [searchKeyword, setSearchKeyword] = useState('');
   const [sortBy, setSortBy] = useState('popular');
   const [isMobileFilterOpen, setIsMobileFilterOpen] = useState(false);
+  const [dbProducts, setDbProducts] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+
+  // Fetch live products directly from Supabase / Backend API
+  useEffect(() => {
+    let isMounted = true;
+    setIsLoading(true);
+    getProducts()
+      .then((data) => {
+        if (isMounted) {
+          setDbProducts(data || []);
+          setIsLoading(false);
+        }
+      })
+      .catch((err) => {
+        console.error('Failed to load database products:', err);
+        if (isMounted) setIsLoading(false);
+      });
+    return () => { isMounted = false; };
+  }, []);
 
   // Sync category state if searchParam changes
   useEffect(() => {
@@ -62,7 +83,7 @@ const Shop = () => {
 
   // Comprehensive Filtering Logic matching user requirements
   const filteredProducts = useMemo(() => {
-    return PRODUCTS.filter((item) => {
+    return dbProducts.filter((item) => {
       // 1. Gender Filter (رجالي أو ستاتي أو رجالي وستاتي)
       if (selectedGender !== 'all') {
         const itemGender = item.category || item.gender;
@@ -429,11 +450,22 @@ const Shop = () => {
 
           {/* Products Count Header */}
           <div className="flex items-center justify-between text-xs text-slate-400">
-            <span>عرض {filteredProducts.length} من أصل {PRODUCTS.length} عطر</span>
+            <span>عرض {filteredProducts.length} من أصل {dbProducts.length} عطر من قاعدة البيانات</span>
           </div>
 
-          {/* Products Grid */}
-          {filteredProducts.length > 0 ? (
+          {/* Products Grid / Loading State */}
+          {isLoading ? (
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+              {[1, 2, 3, 4, 5, 6].map((n) => (
+                <div key={n} className="bg-slate-900/40 border border-slate-800 rounded-2xl p-6 space-y-4 animate-pulse">
+                  <div className="aspect-square bg-slate-800/60 rounded-xl" />
+                  <div className="h-4 bg-slate-800/60 rounded w-3/4" />
+                  <div className="h-3 bg-slate-800/40 rounded w-1/2" />
+                  <div className="h-5 bg-slate-800/60 rounded w-1/3 mt-4" />
+                </div>
+              ))}
+            </div>
+          ) : filteredProducts.length > 0 ? (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
               {filteredProducts.map((product) => (
                 <ProductCard key={product.id} product={product} />

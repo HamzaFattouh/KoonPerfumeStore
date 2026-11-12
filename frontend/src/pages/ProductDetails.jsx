@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
-import { PRODUCTS, SAMPLE_GIFTS } from '../data/products';
+import { SAMPLE_GIFTS } from '../data/products';
+import { getProductById, getRelatedProducts } from '../services/productService';
 import { useCart } from '../context/CartContext';
 import { 
   Star, 
@@ -26,9 +27,11 @@ const ProductDetails = () => {
   const navigate = useNavigate();
   const { addToCart, toggleWishlist, isInWishlist, showToast, setIsCartOpen } = useCart();
 
-  const product = PRODUCTS.find((p) => p.id === id) || PRODUCTS[0];
+  const [product, setProduct] = useState(null);
+  const [relatedProducts, setRelatedProducts] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
   
-  const [selectedImage, setSelectedImage] = useState(product.images[0]);
+  const [selectedImage, setSelectedImage] = useState('');
   const [selectedSize, setSelectedSize] = useState('100ml');
   const [quantity, setQuantity] = useState(1);
   const [activeTab, setActiveTab] = useState('notes'); // 'notes' | 'specs' | 'reviews'
@@ -40,16 +43,66 @@ const ProductDetails = () => {
     { name: 'ريما العتيبي', rating: 5, date: 'منذ أسبوع', comment: 'تغليف راقي وريحته تأسر القلب، عينة الهدية كانت مفاجأة رائعة.' }
   ]);
 
-  // Reset image and size when route changes
+  // Fetch product from Database
   useEffect(() => {
-    if (product) {
-      setSelectedImage(product.images[0]);
-      const defaultSize = product.sizes?.find(s => s.isDefault)?.size || '100ml';
-      setSelectedSize(defaultSize);
-      setQuantity(1);
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-    }
-  }, [id, product]);
+    let isMounted = true;
+    setIsLoading(true);
+
+    getProductById(id)
+      .then((data) => {
+        if (isMounted) {
+          setProduct(data);
+          if (data) {
+            setSelectedImage(data.images?.[0] || data.image_url);
+            const defaultSize = data.sizes?.find((s) => s.isDefault)?.size || '100ml';
+            setSelectedSize(defaultSize);
+          }
+          setIsLoading(false);
+        }
+      })
+      .catch((err) => {
+        console.error('Error fetching product details from DB:', err);
+        if (isMounted) setIsLoading(false);
+      });
+
+    getRelatedProducts(id, 3)
+      .then((related) => {
+        if (isMounted) setRelatedProducts(related || []);
+      })
+      .catch(() => {});
+
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+    return () => { isMounted = false; };
+  }, [id]);
+
+  if (isLoading) {
+    return (
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 animate-pulse">
+          <div className="aspect-square bg-slate-900/60 rounded-3xl" />
+          <div className="space-y-6">
+            <div className="h-8 bg-slate-900/60 rounded w-2/3" />
+            <div className="h-4 bg-slate-900/40 rounded w-1/3" />
+            <div className="h-24 bg-slate-900/40 rounded w-full" />
+            <div className="h-12 bg-slate-900/60 rounded w-1/2" />
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  if (!product) {
+    return (
+      <div className="max-w-md mx-auto my-24 p-8 text-center bg-slate-900/40 border border-slate-800 rounded-3xl space-y-4">
+        <Sparkles className="w-12 h-12 text-amber-400 mx-auto" />
+        <h2 className="text-xl font-bold text-white">العطر غير متوفر حالياً</h2>
+        <p className="text-xs text-slate-400">قد يكون العطر نفد من قاعدة البيانات أو الرابط غير صحيح.</p>
+        <Link to="/shop" className="inline-block px-6 py-2.5 bg-amber-500 text-slate-950 font-bold rounded-xl text-xs hover:bg-amber-400 transition">
+          العودة للمتجر
+        </Link>
+      </div>
+    );
+  }
 
   const currentSizeObj = product.sizes?.find(s => s.size === selectedSize);
   const currentPrice = currentSizeObj ? currentSizeObj.price : product.price;
@@ -89,9 +142,6 @@ const ProductDetails = () => {
       showToast('شكراً لتقييمك! تم نشر رأيك بنجاح', 'success');
     }
   };
-
-  // Related products (same category or others)
-  const relatedProducts = PRODUCTS.filter(p => p.id !== product.id).slice(0, 3);
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-16">

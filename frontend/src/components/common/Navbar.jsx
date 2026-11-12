@@ -16,7 +16,7 @@ import {
   ChevronDown,
   Globe
 } from 'lucide-react';
-import { PRODUCTS } from '../../data/products';
+import { getProducts } from '../../services/productService';
 
 const Navbar = () => {
   const { cartCount, wishlist, setIsCartOpen, setQuickViewProduct } = useCart();
@@ -25,11 +25,21 @@ const Navbar = () => {
   const [searchOpen, setSearchOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [scrolled, setScrolled] = useState(false);
+  const [allProducts, setAllProducts] = useState([]);
   const searchInputRef = useRef(null);
   const navigate = useNavigate();
   const location = useLocation();
 
   const isHome = location.pathname === '/';
+
+  // Load products from DB for live search
+  useEffect(() => {
+    let isMounted = true;
+    getProducts().then(data => {
+      if (isMounted) setAllProducts(data || []);
+    }).catch(() => {});
+    return () => { isMounted = false; };
+  }, []);
 
   // On Home page, navbar appears when scrolled past the opening video (> 80px)
   useEffect(() => {
@@ -48,14 +58,14 @@ const Navbar = () => {
     }
   }, [searchOpen]);
 
-  // Filtered search products
+  // Filtered search products directly from Database
   const searchResults = searchQuery.trim() === '' 
     ? [] 
-    : PRODUCTS.filter(p => 
-        p.name.includes(searchQuery) || 
-        p.nameEn.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        p.scentFamily.includes(searchQuery) ||
-        p.categoryName.includes(searchQuery)
+    : allProducts.filter(p => 
+        (p.name && p.name.includes(searchQuery)) || 
+        (p.nameEn && p.nameEn.toLowerCase().includes(searchQuery.toLowerCase())) ||
+        (p.scentFamily && p.scentFamily.includes(searchQuery)) ||
+        (p.categoryName && p.categoryName.includes(searchQuery))
       );
 
   const handleSearchResultClick = (productId) => {

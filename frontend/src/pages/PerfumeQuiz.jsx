@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { PRODUCTS } from '../data/products';
+import { getProductById, getProducts } from '../services/productService';
 import { useCart } from '../context/CartContext';
 import { 
   Compass, 
@@ -78,27 +78,32 @@ const PerfumeQuiz = () => {
     }
   };
 
-  const calculateResult = (ans) => {
+  const calculateResult = async (ans) => {
     setCalculating(true);
-    setTimeout(() => {
-      let chosenId = 'koon-absolute';
-      if (ans[2]?.target) {
-        chosenId = ans[2].target;
-      } else if (ans[1]?.category === 'women') {
-        chosenId = 'nebula-vanilla';
-      } else if (ans[1]?.category === 'men') {
-        chosenId = 'black-aurora';
+    let chosenId = 'koon-absolute';
+    if (ans[2]?.target) {
+      chosenId = ans[2].target;
+    } else if (ans[1]?.category === 'women') {
+      chosenId = 'nebula-vanilla';
+    } else if (ans[1]?.category === 'men') {
+      chosenId = 'black-aurora';
+    }
+
+    try {
+      let match = await getProductById(chosenId);
+      if (!match) {
+        const all = await getProducts();
+        match = all[0];
       }
-
-      const match = PRODUCTS.find(p => p.id === chosenId) || PRODUCTS[0];
       setMatchedProduct(match);
+    } catch (e) {
+      console.error('Quiz result calculation error:', e);
+    } finally {
       setCalculating(false);
-
-      // Trigger celebration
       try {
         fireConfetti();
       } catch (e) {}
-    }, 1200);
+    }
   };
 
   const resetQuiz = () => {

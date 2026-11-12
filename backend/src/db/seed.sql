@@ -219,3 +219,4 @@ ON CONFLICT (id) DO UPDATE SET
     notes = EXCLUDED.notes,
     sizes = EXCLUDED.sizes,
     updated_at = NOW();
+
