@@ -1,3 +1,8 @@
+import dns from 'dns';
+try {
+  dns.setDefaultResultOrder('ipv4first');
+} catch (e) {}
+
 import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
@@ -63,7 +68,12 @@ export async function autoMigrateDatabase() {
       console.log(`📦 Database already contains ${count} products.`);
     }
   } catch (err) {
-    console.error('❌ Auto-migration error:', err.message);
+    if (err.message?.includes('ENETUNREACH')) {
+      console.error('❌ Auto-migration error: Render cannot reach Supabase via IPv6 direct connection.');
+      console.error('👉 Fix: In Supabase -> Settings -> Database -> Connection string, choose "Use connection pooling" (port 6543) instead of direct connection.');
+    } else {
+      console.error('❌ Auto-migration error:', err.message);
+    }
   } finally {
     await pool.end();
   }
@@ -73,3 +83,4 @@ export async function autoMigrateDatabase() {
 if (process.argv[1]?.endsWith('migrate.js')) {
   autoMigrateDatabase();
 }
+
