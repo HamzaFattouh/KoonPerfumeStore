@@ -23,3 +23,8 @@ dist-ssr
 *.sln
 *.sw?
 
+# Scripts & temporary video assets
+scripts/
+public/master_video.mp4
+public/alpha_mask_*.png
+

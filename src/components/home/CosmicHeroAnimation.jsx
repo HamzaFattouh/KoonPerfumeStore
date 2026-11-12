@@ -32,7 +32,7 @@ const CosmicHeroAnimation = () => {
     if (videoRef.current) {
       videoRef.current.pause();
       try {
-        videoRef.current.currentTime = 7.95;
+        videoRef.current.currentTime = 8.45;
       } catch (e) {
         // ignore
       }
@@ -49,7 +49,7 @@ const CosmicHeroAnimation = () => {
 
   const handleSkip = () => {
     if (videoRef.current) {
-      videoRef.current.currentTime = 7.9;
+      videoRef.current.currentTime = 8.45;
       videoRef.current.pause();
       setVideoEnded(true);
     }
@@ -72,31 +72,27 @@ const CosmicHeroAnimation = () => {
   };
 
   return (
-    <section className="relative w-full h-[100dvh] min-h-[650px] flex items-center justify-center overflow-hidden bg-transparent select-none">
+    <section className="relative w-full h-[100dvh] min-h-[650px] flex flex-col items-center justify-between overflow-hidden bg-transparent select-none pt-20 pb-8">
       
       {/* 1. Ambient Cosmic Glow behind logo area */}
       <div className="absolute inset-0 pointer-events-none flex items-center justify-center">
-        <div className="w-[500px] h-[500px] sm:w-[650px] sm:h-[650px] rounded-full bg-amber-500/10 blur-[130px] animate-pulse-slow" />
-        <div className="w-[350px] h-[350px] sm:w-[450px] sm:h-[450px] rounded-full bg-indigo-600/10 blur-[100px]" />
+        <div className="w-[450px] h-[450px] sm:w-[600px] sm:h-[600px] rounded-full bg-amber-500/10 blur-[130px] animate-pulse-slow" />
+        <div className="w-[300px] h-[300px] sm:w-[420px] sm:h-[420px] rounded-full bg-indigo-600/10 blur-[100px]" />
       </div>
 
-      {/* 2. Transparent-Blend Video Animation (بدون خلفية مدموجة مباشرة مع نجوم الموقع) */}
-      <div className="relative w-full h-full flex items-center justify-center">
+      {/* 2. Pure Native Transparent WebM Video (خلفية شفافة 100% بدون نجوم الفيديو الخارجية) */}
+      <div className="relative w-full flex-1 flex items-center justify-center px-4 my-auto">
         <video
           ref={videoRef}
           autoPlay
           muted={isMuted}
           playsInline
           onEnded={handleVideoEnded}
-          className="w-full h-full max-w-[1400px] object-contain pointer-events-none transition-all duration-700 select-none z-10"
-          style={{
-            mixBlendMode: 'screen',
-            filter: 'contrast(125%) brightness(105%)'
-          }}
+          className="w-auto h-auto max-h-[58vh] max-w-[90vw] md:max-w-[850px] object-contain pointer-events-none transition-all duration-700 select-none z-10"
         >
-          {/* Transparent WebM with native yuva420p alpha channel */}
+          {/* Native 100% Transparent WebM with yuva420p alpha channel */}
           <source src="/intro_transparent.webm" type="video/webm" />
-          {/* Fallback MP4 rendered transparently via GPU screen blend mode */}
+          {/* Fallback MP4 with pitch black background */}
           <source src="/intro.mp4" type="video/mp4" />
         </video>
       </div>
@@ -133,8 +129,8 @@ const CosmicHeroAnimation = () => {
         )}
       </div>
 
-      {/* 4. Bottom Actions & Smooth Scroll Cue (تظهر بسلاسة) */}
-      <div className={`absolute bottom-8 inset-x-0 z-20 flex flex-col items-center justify-center gap-4 transition-all duration-700 ${
+      {/* 4. Bottom Actions & Smooth Scroll Cue (تظهر بسلاسة أسفل الشعار) */}
+      <div className={`relative z-20 w-full flex flex-col items-center justify-center gap-3 transition-all duration-700 pb-2 ${
         videoEnded ? 'opacity-100 translate-y-0' : 'opacity-90 translate-y-0'
       }`}>
         {/* Quick CTA Buttons */}
