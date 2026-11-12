@@ -21,8 +21,9 @@ const StarBackground = () => {
 
     window.addEventListener('resize', handleResize);
 
-    // --- 1. STARS SYSTEM (حركة ناعمة وخفيفة للنجوم) ---
-    const STAR_COUNT = Math.min(140, Math.floor((width * height) / 10000));
+    // --- 1. STARS SYSTEM (حركة ناعمة وخفيفة للنجوم ومحسنة للأداء) ---
+    const isMobile = width < 768;
+    const STAR_COUNT = isMobile ? 35 : Math.min(65, Math.floor((width * height) / 18000));
     let stars = [];
 
     const starColors = [
@@ -192,13 +193,30 @@ const StarBackground = () => {
         }
       }
 
-      animationFrameId = requestAnimationFrame(render);
+      if (!document.hidden) {
+        animationFrameId = requestAnimationFrame(render);
+      }
     };
 
-    render();
+    const handleVisibilityChange = () => {
+      if (!document.hidden) {
+        animationFrameId = requestAnimationFrame(render);
+      } else {
+        cancelAnimationFrame(animationFrameId);
+      }
+    };
+
+    document.addEventListener('visibilitychange', handleVisibilityChange);
+
+    // Defer start slightly so initial paint & LCP complete without main-thread jitter
+    const timerId = setTimeout(() => {
+      animationFrameId = requestAnimationFrame(render);
+    }, 60);
 
     return () => {
+      clearTimeout(timerId);
       window.removeEventListener('resize', handleResize);
+      document.removeEventListener('visibilitychange', handleVisibilityChange);
       cancelAnimationFrame(animationFrameId);
     };
   }, []);

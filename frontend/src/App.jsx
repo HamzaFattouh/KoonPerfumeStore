@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, Suspense, lazy } from 'react';
 import { BrowserRouter, Routes, Route, useLocation } from 'react-router-dom';
 import { CartProvider } from './context/CartContext';
 import { LanguageProvider } from './context/LanguageContext';
@@ -9,20 +9,29 @@ import CartDrawer from './components/common/CartDrawer';
 import QuickViewModal from './components/common/QuickViewModal';
 import Toast from './components/common/Toast';
 
-// Pages
+// Direct import for Home to ensure instant First Contentful Paint (FCP)
 import Home from './pages/Home';
-import Shop from './pages/Shop';
-import ProductDetails from './pages/ProductDetails';
-import Cart from './pages/Cart';
-import Checkout from './pages/Checkout';
-import OrderConfirmation from './pages/OrderConfirmation';
-import Wishlist from './pages/Wishlist';
-import PerfumeQuiz from './pages/PerfumeQuiz';
-import About from './pages/About';
-import Contact from './pages/Contact';
-import TrackOrder from './pages/TrackOrder';
-import FAQ from './pages/FAQ';
-import Profile from './pages/Profile';
+
+// Route Code-Splitting with React.lazy for dramatic performance boost
+const Shop = lazy(() => import('./pages/Shop'));
+const ProductDetails = lazy(() => import('./pages/ProductDetails'));
+const Cart = lazy(() => import('./pages/Cart'));
+const Checkout = lazy(() => import('./pages/Checkout'));
+const OrderConfirmation = lazy(() => import('./pages/OrderConfirmation'));
+const Wishlist = lazy(() => import('./pages/Wishlist'));
+const PerfumeQuiz = lazy(() => import('./pages/PerfumeQuiz'));
+const About = lazy(() => import('./pages/About'));
+const Contact = lazy(() => import('./pages/Contact'));
+const TrackOrder = lazy(() => import('./pages/TrackOrder'));
+const FAQ = lazy(() => import('./pages/FAQ'));
+const Profile = lazy(() => import('./pages/Profile'));
+
+// Subtle, elegant fallback during chunk transition
+const RouteLoadingFallback = () => (
+  <div className="min-h-[60vh] flex items-center justify-center">
+    <div className="w-8 h-8 rounded-full border-2 border-amber-500/20 border-t-amber-400 animate-spin" />
+  </div>
+);
 
 // Auto scroll to top on page change
 const ScrollToTop = () => {
@@ -46,24 +55,26 @@ function App() {
             {/* Navigation Bar */}
             <Navbar />
 
-            {/* Main App Routes */}
+            {/* Main App Routes with Code-Splitting */}
             <main className="flex-1 relative z-10">
-              <Routes>
-                <Route path="/" element={<Home />} />
-                <Route path="/shop" element={<Shop />} />
-                <Route path="/product/:id" element={<ProductDetails />} />
-                <Route path="/cart" element={<Cart />} />
-                <Route path="/checkout" element={<Checkout />} />
-                <Route path="/order-confirmation" element={<OrderConfirmation />} />
-                <Route path="/wishlist" element={<Wishlist />} />
-                <Route path="/quiz" element={<PerfumeQuiz />} />
-                <Route path="/about" element={<About />} />
-                <Route path="/contact" element={<Contact />} />
-                <Route path="/track-order" element={<TrackOrder />} />
-                <Route path="/faq" element={<FAQ />} />
-                <Route path="/profile" element={<Profile />} />
-                <Route path="*" element={<Home />} />
-              </Routes>
+              <Suspense fallback={<RouteLoadingFallback />}>
+                <Routes>
+                  <Route path="/" element={<Home />} />
+                  <Route path="/shop" element={<Shop />} />
+                  <Route path="/product/:id" element={<ProductDetails />} />
+                  <Route path="/cart" element={<Cart />} />
+                  <Route path="/checkout" element={<Checkout />} />
+                  <Route path="/order-confirmation" element={<OrderConfirmation />} />
+                  <Route path="/wishlist" element={<Wishlist />} />
+                  <Route path="/quiz" element={<PerfumeQuiz />} />
+                  <Route path="/about" element={<About />} />
+                  <Route path="/contact" element={<Contact />} />
+                  <Route path="/track-order" element={<TrackOrder />} />
+                  <Route path="/faq" element={<FAQ />} />
+                  <Route path="/profile" element={<Profile />} />
+                  <Route path="*" element={<Home />} />
+                </Routes>
+              </Suspense>
             </main>
 
             {/* Global Drawers & Modals */}
@@ -81,4 +92,3 @@ function App() {
 }
 
 export default App;
-
