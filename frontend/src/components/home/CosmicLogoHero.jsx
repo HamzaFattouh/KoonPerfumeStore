@@ -106,24 +106,10 @@ const CosmicLogoHero = () => {
       {/* Hidden Audio Player for Cosmic Ambience */}
       <audio ref={audioRef} src="/cosmic_sound.mp3" loop preload="auto" />
 
-      {/* 1. Deep Cosmic Nebula Background Glow (Living breathing lighting) */}
+      {/* 1. Deep Cosmic Nebula Background Glow (GPU-composited CSS) */}
       <div className="absolute inset-0 pointer-events-none flex items-center justify-center">
-        <motion.div 
-          animate={{
-            scale: [1, 1.15, 1],
-            opacity: [0.15, 0.28, 0.15]
-          }}
-          transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
-          className="w-[450px] h-[450px] sm:w-[650px] sm:h-[650px] rounded-full bg-gradient-to-tr from-amber-500/20 via-amber-400/10 to-indigo-600/20 blur-[140px]" 
-        />
-        <motion.div 
-          animate={{
-            scale: [1.1, 0.95, 1.1],
-            opacity: [0.12, 0.22, 0.12]
-          }}
-          transition={{ duration: 10, repeat: Infinity, ease: "easeInOut" }}
-          className="w-[320px] h-[320px] sm:w-[480px] sm:h-[480px] rounded-full bg-indigo-500/15 blur-[110px]" 
-        />
+        <div className="w-[450px] h-[450px] sm:w-[650px] sm:h-[650px] rounded-full bg-gradient-to-tr from-amber-500/20 via-amber-400/10 to-indigo-600/20 blur-[130px] animate-pulse-slow will-change-transform" />
+        <div className="w-[320px] h-[320px] sm:w-[480px] sm:h-[480px] rounded-full bg-indigo-500/15 blur-[100px] animate-pulse will-change-transform" />
       </div>
 
       {/* 2. Top Luxury Controls Floating Bar (صوت / إعادة رسم / تخطي) */}
@@ -390,22 +376,22 @@ const CosmicLogoHero = () => {
             </svg>
           </div>
 
-          {/* Fully Revealed Crystal Emblem Image (1024x1024 High-Resolution Metallic Asset) */}
+          {/* Fully Revealed Crystal Emblem Image (Instant LCP Element) */}
           <div 
-            className={`absolute inset-0 flex items-center justify-center transition-all duration-1000 ${
-              animStage === 'revealed' ? 'opacity-100 scale-100 z-10' : 'opacity-0 scale-95 pointer-events-none z-0'
+            className={`absolute inset-0 flex items-center justify-center transition-all duration-700 ${
+              animStage === 'revealed' ? 'opacity-100 scale-100 z-10' : 'opacity-85 scale-100 z-0'
             }`}
           >
             {/* The Pristine 1024x1024 Transparent RGBA Emblem (WebP prioritized with PNG fallback) */}
             <picture className="w-full h-full flex items-center justify-center">
               <source srcSet="/koon_emblem_hq.webp" type="image/webp" />
               <img
-                src="/koon_emblem_hq.png"
+                src="/koon_emblem_hq.webp"
                 alt="Koon Perfume Astronomical Emblem"
                 width="1024"
                 height="1024"
                 loading="eager"
-                fetchPriority="high"
+                fetchpriority="high"
                 className="w-full h-full object-contain filter drop-shadow-[0_15px_35px_rgba(245,158,11,0.25)] select-none pointer-events-none"
               />
             </picture>
