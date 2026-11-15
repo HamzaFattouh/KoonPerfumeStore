@@ -11,13 +11,13 @@ import {
 import { useLanguage } from '../../context/LanguageContext';
 import { getCachedSiteSettings } from '../../services/adminService';
 
-// 7 Hyper-Realistic 8K 3D Studio Renders on Dark Stone Pedestal
+// 7 Standalone Transparent 3D Perfume Bottles (No Background)
 const LUXURY_3D_PERFUMES = [
   {
     id: 'naxos',
     brand: 'XERJOFF',
     model: 'XJ 1861 Naxos',
-    image: '/perfumes/naxos.jpg',
+    image: '/perfumes/naxos.png',
     glow: 'rgba(234, 179, 8, 0.45)',
     descriptionAr: 'توليفة إيطالية فاخرة تجمع بين دفء العسل والتبغ مع نفحات اللافندر والبرغموت الإيطالي، في زجاجة ذهبية متجمدة تعكس الفخامة الملكية.',
     descriptionHe: 'ניחוח איטלקי יוקרתי המשלב דבש חם וטבק עם לבנדר וברגמוט, בבקבוק זהוב מרהיב.'
@@ -26,7 +26,7 @@ const LUXURY_3D_PERFUMES = [
     id: 'symphony',
     brand: 'LOUIS VUITTON',
     model: 'Symphony',
-    image: '/perfumes/symphony.jpg',
+    image: '/perfumes/symphony.png',
     glow: 'rgba(192, 132, 252, 0.45)',
     descriptionAr: 'سيمفونية عطرية ناعمة من الجريب فروت والبرغموت والزنجبيل، تتوجها زجاجة بنفسجية منحوتة بغطاء فضي فني من لويس فويتون.',
     descriptionHe: 'סימפוניה עדינה של אשכולית, ברגמוט וג׳ינג׳ר בבקבוק זכוכית סגול עם פקק כסף פיסולי.'
@@ -35,7 +35,7 @@ const LUXURY_3D_PERFUMES = [
     id: 'chanel-no5',
     brand: 'CHANEL',
     model: "N°5 L'Eau",
-    image: '/perfumes/chanel_no5.jpg',
+    image: '/perfumes/chanel_no5.png',
     glow: 'rgba(251, 191, 36, 0.45)',
     descriptionAr: 'الأيقونة الباريسية الخالدة بلمسة عصرية مشرقة من الحمضيات والياسمين وخشب الأرز، داخل زجاجة شانيل الكريستالية الكلاسيكية.',
     descriptionHe: 'האייקון הפריזאי הנצחי עם נגיעה רעננה של הדרים, יסמין ועץ ארז בבקבוק הקריסטל הקלאסי.'
@@ -44,7 +44,7 @@ const LUXURY_3D_PERFUMES = [
     id: 'guidance46',
     brand: 'AMOUAGE',
     model: 'Guidance 46',
-    image: '/perfumes/guidance46.jpg',
+    image: '/perfumes/guidance46.png',
     glow: 'rgba(244, 63, 94, 0.45)',
     descriptionAr: 'تركيز استثنائي يفيض بنفحات الكمثرى والبندق واللبان والورد الدمشقي، بتدرج مرجاني دافئ وشعار أمواج الذهبي الفاخر.',
     descriptionHe: 'תמצית עוצמתית של אגס, אגוזי לוז, לבונה וורד דמשקאי בבקבוק קורל עם סמל זהב מלכותי.'
@@ -53,7 +53,7 @@ const LUXURY_3D_PERFUMES = [
     id: 'sauvage',
     brand: 'DIOR',
     model: 'Sauvage Eau de Parfum',
-    image: '/perfumes/sauvage.jpg',
+    image: '/perfumes/sauvage.png',
     glow: 'rgba(56, 189, 248, 0.45)',
     descriptionAr: 'حضور قوي وجذاب يمزج انتعاش البرغموت مع الفلفل الحار والفانيليا الداكنة، في زجاجة ديور الزرقاء الليلية المصقولة.',
     descriptionHe: 'נוכחות עוצמתית המשלבת ברגמוט רענן, פלפל ווניל כהה בבקבוק הכחול-לילי המפורסם של דיור.'
@@ -62,7 +62,7 @@ const LUXURY_3D_PERFUMES = [
     id: 'oud-wood',
     brand: 'TOM FORD',
     model: 'Oud Wood',
-    image: '/perfumes/oud_wood.jpg',
+    image: '/perfumes/oud_wood.png',
     glow: 'rgba(168, 162, 158, 0.42)',
     descriptionAr: 'أيقونة العود النادر وخشب الورد والعنبر الدافئ، بتوازن مخملي داكن داخل زجاجة توم فورد الهندسية الفخمة.',
     descriptionHe: 'יצירת מופת של עוד נדיר, עץ ורוד וענבר חם בבקבוק האדריכלי הכהה של טום פורד.'
@@ -71,7 +71,7 @@ const LUXURY_3D_PERFUMES = [
     id: 'valaya',
     brand: 'PARFUMS de MARLY',
     model: 'Valaya',
-    image: '/perfumes/valaya.jpg',
+    image: '/perfumes/valaya.png',
     glow: 'rgba(226, 232, 240, 0.42)',
     descriptionAr: 'عبير نقي وأثيري من الخوخ الأبيض وزهر البرتقال والمسك الحريري، في زجاجة عاجية منحوتة مستوحاة من القصور الفرنسية.',
     descriptionHe: 'ניחוח טהור ואוורירי של אפרסק לבן, פריחת תפוז ומושק משיי בבקבוק שנהב מפוסל.'
@@ -90,15 +90,15 @@ const PerfumeShelfHero = ({ products = [], heroSettings }) => {
   const [isPaused, setIsPaused] = useState(false);
   const [slotSpacing, setSlotSpacing] = useState(270);
 
-  // Responsive horizontal spacing for 16:9 3D renders on the shelf
+  // Responsive horizontal spacing for standalone 3D bottles on the shelf
   useEffect(() => {
     const updateSpacing = () => {
       if (window.innerWidth < 640) {
-        setSlotSpacing(175);
+        setSlotSpacing(120);
       } else if (window.innerWidth < 1024) {
-        setSlotSpacing(230);
+        setSlotSpacing(165);
       } else {
-        setSlotSpacing(290);
+        setSlotSpacing(205);
       }
     };
     updateSpacing();
@@ -264,32 +264,37 @@ const PerfumeShelfHero = ({ products = [], heroSettings }) => {
                   className="absolute bottom-7 left-1/2 -translate-x-1/2 flex flex-col items-center cursor-pointer group origin-bottom"
                   title={`${item.brand} — ${item.model}`}
                 >
-                  {/* 16:9 Hyper-Realistic 3D Studio Render Card */}
-                  <div
-                    className={`relative w-[240px] sm:w-[330px] lg:w-[390px] aspect-video rounded-2xl overflow-hidden transition-shadow duration-500 ${
-                      isCenter
-                        ? 'ring-2 ring-amber-400/70 shadow-[0_25px_60px_rgba(0,0,0,0.95)]'
-                        : 'ring-1 ring-slate-700/50 shadow-2xl'
-                    }`}
-                    style={{
-                      boxShadow: isCenter
-                        ? `0 24px 60px -12px ${item.glow}, 0 20px 45px rgba(0,0,0,0.9)`
-                        : undefined
-                    }}
+                  {/* Standalone 3D Perfume Bottle (No Background Box / Card) */}
+                  <motion.div
+                    whileHover={isCenter ? { rotateY: 8, rotateX: -4, y: -6, scale: 1.04 } : { y: -4 }}
+                    transition={{ type: 'spring', stiffness: 260, damping: 20 }}
+                    className="relative flex items-end justify-center"
+                    style={{ transformStyle: 'preserve-3d' }}
                   >
+                    {/* Subtle Rim Aura behind center bottle only */}
+                    {isCenter && (
+                      <div
+                        className="absolute inset-x-4 top-6 bottom-2 rounded-full blur-2xl opacity-55 pointer-events-none transition-colors duration-700"
+                        style={{ backgroundColor: item.glow }}
+                      />
+                    )}
                     <img
                       src={item.image}
                       alt={`${item.brand} ${item.model}`}
                       draggable={false}
-                      className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                      className="relative z-10 h-[200px] sm:h-[260px] lg:h-[295px] w-auto object-contain select-none transition-all duration-500"
+                      style={{
+                        filter: isCenter
+                          ? 'drop-shadow(0 24px 26px rgba(0,0,0,0.92)) drop-shadow(0 0 18px rgba(251,191,36,0.22))'
+                          : 'drop-shadow(0 16px 18px rgba(0,0,0,0.85))'
+                      }}
                     />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/35 via-transparent to-transparent pointer-events-none" />
-                  </div>
+                  </motion.div>
 
                   {/* Contact Shadow on Shelf */}
                   <div
-                    className={`mt-2 h-2.5 rounded-full blur-sm transition-all duration-300 ${
-                      isCenter ? 'w-56 sm:w-72 bg-amber-400/40' : 'w-36 bg-black/85'
+                    className={`mt-1 h-2.5 rounded-full blur-sm transition-all duration-300 ${
+                      isCenter ? 'w-32 sm:w-44 bg-amber-400/45' : 'w-20 bg-black/85'
                     }`}
                   />
                 </motion.div>
