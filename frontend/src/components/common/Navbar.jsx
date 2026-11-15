@@ -105,17 +105,17 @@ const Navbar = () => {
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="flex items-center justify-between gap-3 sm:gap-4">
               
-              {/* Logo and Brand */}
+              {/* Logo and Brand: Hide text when screen shrinks to save space, keeping emblem */}
               <Link to="/" className="flex items-center gap-3 group shrink-0">
-                <div className="relative w-11 h-11 sm:w-12 sm:h-12 rounded-full overflow-hidden border-2 border-slate-700/80 group-hover:border-amber-400/80 transition-all shadow-md group-hover:shadow-amber-500/20">
+                <div className="relative w-10 h-10 sm:w-11 sm:h-11 rounded-full overflow-hidden border-2 border-slate-700/80 group-hover:border-amber-400/80 transition-all shadow-md group-hover:shadow-amber-500/20 shrink-0">
                   <img 
                     src="/koon-logo.jpg" 
                     alt="Koon Perfume Logo" 
                     className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                   />
                 </div>
-                <div className="flex flex-col">
-                  <span className="text-xl sm:text-2xl font-black tracking-wide text-white group-hover:text-amber-400 transition">
+                <div className="hidden xl:flex flex-col">
+                  <span className="text-xl font-black tracking-wide text-white group-hover:text-amber-400 transition leading-tight">
                     {t.brandName}
                   </span>
                   <span className="text-[10px] font-serif uppercase tracking-[0.25em] text-slate-400 group-hover:text-slate-200 transition">
@@ -125,7 +125,7 @@ const Navbar = () => {
               </Link>
 
               {/* Desktop Navigation Links */}
-              <nav className="hidden lg:flex items-center gap-4 xl:gap-6 whitespace-nowrap">
+              <nav className="hidden lg:flex items-center gap-3.5 xl:gap-6 whitespace-nowrap">
                 {navLinks.map((link) => (
                   <NavLink
                     key={link.to}
@@ -142,18 +142,73 @@ const Navbar = () => {
               {/* Actions: Language Switcher, Search, Wishlist, Cart, Profile */}
               <div className="flex items-center gap-2 sm:gap-3 shrink-0">
                 
-                {/* 🌐 Single Language Icon Button (شعار تحويل اللغة فقط) */}
+                {/* 🪐 Bespoke Drawn Arabic & Hebrew Language Emblem Button */}
                 <button
                   type="button"
                   onClick={() => setLanguage(language === 'ar' ? 'he' : 'ar')}
-                  className="p-2 sm:p-2.5 text-slate-300 hover:text-amber-400 hover:bg-slate-800/80 rounded-xl transition cursor-pointer relative flex items-center justify-center group border border-slate-800/80 hover:border-amber-500/40"
+                  className="p-1.5 sm:p-2 rounded-xl transition cursor-pointer relative flex items-center justify-center group bg-slate-900/80 hover:bg-slate-800 border border-slate-700/80 hover:border-amber-400/60 shadow-sm"
                   title={language === 'ar' ? 'החלף לעברית (Switch to Hebrew)' : 'التبديل إلى العربية (Switch to Arabic)'}
                   aria-label={language === 'ar' ? 'تغيير اللغة إلى العبرية' : 'שנה שפה לערבית'}
                 >
-                  <Globe className="w-5 h-5 text-amber-400 group-hover:scale-110 group-hover:rotate-12 transition-transform" />
-                  <span className="absolute -bottom-1 -right-1 w-4 h-4 rounded-full bg-slate-950 border border-amber-500/70 text-amber-300 text-[10px] font-black flex items-center justify-center leading-none shadow-sm">
-                    {language === 'ar' ? 'ع' : 'ע'}
-                  </span>
+                  <svg 
+                    viewBox="0 0 36 36" 
+                    fill="none" 
+                    xmlns="http://www.w3.org/2000/svg"
+                    className="w-7 h-7 transform transition-transform duration-300 group-hover:scale-105"
+                  >
+                    {/* Celestial Outer Orbit Ring */}
+                    <circle cx="18" cy="18" r="16" stroke="url(#goldEmblemGrad)" strokeWidth="1.2" strokeDasharray="3 2" opacity="0.7" />
+                    <circle cx="18" cy="18" r="13" fill="#07080b" stroke="#f59e0b" strokeWidth="1.2" />
+                    
+                    {/* Star Dust points */}
+                    <circle cx="18" cy="2" r="1.2" fill="#fbbf24" />
+                    <circle cx="18" cy="34" r="1.2" fill="#fbbf24" />
+                    <circle cx="2" cy="18" r="1.2" fill="#fbbf24" />
+                    <circle cx="34" cy="18" r="1.2" fill="#fbbf24" />
+                    
+                    {/* Dual Glyph Arabic 'ع' and Hebrew 'ע' Calligraphic Seal */}
+                    <text 
+                      x="11.5" 
+                      y="22.5" 
+                      fontFamily="Cairo, sans-serif" 
+                      fontWeight="900" 
+                      fontSize="12.5" 
+                      fill={language === 'ar' ? '#f59e0b' : '#64748b'}
+                      textAnchor="middle"
+                    >
+                      ع
+                    </text>
+                    <text 
+                      x="18" 
+                      y="21" 
+                      fontFamily="sans-serif" 
+                      fontWeight="300" 
+                      fontSize="10" 
+                      fill="#475569" 
+                      textAnchor="middle"
+                    >
+                      |
+                    </text>
+                    <text 
+                      x="24.5" 
+                      y="22.5" 
+                      fontFamily="sans-serif" 
+                      fontWeight="900" 
+                      fontSize="12.5" 
+                      fill={language === 'he' ? '#f59e0b' : '#64748b'}
+                      textAnchor="middle"
+                    >
+                      ע
+                    </text>
+
+                    <defs>
+                      <linearGradient id="goldEmblemGrad" x1="0" y1="0" x2="36" y2="36" gradientUnits="userSpaceOnUse">
+                        <stop stopColor="#f59e0b" />
+                        <stop offset="0.5" stopColor="#fbbf24" />
+                        <stop offset="1" stopColor="#d97706" />
+                      </linearGradient>
+                    </defs>
+                  </svg>
                 </button>
 
                 {/* Search Toggle */}

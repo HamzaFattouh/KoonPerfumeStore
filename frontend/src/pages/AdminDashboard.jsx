@@ -47,7 +47,8 @@ import {
   ShieldCheck,
   ChevronDown,
   Layers,
-  Banknote
+  Banknote,
+  SlidersHorizontal
 } from 'lucide-react';
 
 const AdminDashboard = () => {
@@ -126,7 +127,20 @@ const AdminDashboard = () => {
     hero_title_ar: '',
     hero_title_en: '',
     hero_subtitle_ar: '',
-    hero_subtitle_he: ''
+    hero_subtitle_he: '',
+    show_hero_explore_btn: true,
+    show_hero_quiz_btn: true,
+    show_bestsellers: true,
+    show_promo_banner: true,
+    show_testimonials: true,
+    promo_tag_ar: '',
+    promo_tag_he: '',
+    promo_title_ar: '',
+    promo_title_he: '',
+    promo_subtitle_ar: '',
+    promo_subtitle_he: '',
+    promo_coupon_code: 'KOON10',
+    promo_banner_image: ''
   });
 
   // Coupons Manager State
@@ -170,6 +184,8 @@ const AdminDashboard = () => {
       const hero = settings?.hero_section || {};
       const ann = settings?.announcement_bar || {};
       const coups = settings?.coupons || [];
+      const secs = settings?.homepage_sections || {};
+      const promo = settings?.promo_banner || {};
 
       setHomeForm({
         announcement_enabled: ann.enabled ?? true,
@@ -180,7 +196,20 @@ const AdminDashboard = () => {
         hero_title_ar: hero.title_ar || '',
         hero_title_en: hero.title_en || '',
         hero_subtitle_ar: hero.subtitle_ar || '',
-        hero_subtitle_he: hero.subtitle_he || ''
+        hero_subtitle_he: hero.subtitle_he || '',
+        show_hero_explore_btn: hero.show_explore_btn ?? true,
+        show_hero_quiz_btn: hero.show_quiz_btn ?? true,
+        show_bestsellers: secs.show_bestsellers ?? true,
+        show_promo_banner: secs.show_promo_banner ?? true,
+        show_testimonials: secs.show_testimonials ?? true,
+        promo_tag_ar: promo.tag_ar || '',
+        promo_tag_he: promo.tag_he || '',
+        promo_title_ar: promo.title_ar || '',
+        promo_title_he: promo.title_he || '',
+        promo_subtitle_ar: promo.subtitle_ar || '',
+        promo_subtitle_he: promo.subtitle_he || '',
+        promo_coupon_code: promo.coupon_code || 'KOON10',
+        promo_banner_image: promo.banner_image_url || ''
       });
 
       setCouponsList(Array.isArray(coups) ? coups : []);
@@ -343,23 +372,42 @@ const AdminDashboard = () => {
   const handleSaveHomepageCMS = async (e) => {
     e.preventDefault();
     try {
-      await updateSiteSetting('announcement_bar', {
-        enabled: homeForm.announcement_enabled,
-        text_ar: homeForm.announcement_ar,
-        text_he: homeForm.announcement_he
-      });
+      await Promise.all([
+        updateSiteSetting('announcement_bar', {
+          enabled: homeForm.announcement_enabled,
+          text_ar: homeForm.announcement_ar,
+          text_he: homeForm.announcement_he
+        }),
+        updateSiteSetting('hero_section', {
+          tagline_ar: homeForm.hero_tagline_ar,
+          tagline_he: homeForm.hero_tagline_he,
+          title_ar: homeForm.hero_title_ar,
+          title_en: homeForm.hero_title_en,
+          subtitle_ar: homeForm.hero_subtitle_ar,
+          subtitle_he: homeForm.hero_subtitle_he,
+          show_explore_btn: homeForm.show_hero_explore_btn,
+          show_quiz_btn: homeForm.show_hero_quiz_btn
+        }),
+        updateSiteSetting('homepage_sections', {
+          show_bestsellers: homeForm.show_bestsellers,
+          show_promo_banner: homeForm.show_promo_banner,
+          show_testimonials: homeForm.show_testimonials
+        }),
+        updateSiteSetting('promo_banner', {
+          tag_ar: homeForm.promo_tag_ar,
+          tag_he: homeForm.promo_tag_he,
+          title_ar: homeForm.promo_title_ar,
+          title_he: homeForm.promo_title_he,
+          subtitle_ar: homeForm.promo_subtitle_ar,
+          subtitle_he: homeForm.promo_subtitle_he,
+          coupon_code: homeForm.promo_coupon_code,
+          banner_image_url: homeForm.promo_banner_image
+        })
+      ]);
 
-      await updateSiteSetting('hero_section', {
-        tagline_ar: homeForm.hero_tagline_ar,
-        tagline_he: homeForm.hero_tagline_he,
-        title_ar: homeForm.hero_title_ar,
-        title_en: homeForm.hero_title_en,
-        subtitle_ar: homeForm.hero_subtitle_ar,
-        subtitle_he: homeForm.hero_subtitle_he
-      });
-
-      showToast('تم حفظ ونشر تعديلات الصفحة الرئيسية مباشرة! 🚀');
+      showToast('تم حفظ ونشر إعدادات وأقسام الصفحة الرئيسية مباشرة! 🚀');
     } catch (err) {
+      console.error('Error saving settings:', err);
       showToast('حدث خطأ في حفظ الإعدادات.', 'error');
     }
   };
@@ -1027,20 +1075,263 @@ const AdminDashboard = () => {
           <div className="space-y-8 animate-fade-in max-w-4xl">
             <div className="pb-4 border-b border-slate-800 flex items-center justify-between">
               <div>
-                <h2 className="text-lg font-bold text-white">{at.homepage?.title || 'تخصيص محتوى وترتيب الصفحة الرئيسية'}</h2>
+                <h2 className="text-lg font-bold text-white">{at.homepage?.title || 'تخصيص محتوى وترتيب أقسام الصفحة الرئيسية'}</h2>
                 <p className="text-xs text-slate-400 mt-1">
-                  عدّل العناوين والشعارات ونصوص البانر الإعلاني باللغتين العربية والعبرية لتظهر فوراً على الموقع.
+                  تحكم بظهور واختفاء الأقسام، النصوص تحت الشعار، أزرار الواجهة، وبانر الخصومات باللغتين العربية والعبرية.
                 </p>
               </div>
             </div>
 
             <form onSubmit={handleSaveHomepageCMS} className="space-y-6">
               
-              {/* 1. Announcement Bar Section */}
+              {/* 1. SECTIONS VISIBILITY MANAGER (إدارة ظهور واختفاء أقسام الموقع) */}
+              <div className="p-6 rounded-2xl bg-slate-900/50 border border-slate-800 space-y-4">
+                <div className="flex items-center gap-2 pb-3 border-b border-slate-800">
+                  <SlidersHorizontal className="w-4 h-4 text-amber-400" />
+                  <h3 className="text-sm font-bold text-white">إدارة ظهور واختفاء أقسام الصفحة الرئيسية</h3>
+                </div>
+                
+                <p className="text-xs text-slate-400">
+                  حدد الأقسام التي ترغب بعرضها أو إخفائها فوراً من الواجهة الرئيسية للمتجر:
+                </p>
+
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-1">
+                  <label className="flex items-center gap-3 p-3.5 rounded-xl bg-slate-950 border border-slate-800 hover:border-slate-700 cursor-pointer transition">
+                    <input
+                      type="checkbox"
+                      checked={homeForm.show_bestsellers}
+                      onChange={(e) => setHomeForm({ ...homeForm, show_bestsellers: e.target.checked })}
+                      className="w-4 h-4 rounded border-slate-700 bg-slate-900 text-amber-500 focus:ring-0 cursor-pointer"
+                    />
+                    <div>
+                      <span className="block text-xs font-bold text-white">قسم العطور الأكثر شهرة</span>
+                      <span className="text-[10px] text-slate-400">كتالوج المنتجات المختارة</span>
+                    </div>
+                  </label>
+
+                  <label className="flex items-center gap-3 p-3.5 rounded-xl bg-slate-950 border border-slate-800 hover:border-slate-700 cursor-pointer transition">
+                    <input
+                      type="checkbox"
+                      checked={homeForm.show_promo_banner}
+                      onChange={(e) => setHomeForm({ ...homeForm, show_promo_banner: e.target.checked })}
+                      className="w-4 h-4 rounded border-slate-700 bg-slate-900 text-amber-500 focus:ring-0 cursor-pointer"
+                    />
+                    <div>
+                      <span className="block text-xs font-bold text-white">قسم العروض والبانر</span>
+                      <span className="text-[10px] text-slate-400">الخصومات وكود الكوبون</span>
+                    </div>
+                  </label>
+
+                  <label className="flex items-center gap-3 p-3.5 rounded-xl bg-slate-950 border border-slate-800 hover:border-slate-700 cursor-pointer transition">
+                    <input
+                      type="checkbox"
+                      checked={homeForm.show_testimonials}
+                      onChange={(e) => setHomeForm({ ...homeForm, show_testimonials: e.target.checked })}
+                      className="w-4 h-4 rounded border-slate-700 bg-slate-900 text-amber-500 focus:ring-0 cursor-pointer"
+                    />
+                    <div>
+                      <span className="block text-xs font-bold text-white">آراء العملاء (Feedback)</span>
+                      <span className="text-[10px] text-slate-400">الشهادات والتقييمات المعتمدة</span>
+                    </div>
+                  </label>
+                </div>
+              </div>
+
+              {/* 2. HERO SECTION & LOGO SUBTITLES / BUTTONS */}
+              <div className="p-6 rounded-2xl bg-slate-900/50 border border-slate-800 space-y-4">
+                <div className="flex items-center gap-2 pb-3 border-b border-slate-800">
+                  <Sparkles className="w-4 h-4 text-amber-400" />
+                  <h3 className="text-sm font-bold text-white">الواجهة الرئيسية والنص والأزرار تحت الشعار</h3>
+                </div>
+
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <div>
+                    <label className="block text-xs font-semibold text-slate-400 mb-1">
+                      العبارة الترويجية العلوية فوق العنوان (عربي)
+                    </label>
+                    <input
+                      type="text"
+                      value={homeForm.hero_tagline_ar}
+                      onChange={(e) => setHomeForm({ ...homeForm, hero_tagline_ar: e.target.value })}
+                      placeholder="دار العطور الفلكية الأولى • توليفات نيش فائقة التركيز"
+                      className="w-full bg-slate-950 border border-slate-700 rounded-xl px-4 py-2.5 text-xs text-slate-100 focus:outline-none focus:border-amber-400"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-xs font-semibold text-slate-400 mb-1">
+                      العبارة الترويجية العلوية (عبري עברית)
+                    </label>
+                    <input
+                      type="text"
+                      value={homeForm.hero_tagline_he}
+                      onChange={(e) => setHomeForm({ ...homeForm, hero_tagline_he: e.target.value })}
+                      placeholder="בית הבישום הקוסמי הראשון • תמציות נישה בריכוז עילאי"
+                      className="w-full bg-slate-950 border border-slate-700 rounded-xl px-4 py-2.5 text-xs text-slate-100 focus:outline-none focus:border-amber-400"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-xs font-semibold text-slate-400 mb-1">
+                      عنوان المتجر الرئيسي (عربي)
+                    </label>
+                    <input
+                      type="text"
+                      value={homeForm.hero_title_ar}
+                      onChange={(e) => setHomeForm({ ...homeForm, hero_title_ar: e.target.value })}
+                      placeholder="عطورٌ نُسجت من سديم الكون"
+                      className="w-full bg-slate-950 border border-slate-700 rounded-xl px-4 py-2.5 text-xs text-slate-100 focus:outline-none focus:border-amber-400"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-xs font-semibold text-slate-400 mb-1">
+                      عنوان المتجر (عبري עברית)
+                    </label>
+                    <input
+                      type="text"
+                      value={homeForm.hero_title_en}
+                      onChange={(e) => setHomeForm({ ...homeForm, hero_title_en: e.target.value })}
+                      placeholder="בשמים שנארגו מערפיליות היקום"
+                      className="w-full bg-slate-950 border border-slate-700 rounded-xl px-4 py-2.5 text-xs text-slate-100 focus:outline-none focus:border-amber-400"
+                    />
+                  </div>
+
+                  {/* Subtitle / Text under logo (مباشرة تحت الشعار) */}
+                  <div className="sm:col-span-2">
+                    <label className="block text-xs font-semibold text-amber-400 mb-1">
+                      النص تحت الشعار (عربي) 🇸🇦
+                    </label>
+                    <textarea
+                      rows="2"
+                      value={homeForm.hero_subtitle_ar}
+                      onChange={(e) => setHomeForm({ ...homeForm, hero_subtitle_ar: e.target.value })}
+                      placeholder="نجمع بين نفائس الزيوت المعتقة في غراس الفرنسية وسحر الأجرام السماوية لنصنع بصمة عطرية لا تُمحى تدوم لأيام."
+                      className="w-full bg-slate-950 border border-slate-700 rounded-xl px-4 py-2.5 text-xs text-slate-100 focus:outline-none focus:border-amber-400"
+                    />
+                  </div>
+
+                  <div className="sm:col-span-2">
+                    <label className="block text-xs font-semibold text-amber-400 mb-1">
+                      النص تحت الشعار (عبري עברית) 🇮🇱
+                    </label>
+                    <textarea
+                      rows="2"
+                      value={homeForm.hero_subtitle_he}
+                      onChange={(e) => setHomeForm({ ...homeForm, hero_subtitle_he: e.target.value })}
+                      placeholder="יוקרה בממדים קוסמיים. שמנים נדירים שנרקחו להעניק נוכחות בלתי נשכחת הנשארת לאורך ימים."
+                      className="w-full bg-slate-950 border border-slate-700 rounded-xl px-4 py-2.5 text-xs text-slate-100 focus:outline-none focus:border-amber-400"
+                    />
+                  </div>
+                </div>
+
+                {/* Hero Buttons Controls (التحكم بالأزرار تحت الشعار) */}
+                <div className="pt-3 border-t border-slate-800">
+                  <span className="block text-xs font-bold text-white mb-2">التحكم في الأزرار التي تحت الشعار:</span>
+                  <div className="flex flex-wrap gap-4">
+                    <label className="flex items-center gap-2 text-xs cursor-pointer text-slate-300">
+                      <input
+                        type="checkbox"
+                        checked={homeForm.show_hero_explore_btn}
+                        onChange={(e) => setHomeForm({ ...homeForm, show_hero_explore_btn: e.target.checked })}
+                        className="rounded border-slate-700 bg-slate-950 text-amber-500 focus:ring-0"
+                      />
+                      <span>إظهار زر "استكشف عطور كون الفلكية"</span>
+                    </label>
+
+                    <label className="flex items-center gap-2 text-xs cursor-pointer text-slate-300">
+                      <input
+                        type="checkbox"
+                        checked={homeForm.show_hero_quiz_btn}
+                        onChange={(e) => setHomeForm({ ...homeForm, show_hero_quiz_btn: e.target.checked })}
+                        className="rounded border-slate-700 bg-slate-950 text-amber-500 focus:ring-0"
+                      />
+                      <span>إظهار زر "مستكشف العطور (Quiz)"</span>
+                    </label>
+                  </div>
+                </div>
+              </div>
+
+              {/* 3. PROMO, DISCOUNTS & BANNER SECTION (قسم الإعلانات والخصومات مع مساحة للبانر) */}
+              <div className="p-6 rounded-2xl bg-slate-900/50 border border-slate-800 space-y-4">
+                <div className="flex items-center gap-2 pb-3 border-b border-slate-800">
+                  <Tag className="w-4 h-4 text-amber-400" />
+                  <h3 className="text-sm font-bold text-white">قسم الإعلانات (الخصومات، كوبونات الخصم، ومساحة البانر)</h3>
+                </div>
+
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <div>
+                    <label className="block text-xs font-semibold text-slate-400 mb-1">
+                      عنوان العرض الترويجي (عربي)
+                    </label>
+                    <input
+                      type="text"
+                      value={homeForm.promo_title_ar}
+                      onChange={(e) => setHomeForm({ ...homeForm, promo_title_ar: e.target.value })}
+                      placeholder="باقة المجرة الفاخرة: خصم إضافي + عينة نيش وتغليف ملكي مجاني"
+                      className="w-full bg-slate-950 border border-slate-700 rounded-xl px-4 py-2.5 text-xs text-slate-100 focus:outline-none focus:border-amber-400"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-xs font-semibold text-slate-400 mb-1">
+                      عنوان العرض الترويجي (عبري עברית)
+                    </label>
+                    <input
+                      type="text"
+                      value={homeForm.promo_title_he}
+                      onChange={(e) => setHomeForm({ ...homeForm, promo_title_he: e.target.value })}
+                      placeholder="מארז הגלקסיה המלכותי: הנחה מיוחדת + דוגמית נישה ומשלוח חינם"
+                      className="w-full bg-slate-950 border border-slate-700 rounded-xl px-4 py-2.5 text-xs text-slate-100 focus:outline-none focus:border-amber-400"
+                    />
+                  </div>
+
+                  <div className="sm:col-span-2">
+                    <label className="block text-xs font-semibold text-slate-400 mb-1">
+                      تفاصيل العرض الترويجي (عربي)
+                    </label>
+                    <textarea
+                      rows="2"
+                      value={homeForm.promo_subtitle_ar}
+                      onChange={(e) => setHomeForm({ ...homeForm, promo_subtitle_ar: e.target.value })}
+                      placeholder="اقتنِ عطرك النيش المفضل مع شحن مبرد مجاني لكافة المناطق..."
+                      className="w-full bg-slate-950 border border-slate-700 rounded-xl px-4 py-2.5 text-xs text-slate-100 focus:outline-none focus:border-amber-400"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-xs font-semibold text-slate-400 mb-1">
+                      كود كوبون الخصم المعروض
+                    </label>
+                    <input
+                      type="text"
+                      value={homeForm.promo_coupon_code}
+                      onChange={(e) => setHomeForm({ ...homeForm, promo_coupon_code: e.target.value })}
+                      placeholder="KOON10"
+                      className="w-full bg-slate-950 border border-slate-700 rounded-xl px-4 py-2.5 text-xs text-amber-300 font-mono tracking-wider focus:outline-none focus:border-amber-400 uppercase"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-xs font-semibold text-slate-400 mb-1">
+                      رابط صورة البانر الإعلاني (مساحة لبانر اختياري)
+                    </label>
+                    <input
+                      type="text"
+                      value={homeForm.promo_banner_image}
+                      onChange={(e) => setHomeForm({ ...homeForm, promo_banner_image: e.target.value })}
+                      placeholder="https://images.unsplash.com/... أو مسار صورة"
+                      className="w-full bg-slate-950 border border-slate-700 rounded-xl px-4 py-2.5 text-xs text-slate-100 focus:outline-none focus:border-amber-400"
+                    />
+                  </div>
+                </div>
+              </div>
+
+              {/* 4. Announcement Bar Section */}
               <div className="p-6 rounded-2xl bg-slate-900/50 border border-slate-800 space-y-4">
                 <div className="flex items-center justify-between pb-3 border-b border-slate-800">
                   <div className="flex items-center gap-2">
-                    <Tag className="w-4 h-4 text-amber-400" />
+                    <Sparkles className="w-4 h-4 text-amber-400" />
                     <h3 className="text-sm font-bold text-white">شريط الإعلانات الترويجي العلوي</h3>
                   </div>
                   <label className="flex items-center gap-2 text-xs cursor-pointer text-slate-300">
@@ -1077,94 +1368,6 @@ const AdminDashboard = () => {
                       value={homeForm.announcement_he}
                       onChange={(e) => setHomeForm({ ...homeForm, announcement_he: e.target.value })}
                       placeholder="משלוח קוסמי חינם בהזמנות מעל 350 ₪..."
-                      className="w-full bg-slate-950 border border-slate-700 rounded-xl px-4 py-2.5 text-xs text-slate-100 focus:outline-none focus:border-amber-400"
-                    />
-                  </div>
-                </div>
-              </div>
-
-              {/* 2. Hero Section Titles */}
-              <div className="p-6 rounded-2xl bg-slate-900/50 border border-slate-800 space-y-4">
-                <div className="flex items-center gap-2 pb-3 border-b border-slate-800">
-                  <Sparkles className="w-4 h-4 text-amber-400" />
-                  <h3 className="text-sm font-bold text-white">القسم الرئيسي (Hero Section)</h3>
-                </div>
-
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  <div>
-                    <label className="block text-xs font-semibold text-slate-400 mb-1">
-                      العبارة الترويجية العلوية (عربي)
-                    </label>
-                    <input
-                      type="text"
-                      value={homeForm.hero_tagline_ar}
-                      onChange={(e) => setHomeForm({ ...homeForm, hero_tagline_ar: e.target.value })}
-                      placeholder="دار العطور الفلكية الأولى • توليفات نيش فائقة التركيز"
-                      className="w-full bg-slate-950 border border-slate-700 rounded-xl px-4 py-2.5 text-xs text-slate-100 focus:outline-none focus:border-amber-400"
-                    />
-                  </div>
-
-                  <div>
-                    <label className="block text-xs font-semibold text-slate-400 mb-1">
-                      العبارة الترويجية العلوية (عبري עברית)
-                    </label>
-                    <input
-                      type="text"
-                      value={homeForm.hero_tagline_he}
-                      onChange={(e) => setHomeForm({ ...homeForm, hero_tagline_he: e.target.value })}
-                      placeholder="בית הבישום הקוסמי הראשון • תמציות נישה בריכוז עילאי"
-                      className="w-full bg-slate-950 border border-slate-700 rounded-xl px-4 py-2.5 text-xs text-slate-100 focus:outline-none focus:border-amber-400"
-                    />
-                  </div>
-
-                  <div>
-                    <label className="block text-xs font-semibold text-slate-400 mb-1">
-                      عنوان المتجر (عربي)
-                    </label>
-                    <input
-                      type="text"
-                      value={homeForm.hero_title_ar}
-                      onChange={(e) => setHomeForm({ ...homeForm, hero_title_ar: e.target.value })}
-                      placeholder="كون بيرفيوم"
-                      className="w-full bg-slate-950 border border-slate-700 rounded-xl px-4 py-2.5 text-xs text-slate-100 focus:outline-none focus:border-amber-400"
-                    />
-                  </div>
-
-                  <div>
-                    <label className="block text-xs font-semibold text-slate-400 mb-1">
-                      عنوان المتجر بالإنجليزية
-                    </label>
-                    <input
-                      type="text"
-                      value={homeForm.hero_title_en}
-                      onChange={(e) => setHomeForm({ ...homeForm, hero_title_en: e.target.value })}
-                      placeholder="KOON PERFUME"
-                      className="w-full bg-slate-950 border border-slate-700 rounded-xl px-4 py-2.5 text-xs text-slate-100 focus:outline-none focus:border-amber-400"
-                    />
-                  </div>
-
-                  <div>
-                    <label className="block text-xs font-semibold text-slate-400 mb-1">
-                      الوصف الكوني الفرعي (عربي)
-                    </label>
-                    <input
-                      type="text"
-                      value={homeForm.hero_subtitle_ar}
-                      onChange={(e) => setHomeForm({ ...homeForm, hero_subtitle_ar: e.target.value })}
-                      placeholder="الفخامة في أبعاد كوكبية"
-                      className="w-full bg-slate-950 border border-slate-700 rounded-xl px-4 py-2.5 text-xs text-slate-100 focus:outline-none focus:border-amber-400"
-                    />
-                  </div>
-
-                  <div>
-                    <label className="block text-xs font-semibold text-slate-400 mb-1">
-                      الوصف الكوني الفرعي (عبري עברית)
-                    </label>
-                    <input
-                      type="text"
-                      value={homeForm.hero_subtitle_he}
-                      onChange={(e) => setHomeForm({ ...homeForm, hero_subtitle_he: e.target.value })}
-                      placeholder="יוקרה בממדים קוסמיים"
                       className="w-full bg-slate-950 border border-slate-700 rounded-xl px-4 py-2.5 text-xs text-slate-100 focus:outline-none focus:border-amber-400"
                     />
                   </div>

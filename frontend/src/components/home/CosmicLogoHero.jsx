@@ -15,7 +15,7 @@ import {
 } from 'lucide-react';
 import { useLanguage } from '../../context/LanguageContext';
 
-const CosmicLogoHero = () => {
+const CosmicLogoHero = ({ heroSettings }) => {
   const { t, language } = useLanguage();
   
   // Animation state: 'drawing' | 'revealed'
@@ -429,47 +429,61 @@ const CosmicLogoHero = () => {
             <Sparkles className="w-3.5 h-3.5 text-amber-400" />
             <span>
               {language === 'he' 
-                ? 'בית הבישום הקוסמי הראשון • תמציות נישה בריכוז עילאי' 
-                : 'دار العطور الفلكية الأولى • توليفات نيش فائقة التركيز'}
+                ? (heroSettings?.tagline_he || 'בית הבישום הקוסמי הראשון • תמציות נישה בריכוז עילאי') 
+                : (heroSettings?.tagline_ar || 'دار العطور الفلكية الأولى • توليفات نيش فائقة التركيز')}
             </span>
           </div>
           
           <h1 className="text-3xl sm:text-4xl md:text-5xl font-black text-white tracking-tight leading-tight">
             {language === 'he' ? (
-              <>בשמים שנארגו מ<span className="text-transparent bg-clip-text bg-gradient-to-r from-amber-300 via-amber-400 to-amber-500">ערפיליות היקום</span></>
+              heroSettings?.title_he ? (
+                <span>{heroSettings.title_he}</span>
+              ) : (
+                <>בשמים שנארגו מ<span className="text-transparent bg-clip-text bg-gradient-to-r from-amber-300 via-amber-400 to-amber-500">ערפיליות היקום</span></>
+              )
             ) : (
-              <>عطورٌ نُسجت من <span className="text-transparent bg-clip-text bg-gradient-to-r from-amber-300 via-amber-400 to-amber-500">سديم الكون</span></>
+              heroSettings?.title_ar ? (
+                <span>{heroSettings.title_ar}</span>
+              ) : (
+                <>عطورٌ نُسجت من <span className="text-transparent bg-clip-text bg-gradient-to-r from-amber-300 via-amber-400 to-amber-500">سديم الكون</span></>
+              )
             )}
           </h1>
 
           <p className="text-xs sm:text-sm text-slate-300/90 leading-relaxed max-w-lg mx-auto">
             {language === 'he'
-              ? 'יוקרה בממדים קוסמיים. שמנים נדירים שנרקחו להעניק נוכחות בלתי נשכחת הנשארת לאורך ימים.'
-              : 'نجمع بين نفائس الزيوت المعتقة في غراس الفرنسية وسحر الأجرام السماوية لنصنع بصمة عطرية لا تُمحى تدوم لأيام.'}
+              ? (heroSettings?.subtitle_he || 'יוקרה בממדים קוסמיים. שמנים נדירים שנרקחו להעניק נוכחות בלתי נשכחת הנשארת לאורך ימים.')
+              : (heroSettings?.subtitle_ar || 'نجمع بين نفائس الزيوت المعتقة في غراس الفرنسية وسحر الأجرام السماوية لنصنع بصمة عطرية لا تُمحى تدوم لأيام.')}
           </p>
         </motion.div>
       </div>
 
       {/* 4. Luxury Action CTAs & Floating Metrics */}
       <div className="relative z-20 w-full flex flex-col items-center justify-center gap-4 px-4 pt-4">
-        {/* Call-to-Action Buttons */}
-        <div className="flex flex-wrap items-center justify-center gap-3 sm:gap-4">
-          <Link
-            to="/shop"
-            className="px-8 py-3.5 bg-gradient-to-r from-amber-500 via-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-slate-950 font-black text-xs sm:text-sm rounded-xl shadow-xl shadow-amber-500/25 transition-all duration-300 transform hover:-translate-y-0.5 active:scale-95 flex items-center gap-2 cursor-pointer border border-amber-400/40"
-          >
-            <span>{t.actions.exploreBtn}</span>
-            <ArrowLeft className="w-4 h-4" />
-          </Link>
+        {/* Call-to-Action Buttons (Controlled from Admin) */}
+        {(heroSettings?.show_explore_btn !== false || heroSettings?.show_quiz_btn !== false) && (
+          <div className="flex flex-wrap items-center justify-center gap-3 sm:gap-4">
+            {heroSettings?.show_explore_btn !== false && (
+              <Link
+                to="/shop"
+                className="px-8 py-3.5 bg-gradient-to-r from-amber-500 via-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-slate-950 font-black text-xs sm:text-sm rounded-xl shadow-xl shadow-amber-500/25 transition-all duration-300 transform hover:-translate-y-0.5 active:scale-95 flex items-center gap-2 cursor-pointer border border-amber-400/40"
+              >
+                <span>{t.actions.exploreBtn}</span>
+                <ArrowLeft className="w-4 h-4" />
+              </Link>
+            )}
 
-          <Link
-            to="/quiz"
-            className="px-6 py-3.5 bg-slate-950/80 hover:bg-slate-900 text-slate-200 hover:text-amber-300 border border-slate-700/80 hover:border-amber-400/50 font-bold text-xs sm:text-sm rounded-xl transition-all duration-300 flex items-center gap-2 backdrop-blur-md cursor-pointer"
-          >
-            <Compass className="w-4 h-4 text-amber-400" />
-            <span>{t.actions.quizBtn}</span>
-          </Link>
-        </div>
+            {heroSettings?.show_quiz_btn !== false && (
+              <Link
+                to="/quiz"
+                className="px-6 py-3.5 bg-slate-950/80 hover:bg-slate-900 text-slate-200 hover:text-amber-300 border border-slate-700/80 hover:border-amber-400/50 font-bold text-xs sm:text-sm rounded-xl transition-all duration-300 flex items-center gap-2 backdrop-blur-md cursor-pointer"
+              >
+                <Compass className="w-4 h-4 text-amber-400" />
+                <span>{t.actions.quizBtn}</span>
+              </Link>
+            )}
+          </div>
+        )}
 
         {/* Luxury Micro-Pillars Ticker */}
         <div className="hidden md:flex items-center gap-6 text-[11px] text-slate-400 pt-1 border-t border-slate-800/60 max-w-3xl">

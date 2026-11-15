@@ -76,6 +76,27 @@ INSERT INTO public.site_settings (key, data) VALUES
         {"code": "KOON10", "discount_percent": 10, "is_active": true},
         {"code": "COSMIC20", "discount_percent": 20, "is_active": true}
     ]'::jsonb
+),
+(
+    'homepage_sections',
+    '{
+        "show_bestsellers": true,
+        "show_promo_banner": true,
+        "show_testimonials": true
+    }'::jsonb
+),
+(
+    'promo_banner',
+    '{
+        "tag_ar": "عروض المدار الكونية الاستثنائية • خصومات حصرية",
+        "tag_he": "מבצעים קוסמיים מיוחדים • הנחות בלעדיות",
+        "title_ar": "باقة المجرة الفاخرة: خصم إضافي + عينة نيش وتغليف ملكي مجاني",
+        "title_he": "מארז הגלקסיה המלכותי: הנחה מיוחדת + דוגמית נישה ומשלוח חינם",
+        "subtitle_ar": "اقتنِ عطرك النيش المفضل مع شحن مبرد مجاني لكافة المناطق. استخدم كود الخصم الحصري أدناه قبل إتمام طلبك والدفع عند الاستلام.",
+        "subtitle_he": "הזמן את הבושם האהוב עליך עם משלוח מבוקר חינם ותשלום במזומן בעת המסירה. השתמש בקוד הקופון להנחה מיידית.",
+        "coupon_code": "KOON10",
+        "banner_image_url": "https://images.unsplash.com/photo-1594035910387-fea47794261f?q=80&w=1200&auto=format&fit=crop"
+    }'::jsonb
 )
 ON CONFLICT (key) DO NOTHING;
 
