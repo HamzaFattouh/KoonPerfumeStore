@@ -52,6 +52,7 @@ import {
   Banknote,
   SlidersHorizontal
 } from 'lucide-react';
+import ImageUpload from '../components/common/ImageUpload';
 
 const AdminDashboard = () => {
   const navigate = useNavigate();
@@ -1382,16 +1383,13 @@ const AdminDashboard = () => {
                     />
                   </div>
 
-                  <div>
-                    <label className="block text-xs font-semibold text-slate-400 mb-1">
-                      رابط صورة البانر الإعلاني (مساحة لبانر اختياري)
-                    </label>
-                    <input
-                      type="text"
+                  <div className="sm:col-span-2">
+                    <ImageUpload
                       value={homeForm.promo_banner_image}
-                      onChange={(e) => setHomeForm({ ...homeForm, promo_banner_image: e.target.value })}
-                      placeholder="https://images.unsplash.com/... أو مسار صورة"
-                      className="w-full bg-slate-950 border border-slate-700 rounded-xl px-4 py-2.5 text-xs text-slate-100 focus:outline-none focus:border-amber-400"
+                      onChange={(url) => setHomeForm({ ...homeForm, promo_banner_image: url })}
+                      label="صورة البانر الإعلاني (رفع من الجهاز أو إدخال رابط)"
+                      helperText="اختر صورة بانر عريضة لعرضها كخلفية لقسم العروض والخصومات في الصفحة الرئيسية"
+                      aspectRatio="banner"
                     />
                   </div>
                 </div>
@@ -1462,7 +1460,7 @@ const AdminDashboard = () => {
                 {/* Form to add a new chat screenshot */}
                 <div className="bg-slate-950 p-4 rounded-xl border border-slate-800 space-y-3">
                   <span className="text-xs font-bold text-slate-200 block">إضافة صورة محادثة جديدة 📸</span>
-                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
+                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
                     <div>
                       <label className="block text-[11px] text-slate-400 mb-1">المنصة</label>
                       <select
@@ -1498,17 +1496,6 @@ const AdminDashboard = () => {
                         className="w-full bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-xs text-slate-100 focus:outline-none focus:border-amber-400"
                       />
                     </div>
-
-                    <div>
-                      <label className="block text-[11px] text-slate-400 mb-1">رابط صورة لقطة الشاشة</label>
-                      <input
-                        type="text"
-                        value={newFeedbackChat.image_url}
-                        onChange={(e) => setNewFeedbackChat({ ...newFeedbackChat, image_url: e.target.value })}
-                        placeholder="https://... أو مسار صورة"
-                        className="w-full bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-xs text-slate-100 focus:outline-none focus:border-amber-400"
-                      />
-                    </div>
                   </div>
 
                   <div>
@@ -1521,6 +1508,15 @@ const AdminDashboard = () => {
                       className="w-full bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-xs text-slate-100 focus:outline-none focus:border-amber-400"
                     />
                   </div>
+
+                  {/* Image Upload for Feedback Chat Screenshot */}
+                  <ImageUpload
+                    value={newFeedbackChat.image_url}
+                    onChange={(url) => setNewFeedbackChat({ ...newFeedbackChat, image_url: url })}
+                    label="صورة لقطة شاشة المحادثة (رفع من الجهاز أو إدخال رابط)"
+                    helperText="ارفع صورة لقطة شاشة لمحادثة واتساب أو إنستغرام لتوثيق تجربة العميل الحقيقية"
+                    aspectRatio="auto"
+                  />
 
                   <div className="pt-1 flex justify-end">
                     <button
@@ -1789,15 +1785,12 @@ const AdminDashboard = () => {
                 </div>
 
                 <div className="sm:col-span-2">
-                  <label className="block text-xs font-semibold text-slate-300 mb-1">رابط الصورة الرئيسية</label>
-                  <input
-                    type="url"
-                    required
-                    placeholder="https://..."
+                  <ImageUpload
                     value={productForm.image_url}
-                    onChange={(e) => setProductForm({ ...productForm, image_url: e.target.value })}
-                    className="w-full bg-slate-950 border border-slate-700 rounded-xl px-4 py-2.5 text-xs text-white focus:outline-none focus:border-amber-400 font-mono text-left"
-                    dir="ltr"
+                    onChange={(url) => setProductForm({ ...productForm, image_url: url })}
+                    label="صورة العطر الرئيسية (رفع من جهازك أو رابط)"
+                    helperText="الصيغ المدعومة: JPG, PNG, WEBP حتى 15MB. تظهر كصورة أساسية في الكتالوج"
+                    aspectRatio="square"
                   />
                 </div>
 

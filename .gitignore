@@ -39,3 +39,7 @@ scripts/
 public/master_video.mp4
 public/alpha_mask_*.png
 
+# Uploaded Files
+backend/uploads/*
+!backend/uploads/.gitkeep
+

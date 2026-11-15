@@ -6,12 +6,18 @@ try {
 import express from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
+import path from 'path';
+import { fileURLToPath } from 'url';
 import productRoutes from './routes/productRoutes.js';
 import orderRoutes from './routes/orderRoutes.js';
 import settingsRoutes from './routes/settingsRoutes.js';
 import adminRoutes from './routes/adminRoutes.js';
+import uploadRoutes from './routes/uploadRoutes.js';
 import { supabase } from './config/supabase.js';
 import { autoMigrateDatabase } from './db/migrate.js';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 dotenv.config();
 
@@ -25,8 +31,12 @@ app.use(cors({
   allowedHeaders: ['Content-Type', 'Authorization']
 }));
 
-// Body Parser Middleware
-app.use(express.json());
+// Body Parser Middleware (with generous limit for image payloads)
+app.use(express.json({ limit: '25mb' }));
+app.use(express.urlencoded({ extended: true, limit: '25mb' }));
+
+// Serve Uploaded Files Statically
+app.use('/uploads', express.static(path.join(__dirname, '../uploads')));
 
 // API Health Check
 app.get('/api/health', (req, res) => {
@@ -43,6 +53,7 @@ app.use('/api/products', productRoutes);
 app.use('/api/orders', orderRoutes);
 app.use('/api/settings', settingsRoutes);
 app.use('/api/admin', adminRoutes);
+app.use('/api/upload', uploadRoutes);
 
 // Root Welcome Endpoint
 app.get('/', (req, res) => {
