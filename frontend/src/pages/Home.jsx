@@ -1,9 +1,22 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { ArrowLeft, Flame, Star, Copy, Check, Sparkles, Tag, Gift } from 'lucide-react';
+import { 
+  ArrowLeft, 
+  Flame, 
+  Star, 
+  Copy, 
+  Check, 
+  Sparkles, 
+  Tag, 
+  Gift,
+  MessageSquare,
+  ZoomIn,
+  X,
+  ExternalLink
+} from 'lucide-react';
 import { getProducts } from '../services/productService';
 import { getSiteSettings, getCachedSiteSettings } from '../services/adminService';
-import { TESTIMONIALS } from '../data/products';
+import { TESTIMONIALS, DEFAULT_SOCIAL_CHATS } from '../data/products';
 import ProductCard from '../components/products/ProductCard';
 import { useLanguage } from '../context/LanguageContext';
 import CosmicLogoHero from '../components/home/CosmicLogoHero';
@@ -17,6 +30,10 @@ const Home = () => {
   const [isLoadingProducts, setIsLoadingProducts] = useState(true);
   const [siteSettings, setSiteSettings] = useState(() => getCachedSiteSettings() || {});
   const [copiedCoupon, setCopiedCoupon] = useState(false);
+
+  // Feedback display states: 'chats' (social screenshots) | 'reviews' (text reviews)
+  const [feedbackTab, setFeedbackTab] = useState('chats');
+  const [lightboxChat, setLightboxChat] = useState(null);
 
   // Fetch live products & dynamic site settings
   useEffect(() => {
@@ -72,10 +89,16 @@ const Home = () => {
   const promoData = siteSettings?.promo_banner || {};
   const activeCoupon = promoData.coupon_code || 'KOON10';
 
+  // Customer Feedback Social Media Chats
+  const fbData = siteSettings?.customer_feedback || {};
+  const socialChats = (Array.isArray(fbData.chats) && fbData.chats.length > 0)
+    ? fbData.chats
+    : DEFAULT_SOCIAL_CHATS;
+
   return (
     <div className="space-y-20 pb-24 text-slate-100">
       
-      {/* 1. Masterpiece Cosmic Emblem & Brand Hero Section (Text & Buttons controlled from Admin) */}
+      {/* 1. Masterpiece Cosmic Emblem & Brand Hero Section (Controlled from Admin) */}
       <CosmicLogoHero heroSettings={siteSettings?.hero_section} />
 
       {/* 2. Curated Luxury Perfumes Showcase (Controlled from Admin) */}
@@ -224,52 +247,222 @@ const Home = () => {
         </section>
       )}
 
-      {/* 4. Customer Feedback & Testimonials (Controlled from Admin) */}
+      {/* 4. Customer Feedback & Social Media Chat Screenshots (Controlled from Admin) */}
       {showTestimonials && (
         <section id="testimonials-section" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center max-w-2xl mx-auto mb-12">
+          
+          {/* Section Header */}
+          <div className="text-center max-w-2xl mx-auto mb-10">
             <span className="text-xs font-bold text-amber-400 uppercase tracking-widest block mb-2">
-              {language === 'ar' ? 'شهادات نعتز بها' : 'חוות דעת לקוחות'}
+              {language === 'ar' ? 'تجارب حقيقية موثقة 100%' : 'חוות דעת וצילומי שיחות מאומתים'}
             </span>
             <h2 className="text-2xl sm:text-3xl font-extrabold text-white">
-              {language === 'ar' ? 'ماذا يقول عشاق كون بيرفيوم؟' : 'מה הלקוחות שלנו אומרים?'}
+              {language === 'ar' ? 'ماذا يقول عملاؤنا عبر وسائل التواصل؟' : 'מה הלקוחות שלנו אומרים?'}
             </h2>
+            <p className="text-xs sm:text-sm text-slate-400 mt-2">
+              {language === 'ar' 
+                ? 'محادثات واقعية وشهادات موثقة من زبائن دار كون عبر واتساب وإنستغرام بعد استلام وتجربة عطورنا.'
+                : 'שיחות אמיתיות ומשוב מלקוחות דרך וואטסאפ ואינסטגרם לאחר קבלת הבשמים.'}
+            </p>
+
+            {/* Toggle between Chat Screenshots & Text Reviews */}
+            <div className="inline-flex items-center gap-1.5 p-1 bg-slate-900/80 border border-slate-800 rounded-xl mt-6 backdrop-blur-md">
+              <button
+                type="button"
+                onClick={() => setFeedbackTab('chats')}
+                className={`flex items-center gap-2 px-4 py-2 rounded-lg text-xs font-bold transition cursor-pointer ${
+                  feedbackTab === 'chats'
+                    ? 'bg-amber-500 text-slate-950 shadow-md shadow-amber-500/20'
+                    : 'text-slate-400 hover:text-white'
+                }`}
+              >
+                <MessageSquare className="w-3.5 h-3.5" />
+                <span>{language === 'ar' ? 'صور محادثات التواصل (واتساب وإنستغرام)' : 'צילומי שיחות ברשתות'}</span>
+              </button>
+
+              <button
+                type="button"
+                onClick={() => setFeedbackTab('reviews')}
+                className={`flex items-center gap-2 px-4 py-2 rounded-lg text-xs font-bold transition cursor-pointer ${
+                  feedbackTab === 'reviews'
+                    ? 'bg-amber-500 text-slate-950 shadow-md shadow-amber-500/20'
+                    : 'text-slate-400 hover:text-white'
+                }`}
+              >
+                <Star className="w-3.5 h-3.5" />
+                <span>{language === 'ar' ? 'التقييمات والشهادات المكتوبة' : 'חוות דעת כתובות'}</span>
+              </button>
+            </div>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            {TESTIMONIALS.map((item) => (
-              <div 
-                key={item.id}
-                className="bg-slate-900/40 hover:bg-slate-900/60 border border-slate-800/80 hover:border-amber-500/30 p-6 rounded-2xl flex flex-col justify-between transition-all duration-300 backdrop-blur-sm hover:-translate-y-1"
-              >
-                <div className="space-y-3">
-                  <div className="flex items-center justify-between">
-                    <div className="flex text-amber-400">
-                      {[...Array(item.rating)].map((_, i) => (
-                        <Star key={i} className="w-3.5 h-3.5 fill-amber-400" />
-                      ))}
+          {/* VIEW A: Social Media Chat Screenshots Grid */}
+          {feedbackTab === 'chats' && (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 animate-fade-in">
+              {socialChats.map((chat, idx) => (
+                <div 
+                  key={chat.id || idx}
+                  className="group bg-slate-900/60 hover:bg-slate-900/90 border border-slate-800/90 hover:border-amber-500/40 rounded-3xl overflow-hidden transition-all duration-300 backdrop-blur-sm flex flex-col justify-between shadow-xl hover:-translate-y-1.5"
+                >
+                  {/* Top Header: Platform Badge & Date */}
+                  <div className="p-4 flex items-center justify-between border-b border-slate-800/60 bg-slate-950/60">
+                    <div className="flex items-center gap-2">
+                      <span className={`px-2.5 py-1 rounded-full text-[11px] font-bold flex items-center gap-1.5 ${
+                        chat.platform === 'whatsapp'
+                          ? 'bg-emerald-500/15 text-emerald-300 border border-emerald-500/30'
+                          : chat.platform === 'instagram'
+                          ? 'bg-rose-500/15 text-rose-300 border border-rose-500/30'
+                          : 'bg-amber-500/15 text-amber-300 border border-amber-500/30'
+                      }`}>
+                        <span>{chat.platform === 'whatsapp' ? '💬' : '📸'}</span>
+                        <span>{chat.platform_name || (chat.platform === 'whatsapp' ? 'واتساب WhatsApp' : 'إنستغرام Instagram')}</span>
+                      </span>
                     </div>
-                    <span className="text-[10px] text-slate-500 font-mono">{item.date}</span>
-                  </div>
-                  <div className="text-xs font-semibold text-amber-300">
-                    {language === 'ar' ? `اشترى: ${item.perfume}` : `נרכש: ${item.perfume}`}
-                  </div>
-                  <p className="text-xs text-slate-300 leading-relaxed italic">
-                    "{item.comment}"
-                  </p>
-                </div>
 
-                <div className="pt-4 border-t border-slate-800/60 mt-4 flex items-center justify-between text-xs">
-                  <span className="font-bold text-white flex items-center gap-1">
-                    <span>{item.name}</span>
-                    <span className="text-[10px] text-amber-400 font-bold">✓</span>
-                  </span>
-                  <span className="text-slate-400 text-[11px]">{item.city}</span>
+                    <span className="text-[11px] text-slate-500 font-mono">{chat.date || 'مؤخراً'}</span>
+                  </div>
+
+                  {/* Screenshot Container with Click to Zoom */}
+                  <div 
+                    onClick={() => setLightboxChat(chat)}
+                    className="relative cursor-pointer overflow-hidden bg-slate-950 h-64 sm:h-72 flex items-center justify-center group/img"
+                  >
+                    <img 
+                      src={chat.image_url} 
+                      alt={`محادثة ${chat.customer_name}`} 
+                      className="w-full h-full object-cover group-hover/img:scale-105 transition-transform duration-500 filter brightness-95"
+                    />
+
+                    {/* Gradient Overlay & Zoom Icon */}
+                    <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/30 to-transparent opacity-60 group-hover/img:opacity-40 transition-opacity" />
+                    
+                    <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover/img:opacity-100 transition-opacity bg-black/40 backdrop-blur-[2px]">
+                      <div className="flex items-center gap-2 px-4 py-2 rounded-xl bg-amber-500 text-slate-950 text-xs font-bold shadow-xl shadow-amber-500/30">
+                        <ZoomIn className="w-4 h-4" />
+                        <span>تكبير المحادثة وقراءتها</span>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Bottom Details & Quote */}
+                  <div className="p-5 space-y-3 bg-slate-950/40">
+                    <p className="text-xs text-slate-300 leading-relaxed italic bg-slate-900/60 p-3 rounded-xl border border-slate-800">
+                      "{chat.caption}"
+                    </p>
+
+                    <div className="flex items-center justify-between text-xs pt-2 border-t border-slate-800/60">
+                      <div>
+                        <span className="font-bold text-white flex items-center gap-1.5">
+                          <span>{chat.customer_name}</span>
+                          <span className="text-[10px] text-amber-400 font-bold">✓</span>
+                        </span>
+                        <span className="text-[11px] text-amber-400/90 block mt-0.5">
+                          {chat.perfume}
+                        </span>
+                      </div>
+
+                      <button
+                        type="button"
+                        onClick={() => setLightboxChat(chat)}
+                        className="text-[11px] text-slate-400 hover:text-amber-300 font-bold flex items-center gap-1 cursor-pointer"
+                      >
+                        <span>عرض الصورة</span>
+                        <ExternalLink className="w-3 h-3" />
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+
+          {/* VIEW B: Classic Written Testimonials */}
+          {feedbackTab === 'reviews' && (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 animate-fade-in">
+              {TESTIMONIALS.map((item) => (
+                <div 
+                  key={item.id}
+                  className="bg-slate-900/40 hover:bg-slate-900/60 border border-slate-800/80 hover:border-amber-500/30 p-6 rounded-2xl flex flex-col justify-between transition-all duration-300 backdrop-blur-sm hover:-translate-y-1"
+                >
+                  <div className="space-y-3">
+                    <div className="flex items-center justify-between">
+                      <div className="flex text-amber-400">
+                        {[...Array(item.rating)].map((_, i) => (
+                          <Star key={i} className="w-3.5 h-3.5 fill-amber-400" />
+                        ))}
+                      </div>
+                      <span className="text-[10px] text-slate-500 font-mono">{item.date}</span>
+                    </div>
+                    <div className="text-xs font-semibold text-amber-300">
+                      {language === 'ar' ? `اشترى: ${item.perfume}` : `נרכש: ${item.perfume}`}
+                    </div>
+                    <p className="text-xs text-slate-300 leading-relaxed italic">
+                      "{item.comment}"
+                    </p>
+                  </div>
+
+                  <div className="pt-4 border-t border-slate-800/60 mt-4 flex items-center justify-between text-xs">
+                    <span className="font-bold text-white flex items-center gap-1">
+                      <span>{item.name}</span>
+                      <span className="text-[10px] text-amber-400 font-bold">✓</span>
+                    </span>
+                    <span className="text-slate-400 text-[11px]">{item.city}</span>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+
+        </section>
+      )}
+
+      {/* 5. LIGHTBOX MODAL FOR CHAT SCREENSHOTS (عند النقر على صورة المحادثة) */}
+      {lightboxChat && (
+        <div 
+          className="fixed inset-0 z-50 bg-black/90 backdrop-blur-md flex items-center justify-center p-4 sm:p-6 animate-fade-in"
+          onClick={() => setLightboxChat(null)}
+        >
+          <div 
+            className="relative bg-slate-950 border border-slate-800 rounded-3xl max-w-2xl w-full max-h-[92vh] overflow-hidden flex flex-col shadow-2xl"
+            onClick={(e) => e.stopPropagation()}
+          >
+            {/* Modal Header */}
+            <div className="p-4 sm:p-5 flex items-center justify-between border-b border-slate-800 bg-slate-900/60">
+              <div className="flex items-center gap-3">
+                <span className="px-3 py-1 rounded-full bg-emerald-500/15 text-emerald-300 border border-emerald-500/30 text-xs font-bold flex items-center gap-1.5">
+                  <span>{lightboxChat.platform === 'whatsapp' ? '💬' : '📸'}</span>
+                  <span>{lightboxChat.platform_name || 'محادثة موثقة'}</span>
+                </span>
+                <div>
+                  <h4 className="text-sm font-bold text-white">{lightboxChat.customer_name}</h4>
+                  <span className="text-[11px] text-amber-400">{lightboxChat.perfume}</span>
                 </div>
               </div>
-            ))}
+
+              <button
+                type="button"
+                onClick={() => setLightboxChat(null)}
+                className="p-2 rounded-xl bg-slate-900 text-slate-400 hover:text-white hover:bg-slate-800 transition cursor-pointer"
+                title="إغلاق"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+
+            {/* Modal Body: Full Image Display */}
+            <div className="flex-1 overflow-y-auto p-4 flex items-center justify-center bg-black/50">
+              <img 
+                src={lightboxChat.image_url} 
+                alt={`محادثة ${lightboxChat.customer_name}`}
+                className="max-h-[65vh] w-auto object-contain rounded-xl shadow-lg border border-slate-800" 
+              />
+            </div>
+
+            {/* Modal Footer Caption */}
+            <div className="p-4 bg-slate-900/80 border-t border-slate-800 text-xs text-slate-300 text-center italic">
+              "{lightboxChat.caption}"
+            </div>
           </div>
-        </section>
+        </div>
       )}
 
     </div>

@@ -62,6 +62,39 @@ export const TESTIMONIALS = [
   }
 ];
 
+export const DEFAULT_SOCIAL_CHATS = [
+  {
+    id: 'chat-1',
+    platform: 'whatsapp',
+    platform_name: 'واتساب WhatsApp',
+    customer_name: 'أبو فيصل - الرياض',
+    perfume: 'كون أبسولوت (Koon Absolute)',
+    image_url: 'https://images.unsplash.com/photo-1594035910387-fea47794261f?q=80&w=800&auto=format&fit=crop',
+    caption: 'والله يا جماعة العطر فخم وثباته جلس بالثوب يومين كاملين.. كل اللي حولي سألوني عنه وطلبوا الرابط!',
+    date: 'أمس'
+  },
+  {
+    id: 'chat-2',
+    platform: 'instagram',
+    platform_name: 'إنستغرام Instagram',
+    customer_name: 'نورة المنصور - دبي',
+    perfume: 'سديم الفانيليا (Nebula Vanilla)',
+    image_url: 'https://images.unsplash.com/photo-1547887537-6158d64c35b3?q=80&w=800&auto=format&fit=crop',
+    caption: 'سديم الفانيليا وصلني اليوم والتغليف لحاله تحفة فنية! الريحة سحرية ومو متكررة أبداً ❤️',
+    date: 'منذ يومين'
+  },
+  {
+    id: 'chat-3',
+    platform: 'whatsapp',
+    platform_name: 'واتساب WhatsApp',
+    customer_name: 'د. طارق الزهراني - جدة',
+    perfume: 'الشفق الأسود (Dark Twilight)',
+    image_url: 'https://images.unsplash.com/photo-1523293182086-7651a899d37f?q=80&w=800&auto=format&fit=crop',
+    caption: 'العطر استلمته وفحصته مع المندوب والدفع عند الاستلام كان جداً مريح ومضمون.. شكراً على الهدية والعينات الفاخرة.',
+    date: 'منذ 4 أيام'
+  }
+];
+
 export const SAMPLE_GIFTS = [
   { id: 'sample-1', name: 'عينة كون أبسولوت (3ml)' },
   { id: 'sample-2', name: 'عينة سديم الفانيليا (3ml)' },

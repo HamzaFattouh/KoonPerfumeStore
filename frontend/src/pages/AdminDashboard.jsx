@@ -13,6 +13,7 @@ import {
   updateSiteSetting
 } from '../services/adminService';
 import { getProducts } from '../services/productService';
+import { DEFAULT_SOCIAL_CHATS } from '../data/products';
 import { getAdminOrders, updateOrderStatus, getOrderStats } from '../services/orderService';
 import { useLanguage } from '../context/LanguageContext';
 import { 
@@ -43,6 +44,7 @@ import {
   Save, 
   Check, 
   X,
+  MessageSquare,
   Tag,
   ShieldCheck,
   ChevronDown,
@@ -143,6 +145,16 @@ const AdminDashboard = () => {
     promo_banner_image: ''
   });
 
+  // Social Media Feedback Chats Manager State
+  const [feedbackChatsList, setFeedbackChatsList] = useState([]);
+  const [newFeedbackChat, setNewFeedbackChat] = useState({
+    platform: 'whatsapp',
+    customer_name: '',
+    perfume: '',
+    image_url: '',
+    caption: ''
+  });
+
   // Coupons Manager State
   const [couponsList, setCouponsList] = useState([]);
   const [newCoupon, setNewCoupon] = useState({ code: '', discount_percent: 15 });
@@ -213,6 +225,9 @@ const AdminDashboard = () => {
       });
 
       setCouponsList(Array.isArray(coups) ? coups : []);
+
+      const fb = settings?.customer_feedback || {};
+      setFeedbackChatsList(Array.isArray(fb.chats) && fb.chats.length > 0 ? fb.chats : DEFAULT_SOCIAL_CHATS);
     } catch (err) {
       console.error('Error fetching admin data:', err);
       showToast('حدث خطأ في تحميل البيانات.', 'error');
@@ -402,6 +417,10 @@ const AdminDashboard = () => {
           subtitle_he: homeForm.promo_subtitle_he,
           coupon_code: homeForm.promo_coupon_code,
           banner_image_url: homeForm.promo_banner_image
+        }),
+        updateSiteSetting('customer_feedback', {
+          show_testimonials: homeForm.show_testimonials,
+          chats: feedbackChatsList
         })
       ]);
 
@@ -409,6 +428,57 @@ const AdminDashboard = () => {
     } catch (err) {
       console.error('Error saving settings:', err);
       showToast('حدث خطأ في حفظ الإعدادات.', 'error');
+    }
+  };
+
+  // --- SOCIAL FEEDBACK CHATS HANDLERS ---
+  const handleAddFeedbackChat = async (e) => {
+    e.preventDefault();
+    if (!newFeedbackChat.image_url.trim()) {
+      showToast('يرجى وضع رابط صورة المحادثة.', 'error');
+      return;
+    }
+    const item = {
+      id: `chat-${Date.now()}`,
+      platform: newFeedbackChat.platform || 'whatsapp',
+      platform_name: newFeedbackChat.platform === 'whatsapp' ? 'واتساب WhatsApp' : newFeedbackChat.platform === 'instagram' ? 'إنستغرام Instagram' : newFeedbackChat.platform === 'twitter' ? 'تويتر X' : 'سناب شات',
+      customer_name: newFeedbackChat.customer_name || 'عميل دار كون',
+      perfume: newFeedbackChat.perfume || 'عطر نيش فاخر',
+      image_url: newFeedbackChat.image_url.trim(),
+      caption: newFeedbackChat.caption || 'تجربة عطرية رائعة وفخمة جداً.',
+      date: 'مؤخراً'
+    };
+    const updated = [item, ...feedbackChatsList];
+    setFeedbackChatsList(updated);
+    setNewFeedbackChat({
+      platform: 'whatsapp',
+      customer_name: '',
+      perfume: '',
+      image_url: '',
+      caption: ''
+    });
+    try {
+      await updateSiteSetting('customer_feedback', {
+        show_testimonials: homeForm.show_testimonials,
+        chats: updated
+      });
+      showToast('تمت إضافة صورة محادثة العميل ونشرها فوراً! 💬');
+    } catch {
+      showToast('تعذر حفظ المحادثة.', 'error');
+    }
+  };
+
+  const handleDeleteFeedbackChat = async (idToDelete) => {
+    const updated = feedbackChatsList.filter(c => c.id !== idToDelete);
+    setFeedbackChatsList(updated);
+    try {
+      await updateSiteSetting('customer_feedback', {
+        show_testimonials: homeForm.show_testimonials,
+        chats: updated
+      });
+      showToast('تم حذف صورة المحادثة.');
+    } catch {
+      showToast('تعذر الحذف.', 'error');
     }
   };
 
@@ -1371,6 +1441,133 @@ const AdminDashboard = () => {
                       className="w-full bg-slate-950 border border-slate-700 rounded-xl px-4 py-2.5 text-xs text-slate-100 focus:outline-none focus:border-amber-400"
                     />
                   </div>
+                </div>
+              </div>
+
+              {/* 5. Social Media Feedback Chats Manager (إدارة صور محادثات وسائل التواصل) */}
+              <div className="p-6 rounded-2xl bg-slate-900/50 border border-slate-800 space-y-5">
+                <div className="flex items-center justify-between pb-3 border-b border-slate-800">
+                  <div className="flex items-center gap-2">
+                    <MessageSquare className="w-4 h-4 text-amber-400" />
+                    <div>
+                      <h3 className="text-sm font-bold text-white">إدارة صور محادثات التواصل الاجتماعي (Customer Feedback)</h3>
+                      <p className="text-[11px] text-slate-400">إضافة صور لقطات شاشة لمحادثات واتساب وإنستغرام لإظهار مصداقية المتجر</p>
+                    </div>
+                  </div>
+                  <span className="px-2.5 py-1 rounded-full bg-amber-500/10 border border-amber-500/20 text-amber-400 text-xs font-bold">
+                    {feedbackChatsList.length} محادثة معروضة
+                  </span>
+                </div>
+
+                {/* Form to add a new chat screenshot */}
+                <div className="bg-slate-950 p-4 rounded-xl border border-slate-800 space-y-3">
+                  <span className="text-xs font-bold text-slate-200 block">إضافة صورة محادثة جديدة 📸</span>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
+                    <div>
+                      <label className="block text-[11px] text-slate-400 mb-1">المنصة</label>
+                      <select
+                        value={newFeedbackChat.platform}
+                        onChange={(e) => setNewFeedbackChat({ ...newFeedbackChat, platform: e.target.value })}
+                        className="w-full bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-xs text-slate-100 focus:outline-none focus:border-amber-400 cursor-pointer"
+                      >
+                        <option value="whatsapp">واتساب (WhatsApp)</option>
+                        <option value="instagram">إنستغرام (Instagram)</option>
+                        <option value="twitter">تويتر (X)</option>
+                        <option value="snapchat">سناب شات (Snapchat)</option>
+                      </select>
+                    </div>
+
+                    <div>
+                      <label className="block text-[11px] text-slate-400 mb-1">اسم العميل والمدينة</label>
+                      <input
+                        type="text"
+                        value={newFeedbackChat.customer_name}
+                        onChange={(e) => setNewFeedbackChat({ ...newFeedbackChat, customer_name: e.target.value })}
+                        placeholder="سارة العتيبي - الرياض"
+                        className="w-full bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-xs text-slate-100 focus:outline-none focus:border-amber-400"
+                      />
+                    </div>
+
+                    <div>
+                      <label className="block text-[11px] text-slate-400 mb-1">العطر المجرب</label>
+                      <input
+                        type="text"
+                        value={newFeedbackChat.perfume}
+                        onChange={(e) => setNewFeedbackChat({ ...newFeedbackChat, perfume: e.target.value })}
+                        placeholder="سديم العود الملكي"
+                        className="w-full bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-xs text-slate-100 focus:outline-none focus:border-amber-400"
+                      />
+                    </div>
+
+                    <div>
+                      <label className="block text-[11px] text-slate-400 mb-1">رابط صورة لقطة الشاشة</label>
+                      <input
+                        type="text"
+                        value={newFeedbackChat.image_url}
+                        onChange={(e) => setNewFeedbackChat({ ...newFeedbackChat, image_url: e.target.value })}
+                        placeholder="https://... أو مسار صورة"
+                        className="w-full bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-xs text-slate-100 focus:outline-none focus:border-amber-400"
+                      />
+                    </div>
+                  </div>
+
+                  <div>
+                    <label className="block text-[11px] text-slate-400 mb-1">اقتباس أو تعليق مختصر من المحادثة</label>
+                    <input
+                      type="text"
+                      value={newFeedbackChat.caption}
+                      onChange={(e) => setNewFeedbackChat({ ...newFeedbackChat, caption: e.target.value })}
+                      placeholder="العطر ثباته فواح وخيالي، شكراً دار كون على التغليف الفخم!"
+                      className="w-full bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-xs text-slate-100 focus:outline-none focus:border-amber-400"
+                    />
+                  </div>
+
+                  <div className="pt-1 flex justify-end">
+                    <button
+                      type="button"
+                      onClick={handleAddFeedbackChat}
+                      className="px-4 py-2 bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold text-xs rounded-lg transition shadow-md flex items-center gap-2 cursor-pointer"
+                    >
+                      <Plus className="w-3.5 h-3.5" />
+                      <span>إضافة المحادثة لقائمة العرض ✨</span>
+                    </button>
+                  </div>
+                </div>
+
+                {/* List of existing feedback chat screenshots */}
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 pt-2">
+                  {feedbackChatsList.map((chat) => (
+                    <div
+                      key={chat.id}
+                      className="p-3 bg-slate-950/70 border border-slate-800 rounded-xl flex items-start gap-3 relative group"
+                    >
+                      <img
+                        src={chat.image_url}
+                        alt={chat.customer_name}
+                        className="w-16 h-20 object-cover rounded-lg border border-slate-800 shrink-0 bg-slate-900"
+                      />
+                      <div className="flex-1 min-w-0 pr-1">
+                        <div className="flex items-center justify-between">
+                          <span className="text-[10px] font-bold text-amber-400 px-2 py-0.5 rounded bg-amber-500/10 border border-amber-500/20">
+                            {chat.platform === 'whatsapp' ? 'واتساب' : chat.platform === 'instagram' ? 'إنستغرام' : 'تواصل'}
+                          </span>
+                          <button
+                            type="button"
+                            onClick={() => handleDeleteFeedbackChat(chat.id)}
+                            className="text-slate-500 hover:text-rose-400 p-1 rounded hover:bg-rose-500/10 transition cursor-pointer"
+                            title="حذف المحادثة"
+                          >
+                            <Trash2 className="w-3.5 h-3.5" />
+                          </button>
+                        </div>
+                        <h4 className="text-xs font-bold text-white truncate mt-1">{chat.customer_name}</h4>
+                        <span className="text-[11px] text-amber-300/80 truncate block">{chat.perfume}</span>
+                        <p className="text-[10px] text-slate-400 line-clamp-2 mt-1 italic">
+                          "{chat.caption}"
+                        </p>
+                      </div>
+                    </div>
+                  ))}
                 </div>
               </div>
 
