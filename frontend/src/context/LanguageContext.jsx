@@ -19,8 +19,8 @@ export const TRANSLATIONS = {
     nav: {
       home: 'الرئيسية',
       shop: 'المتجر والكتالوج',
-      bestsellers: 'الأكثر مبيعاً ⭐',
-      quiz: 'مستكشف العطور 🪐',
+      bestsellers: 'الأكثر مبيعاً',
+      quiz: 'مستكشف العطور',
       about: 'عن كون بيرفيوم',
       track: 'تتبع طلبك',
       contact: 'اتصل بنا',
@@ -160,8 +160,8 @@ export const TRANSLATIONS = {
     nav: {
       home: 'דף הבית',
       shop: 'חנות וקטלוג',
-      bestsellers: 'הנמכרים ביותר ⭐',
-      quiz: 'בוחן בשמים 🪐',
+      bestsellers: 'הנמכרים ביותר',
+      quiz: 'בוחן בשמים',
       about: 'אודות קון פרפיום',
       track: 'מעקב משלוח',
       contact: 'צור קשר',

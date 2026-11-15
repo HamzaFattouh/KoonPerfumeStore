@@ -125,13 +125,13 @@ const Navbar = () => {
               </Link>
 
               {/* Desktop Navigation Links */}
-              <nav className="hidden lg:flex items-center gap-5 xl:gap-6">
+              <nav className="hidden lg:flex items-center gap-4 xl:gap-6 whitespace-nowrap">
                 {navLinks.map((link) => (
                   <NavLink
                     key={link.to}
                     to={link.to}
-                    className={({ isActive }) => `text-sm font-medium transition-colors hover:text-amber-400 relative py-1 ${
-                      isActive ? 'text-amber-400 font-semibold' : 'text-slate-300'
+                    className={({ isActive }) => `text-xs xl:text-sm font-medium transition-colors hover:text-amber-400 relative py-1 whitespace-nowrap shrink-0 ${
+                      isActive ? 'text-amber-400 font-bold' : 'text-slate-300'
                     }`}
                   >
                     {link.label}
@@ -140,52 +140,21 @@ const Navbar = () => {
               </nav>
 
               {/* Actions: Language Switcher, Search, Wishlist, Cart, Profile */}
-              <div className="flex items-center gap-2 sm:gap-3">
+              <div className="flex items-center gap-2 sm:gap-3 shrink-0">
                 
-                {/* 🌐 Two Language Switcher Buttons (عربي / עברית) */}
-                <div className="flex items-center p-1 bg-slate-900/90 border border-slate-700/80 rounded-xl gap-1 backdrop-blur-md shadow-inner">
-                  {/* Arabic Button (زر اللغة العربية) */}
-                  <button
-                    type="button"
-                    onClick={() => setLanguage('ar')}
-                    className={`flex items-center gap-1.5 px-2 sm:px-2.5 py-1.5 rounded-lg text-xs font-bold transition-all duration-300 cursor-pointer ${
-                      language === 'ar'
-                        ? 'bg-gradient-to-r from-amber-500 to-amber-600 text-slate-950 shadow-md shadow-amber-500/30 border border-amber-400'
-                        : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800/60 border border-transparent'
-                    }`}
-                    title="اللغة العربية (Arabic)"
-                    aria-label="اللغة العربية"
-                  >
-                    {/* Arabic Letter Emblem Badge */}
-                    <span className={`w-4 h-4 rounded-full flex items-center justify-center text-[10px] font-black leading-none ${
-                      language === 'ar' ? 'bg-slate-950 text-amber-400' : 'bg-slate-800 text-slate-300'
-                    }`}>
-                      ع
-                    </span>
-                    <span className="hidden sm:inline">عربي</span>
-                  </button>
-
-                  {/* Hebrew Button (زر اللغة العبرية) */}
-                  <button
-                    type="button"
-                    onClick={() => setLanguage('he')}
-                    className={`flex items-center gap-1.5 px-2 sm:px-2.5 py-1.5 rounded-lg text-xs font-bold transition-all duration-300 cursor-pointer ${
-                      language === 'he'
-                        ? 'bg-gradient-to-r from-amber-500 to-amber-600 text-slate-950 shadow-md shadow-amber-500/30 border border-amber-400'
-                        : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800/60 border border-transparent'
-                    }`}
-                    title="עברית (Hebrew)"
-                    aria-label="עברית"
-                  >
-                    {/* Hebrew Letter Emblem Badge */}
-                    <span className={`w-4 h-4 rounded-full flex items-center justify-center text-[10px] font-black leading-none ${
-                      language === 'he' ? 'bg-slate-950 text-amber-400' : 'bg-slate-800 text-slate-300'
-                    }`}>
-                      ע
-                    </span>
-                    <span className="hidden sm:inline">עברית</span>
-                  </button>
-                </div>
+                {/* 🌐 Single Language Icon Button (شعار تحويل اللغة فقط) */}
+                <button
+                  type="button"
+                  onClick={() => setLanguage(language === 'ar' ? 'he' : 'ar')}
+                  className="p-2 sm:p-2.5 text-slate-300 hover:text-amber-400 hover:bg-slate-800/80 rounded-xl transition cursor-pointer relative flex items-center justify-center group border border-slate-800/80 hover:border-amber-500/40"
+                  title={language === 'ar' ? 'החלף לעברית (Switch to Hebrew)' : 'التبديل إلى العربية (Switch to Arabic)'}
+                  aria-label={language === 'ar' ? 'تغيير اللغة إلى العبرية' : 'שנה שפה לערבית'}
+                >
+                  <Globe className="w-5 h-5 text-amber-400 group-hover:scale-110 group-hover:rotate-12 transition-transform" />
+                  <span className="absolute -bottom-1 -right-1 w-4 h-4 rounded-full bg-slate-950 border border-amber-500/70 text-amber-300 text-[10px] font-black flex items-center justify-center leading-none shadow-sm">
+                    {language === 'ar' ? 'ع' : 'ע'}
+                  </span>
+                </button>
 
                 {/* Search Toggle */}
                 <button
