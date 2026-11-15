@@ -111,6 +111,37 @@ const Footer = () => {
                 <span>care@koonperfume.com</span>
               </div>
             </div>
+
+            {/* Official Social Media Channels (إنستغرام، فيسبوك، واتساب) with Horizontal Scroll */}
+            <div className="pt-2">
+              <span className="text-[11px] font-bold text-amber-400/90 block mb-2">قنوات التواصل والمتابعة الرسمية:</span>
+              <div className="flex items-center gap-2 overflow-x-auto whitespace-nowrap pb-2 scrollbar-none">
+                <a
+                  href="https://instagram.com/koonperfume"
+                  target="_blank"
+                  rel="noreferrer"
+                  className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-gradient-to-r from-pink-500/10 via-rose-500/10 to-amber-500/10 hover:from-pink-500/20 hover:to-amber-500/20 border border-rose-500/30 text-rose-300 text-xs font-bold transition shrink-0 hover:scale-105"
+                >
+                  <span>📸 إنستغرام (Instagram)</span>
+                </a>
+                <a
+                  href="https://facebook.com/koonperfume"
+                  target="_blank"
+                  rel="noreferrer"
+                  className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-blue-600/10 hover:bg-blue-600/20 border border-blue-500/30 text-blue-300 text-xs font-bold transition shrink-0 hover:scale-105"
+                >
+                  <span>🌐 فيسبوك (Facebook)</span>
+                </a>
+                <a
+                  href="https://wa.me/966501234567"
+                  target="_blank"
+                  rel="noreferrer"
+                  className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-emerald-500/10 hover:bg-emerald-500/20 border border-emerald-500/30 text-emerald-300 text-xs font-bold transition shrink-0 hover:scale-105"
+                >
+                  <span>💬 واتساب (WhatsApp)</span>
+                </a>
+              </div>
+            </div>
           </div>
 
           {/* Quick Links */}

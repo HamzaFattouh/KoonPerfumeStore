@@ -115,3 +115,4 @@ export const uploadImage = async (file) => {
     provider: 'base64'
   };
 };
+

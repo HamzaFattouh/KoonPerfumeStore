@@ -65,33 +65,43 @@ export const TESTIMONIALS = [
 export const DEFAULT_SOCIAL_CHATS = [
   {
     id: 'chat-1',
-    platform: 'whatsapp',
-    platform_name: 'واتساب WhatsApp',
-    customer_name: 'أبو فيصل - الرياض',
+    platform: 'instagram',
+    platform_name: 'إنستغرام Instagram',
+    customer_name: 'سارة آل سعود - الرياض',
     perfume: 'كون أبسولوت (Koon Absolute)',
     image_url: 'https://images.unsplash.com/photo-1594035910387-fea47794261f?q=80&w=800&auto=format&fit=crop',
-    caption: 'والله يا جماعة العطر فخم وثباته جلس بالثوب يومين كاملين.. كل اللي حولي سألوني عنه وطلبوا الرابط!',
+    caption: 'سديم كون أبسولوت وصلني اليوم.. فخامة العبوة والتغليف الملكي لحالها تحفة، والثبات جلس بالملابس أكثر من 48 ساعة! شكراً دار كون ❤️',
     date: 'أمس'
   },
   {
     id: 'chat-2',
-    platform: 'instagram',
-    platform_name: 'إنستغرام Instagram',
-    customer_name: 'نورة المنصور - دبي',
-    perfume: 'سديم الفانيليا (Nebula Vanilla)',
-    image_url: 'https://images.unsplash.com/photo-1547887537-6158d64c35b3?q=80&w=800&auto=format&fit=crop',
-    caption: 'سديم الفانيليا وصلني اليوم والتغليف لحاله تحفة فنية! الريحة سحرية ومو متكررة أبداً ❤️',
+    platform: 'facebook',
+    platform_name: 'فيسبوك Facebook',
+    customer_name: 'م. أحمد الشريف - جدة',
+    perfume: 'الشفق الأسود (Dark Twilight)',
+    image_url: 'https://images.unsplash.com/photo-1523293182086-7651a899d37f?q=80&w=800&auto=format&fit=crop',
+    caption: 'طلبته والدفع عند الاستلام بعد المعاينة، مصداقية عالية والعطر رجالي رسمي وثقيل يستحق كل ريال.',
     date: 'منذ يومين'
   },
   {
     id: 'chat-3',
     platform: 'whatsapp',
     platform_name: 'واتساب WhatsApp',
-    customer_name: 'د. طارق الزهراني - جدة',
-    perfume: 'الشفق الأسود (Dark Twilight)',
-    image_url: 'https://images.unsplash.com/photo-1523293182086-7651a899d37f?q=80&w=800&auto=format&fit=crop',
-    caption: 'العطر استلمته وفحصته مع المندوب والدفع عند الاستلام كان جداً مريح ومضمون.. شكراً على الهدية والعينات الفاخرة.',
-    date: 'منذ 4 أيام'
+    customer_name: 'د. طارق الزهراني - مكة المكرمة',
+    perfume: 'سديم الفانيليا (Nebula Vanilla)',
+    image_url: 'https://images.unsplash.com/photo-1547887537-6158d64c35b3?q=80&w=800&auto=format&fit=crop',
+    caption: 'السلام عليكم، العطر وصلني وفحصت العينة المرفقة أولاً.. ما شاء الله ريحة سحرية ومميزة جداً، شكراً لكم على سرعة التوصيل 🤍',
+    date: 'منذ 3 أيام'
+  },
+  {
+    id: 'chat-4',
+    platform: 'instagram',
+    platform_name: 'إنستغرام Instagram',
+    customer_name: 'ريما القحطاني - الخبر',
+    perfume: 'الوردة الفلكية (Cosmic Rose)',
+    image_url: 'https://images.unsplash.com/photo-1592945403244-b3fbafd7f539?q=80&w=800&auto=format&fit=crop',
+    caption: 'عطر أنثوي نيش راقي جداً غير مكرر.. الكل في الدوام سألني عن اسم العطر وشاركتهم حسابكم!',
+    date: 'منذ 5 أيام'
   }
 ];
 

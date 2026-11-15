@@ -441,8 +441,8 @@ const AdminDashboard = () => {
     }
     const item = {
       id: `chat-${Date.now()}`,
-      platform: newFeedbackChat.platform || 'whatsapp',
-      platform_name: newFeedbackChat.platform === 'whatsapp' ? 'واتساب WhatsApp' : newFeedbackChat.platform === 'instagram' ? 'إنستغرام Instagram' : newFeedbackChat.platform === 'twitter' ? 'تويتر X' : 'سناب شات',
+      platform: newFeedbackChat.platform || 'instagram',
+      platform_name: newFeedbackChat.platform === 'whatsapp' ? 'واتساب WhatsApp' : newFeedbackChat.platform === 'facebook' ? 'فيسبوك Facebook' : 'إنستغرام Instagram',
       customer_name: newFeedbackChat.customer_name || 'عميل دار كون',
       perfume: newFeedbackChat.perfume || 'عطر نيش فاخر',
       image_url: newFeedbackChat.image_url.trim(),
@@ -1468,10 +1468,9 @@ const AdminDashboard = () => {
                         onChange={(e) => setNewFeedbackChat({ ...newFeedbackChat, platform: e.target.value })}
                         className="w-full bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-xs text-slate-100 focus:outline-none focus:border-amber-400 cursor-pointer"
                       >
-                        <option value="whatsapp">واتساب (WhatsApp)</option>
                         <option value="instagram">إنستغرام (Instagram)</option>
-                        <option value="twitter">تويتر (X)</option>
-                        <option value="snapchat">سناب شات (Snapchat)</option>
+                        <option value="facebook">فيسبوك (Facebook)</option>
+                        <option value="whatsapp">واتساب (WhatsApp)</option>
                       </select>
                     </div>
 
@@ -1545,7 +1544,7 @@ const AdminDashboard = () => {
                       <div className="flex-1 min-w-0 pr-1">
                         <div className="flex items-center justify-between">
                           <span className="text-[10px] font-bold text-amber-400 px-2 py-0.5 rounded bg-amber-500/10 border border-amber-500/20">
-                            {chat.platform === 'whatsapp' ? 'واتساب' : chat.platform === 'instagram' ? 'إنستغرام' : 'تواصل'}
+                            {chat.platform === 'whatsapp' ? 'واتساب' : chat.platform === 'facebook' ? 'فيسبوك' : 'إنستغرام'}
                           </span>
                           <button
                             type="button"

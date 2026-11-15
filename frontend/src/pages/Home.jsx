@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import { 
   ArrowLeft, 
@@ -12,7 +12,9 @@ import {
   MessageSquare,
   ZoomIn,
   X,
-  ExternalLink
+  ExternalLink,
+  ChevronLeft,
+  ChevronRight
 } from 'lucide-react';
 import { getProducts } from '../services/productService';
 import { getSiteSettings, getCachedSiteSettings } from '../services/adminService';
@@ -34,6 +36,17 @@ const Home = () => {
   // Feedback display states: 'chats' (social screenshots) | 'reviews' (text reviews)
   const [feedbackTab, setFeedbackTab] = useState('chats');
   const [lightboxChat, setLightboxChat] = useState(null);
+  const chatScrollRef = useRef(null);
+
+  const scrollChats = (direction) => {
+    if (chatScrollRef.current) {
+      const scrollAmount = 380;
+      chatScrollRef.current.scrollBy({
+        left: direction === 'left' ? -scrollAmount : scrollAmount,
+        behavior: 'smooth'
+      });
+    }
+  };
 
   // Fetch live products & dynamic site settings
   useEffect(() => {
@@ -252,7 +265,7 @@ const Home = () => {
         <section id="testimonials-section" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           
           {/* Section Header */}
-          <div className="text-center max-w-2xl mx-auto mb-10">
+          <div className="text-center max-w-2xl mx-auto mb-8">
             <span className="text-xs font-bold text-amber-400 uppercase tracking-widest block mb-2">
               {language === 'ar' ? 'تجارب حقيقية موثقة 100%' : 'חוות דעת וצילומי שיחות מאומתים'}
             </span>
@@ -261,12 +274,42 @@ const Home = () => {
             </h2>
             <p className="text-xs sm:text-sm text-slate-400 mt-2">
               {language === 'ar' 
-                ? 'محادثات واقعية وشهادات موثقة من زبائن دار كون عبر واتساب وإنستغرام بعد استلام وتجربة عطورنا.'
-                : 'שיחות אמיתיות ומשוב מלקוחות דרך וואטסאפ ואינסטגרם לאחר קבלת הבשמים.'}
+                ? 'محادثات واقعية وشهادات موثقة من زبائن دار كون عبر إنستغرام، فيسبوك، وواتساب بعد استلام وتجربة عطورنا.'
+                : 'שיחות אמיתיות ומשוב מלקוחות דרך אינסטגרם, פייסבוק, ווואטסאפ לאחר קבלת הבשמים.'}
             </p>
 
+            {/* Official Social Media Channels (إنستغرام، فيسبوك، واتساب) with Horizontal Scroll if no space */}
+            <div className="mt-4 flex items-center justify-center">
+              <div className="flex items-center gap-2 overflow-x-auto max-w-full pb-2 px-1 scrollbar-none">
+                <a
+                  href="https://instagram.com/koonperfume"
+                  target="_blank"
+                  rel="noreferrer"
+                  className="flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-gradient-to-r from-pink-500/15 via-rose-500/15 to-amber-500/15 hover:from-pink-500/25 hover:to-amber-500/25 border border-rose-500/40 text-rose-300 text-xs font-bold transition whitespace-nowrap shrink-0 hover:scale-105 shadow-sm"
+                >
+                  <span>📸 إنستغرام (Instagram)</span>
+                </a>
+                <a
+                  href="https://facebook.com/koonperfume"
+                  target="_blank"
+                  rel="noreferrer"
+                  className="flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-blue-600/10 hover:bg-blue-600/20 border border-blue-500/30 text-blue-300 text-xs font-bold transition whitespace-nowrap shrink-0 hover:scale-105 shadow-sm"
+                >
+                  <span>🌐 فيسبوك (Facebook)</span>
+                </a>
+                <a
+                  href="https://wa.me/966501234567"
+                  target="_blank"
+                  rel="noreferrer"
+                  className="flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-emerald-500/10 hover:bg-emerald-500/20 border border-emerald-500/30 text-emerald-300 text-xs font-bold transition whitespace-nowrap shrink-0 hover:scale-105 shadow-sm"
+                >
+                  <span>💬 واتساب (WhatsApp)</span>
+                </a>
+              </div>
+            </div>
+
             {/* Toggle between Chat Screenshots & Text Reviews */}
-            <div className="inline-flex items-center gap-1.5 p-1 bg-slate-900/80 border border-slate-800 rounded-xl mt-6 backdrop-blur-md">
+            <div className="inline-flex items-center gap-1.5 p-1 bg-slate-900/80 border border-slate-800 rounded-xl mt-4 backdrop-blur-md">
               <button
                 type="button"
                 onClick={() => setFeedbackTab('chats')}
@@ -277,7 +320,7 @@ const Home = () => {
                 }`}
               >
                 <MessageSquare className="w-3.5 h-3.5" />
-                <span>{language === 'ar' ? 'صور محادثات التواصل (واتساب وإنستغرام)' : 'צילומי שיחות ברשתות'}</span>
+                <span>{language === 'ar' ? 'صور محادثات التواصل (إنستغرام، فيسبوك، واتساب)' : 'צילומי שיחות ברשתות'}</span>
               </button>
 
               <button
@@ -295,83 +338,117 @@ const Home = () => {
             </div>
           </div>
 
-          {/* VIEW A: Social Media Chat Screenshots Grid */}
+          {/* VIEW A: Social Media Chat Screenshots (Scroll بالعرض اذا كان لا يوجد مساحة) */}
           {feedbackTab === 'chats' && (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 animate-fade-in">
-              {socialChats.map((chat, idx) => (
-                <div 
-                  key={chat.id || idx}
-                  className="group bg-slate-900/60 hover:bg-slate-900/90 border border-slate-800/90 hover:border-amber-500/40 rounded-3xl overflow-hidden transition-all duration-300 backdrop-blur-sm flex flex-col justify-between shadow-xl hover:-translate-y-1.5"
-                >
-                  {/* Top Header: Platform Badge & Date */}
-                  <div className="p-4 flex items-center justify-between border-b border-slate-800/60 bg-slate-950/60">
-                    <div className="flex items-center gap-2">
-                      <span className={`px-2.5 py-1 rounded-full text-[11px] font-bold flex items-center gap-1.5 ${
-                        chat.platform === 'whatsapp'
-                          ? 'bg-emerald-500/15 text-emerald-300 border border-emerald-500/30'
-                          : chat.platform === 'instagram'
-                          ? 'bg-rose-500/15 text-rose-300 border border-rose-500/30'
-                          : 'bg-amber-500/15 text-amber-300 border border-amber-500/30'
-                      }`}>
-                        <span>{chat.platform === 'whatsapp' ? '💬' : '📸'}</span>
-                        <span>{chat.platform_name || (chat.platform === 'whatsapp' ? 'واتساب WhatsApp' : 'إنستغرام Instagram')}</span>
-                      </span>
-                    </div>
+            <div className="relative group/scroll animate-fade-in">
+              
+              {/* Scroll Controls & Swipe Indicator */}
+              <div className="flex items-center justify-between pb-3 px-1 text-xs">
+                <span className="text-[11px] text-slate-400 flex items-center gap-1.5">
+                  <span className="w-2 h-2 rounded-full bg-amber-400 animate-pulse" />
+                  <span>اسحب أفقياً لتصفح المحادثات ↔️</span>
+                </span>
 
-                    <span className="text-[11px] text-slate-500 font-mono">{chat.date || 'مؤخراً'}</span>
-                  </div>
-
-                  {/* Screenshot Container with Click to Zoom */}
-                  <div 
-                    onClick={() => setLightboxChat(chat)}
-                    className="relative cursor-pointer overflow-hidden bg-slate-950 h-64 sm:h-72 flex items-center justify-center group/img"
+                <div className="flex items-center gap-2">
+                  <button
+                    type="button"
+                    onClick={() => scrollChats('right')}
+                    className="p-2 rounded-xl bg-slate-900/80 hover:bg-slate-800 border border-slate-800 hover:border-amber-400/50 text-slate-300 hover:text-amber-400 transition cursor-pointer shadow-md"
+                    title="المحادثة السابقة"
                   >
-                    <img 
-                      src={chat.image_url} 
-                      alt={`محادثة ${chat.customer_name}`} 
-                      className="w-full h-full object-cover group-hover/img:scale-105 transition-transform duration-500 filter brightness-95"
-                    />
-
-                    {/* Gradient Overlay & Zoom Icon */}
-                    <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/30 to-transparent opacity-60 group-hover/img:opacity-40 transition-opacity" />
-                    
-                    <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover/img:opacity-100 transition-opacity bg-black/40 backdrop-blur-[2px]">
-                      <div className="flex items-center gap-2 px-4 py-2 rounded-xl bg-amber-500 text-slate-950 text-xs font-bold shadow-xl shadow-amber-500/30">
-                        <ZoomIn className="w-4 h-4" />
-                        <span>تكبير المحادثة وقراءتها</span>
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* Bottom Details & Quote */}
-                  <div className="p-5 space-y-3 bg-slate-950/40">
-                    <p className="text-xs text-slate-300 leading-relaxed italic bg-slate-900/60 p-3 rounded-xl border border-slate-800">
-                      "{chat.caption}"
-                    </p>
-
-                    <div className="flex items-center justify-between text-xs pt-2 border-t border-slate-800/60">
-                      <div>
-                        <span className="font-bold text-white flex items-center gap-1.5">
-                          <span>{chat.customer_name}</span>
-                          <span className="text-[10px] text-amber-400 font-bold">✓</span>
-                        </span>
-                        <span className="text-[11px] text-amber-400/90 block mt-0.5">
-                          {chat.perfume}
-                        </span>
-                      </div>
-
-                      <button
-                        type="button"
-                        onClick={() => setLightboxChat(chat)}
-                        className="text-[11px] text-slate-400 hover:text-amber-300 font-bold flex items-center gap-1 cursor-pointer"
-                      >
-                        <span>عرض الصورة</span>
-                        <ExternalLink className="w-3 h-3" />
-                      </button>
-                    </div>
-                  </div>
+                    <ChevronRight className="w-4 h-4" />
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => scrollChats('left')}
+                    className="p-2 rounded-xl bg-slate-900/80 hover:bg-slate-800 border border-slate-800 hover:border-amber-400/50 text-slate-300 hover:text-amber-400 transition cursor-pointer shadow-md"
+                    title="المحادثة التالية"
+                  >
+                    <ChevronLeft className="w-4 h-4" />
+                  </button>
                 </div>
-              ))}
+              </div>
+
+              {/* Horizontal Scroll Track (Scroll بالعرض بسلاسة) */}
+              <div 
+                ref={chatScrollRef}
+                className="flex items-stretch gap-5 overflow-x-auto pb-6 pt-1 scroll-smooth snap-x snap-mandatory scrollbar-thin scrollbar-thumb-amber-500/30 scrollbar-track-slate-900/60"
+              >
+                {socialChats.map((chat, idx) => (
+                  <div 
+                    key={chat.id || idx}
+                    className="w-[86vw] sm:w-[350px] lg:w-[370px] shrink-0 snap-center group/card bg-slate-900/60 hover:bg-slate-900/90 border border-slate-800/90 hover:border-amber-500/40 rounded-3xl overflow-hidden transition-all duration-300 backdrop-blur-sm flex flex-col justify-between shadow-xl hover:-translate-y-1.5"
+                  >
+                    {/* Top Header: Platform Badge (Instagram, Facebook, WhatsApp) & Date */}
+                    <div className="p-4 flex items-center justify-between border-b border-slate-800/60 bg-slate-950/60">
+                      <div className="flex items-center gap-2">
+                        <span className={`px-2.5 py-1 rounded-full text-[11px] font-bold flex items-center gap-1.5 ${
+                          chat.platform === 'whatsapp'
+                            ? 'bg-emerald-500/15 text-emerald-300 border border-emerald-500/30'
+                            : chat.platform === 'facebook'
+                            ? 'bg-blue-600/15 text-blue-300 border border-blue-500/30'
+                            : 'bg-gradient-to-r from-pink-500/15 via-rose-500/15 to-amber-500/15 text-rose-300 border border-rose-500/30'
+                        }`}>
+                          <span>{chat.platform === 'whatsapp' ? '💬' : chat.platform === 'facebook' ? '🌐' : '📸'}</span>
+                          <span>{chat.platform_name || (chat.platform === 'whatsapp' ? 'واتساب WhatsApp' : chat.platform === 'facebook' ? 'فيسبوك Facebook' : 'إنستغرام Instagram')}</span>
+                        </span>
+                      </div>
+
+                      <span className="text-[11px] text-slate-500 font-mono">{chat.date || 'مؤخراً'}</span>
+                    </div>
+
+                    {/* Screenshot Container with Click to Zoom */}
+                    <div 
+                      onClick={() => setLightboxChat(chat)}
+                      className="relative cursor-pointer overflow-hidden bg-slate-950 h-64 sm:h-72 flex items-center justify-center group/img"
+                    >
+                      <img 
+                        src={chat.image_url} 
+                        alt={`محادثة ${chat.customer_name}`} 
+                        className="w-full h-full object-cover group-hover/img:scale-105 transition-transform duration-500 filter brightness-95"
+                      />
+
+                      {/* Gradient Overlay & Zoom Icon */}
+                      <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/30 to-transparent opacity-60 group-hover/img:opacity-40 transition-opacity" />
+                      
+                      <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover/img:opacity-100 transition-opacity bg-black/40 backdrop-blur-[2px]">
+                        <div className="flex items-center gap-2 px-4 py-2 rounded-xl bg-amber-500 text-slate-950 text-xs font-bold shadow-xl shadow-amber-500/30">
+                          <ZoomIn className="w-4 h-4" />
+                          <span>تكبير المحادثة وقراءتها</span>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Bottom Details & Quote */}
+                    <div className="p-5 space-y-3 bg-slate-950/40">
+                      <p className="text-xs text-slate-300 leading-relaxed italic bg-slate-900/60 p-3 rounded-xl border border-slate-800 line-clamp-3">
+                        "{chat.caption}"
+                      </p>
+
+                      <div className="flex items-center justify-between text-xs pt-2 border-t border-slate-800/60">
+                        <div>
+                          <span className="font-bold text-white flex items-center gap-1.5">
+                            <span>{chat.customer_name}</span>
+                            <span className="text-[10px] text-amber-400 font-bold">✓</span>
+                          </span>
+                          <span className="text-[11px] text-amber-400/90 block mt-0.5">
+                            {chat.perfume}
+                          </span>
+                        </div>
+
+                        <button
+                          type="button"
+                          onClick={() => setLightboxChat(chat)}
+                          className="text-[11px] text-slate-400 hover:text-amber-300 font-bold flex items-center gap-1 cursor-pointer"
+                        >
+                          <span>عرض الصورة</span>
+                          <ExternalLink className="w-3 h-3" />
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
             </div>
           )}
 
@@ -428,8 +505,14 @@ const Home = () => {
             {/* Modal Header */}
             <div className="p-4 sm:p-5 flex items-center justify-between border-b border-slate-800 bg-slate-900/60">
               <div className="flex items-center gap-3">
-                <span className="px-3 py-1 rounded-full bg-emerald-500/15 text-emerald-300 border border-emerald-500/30 text-xs font-bold flex items-center gap-1.5">
-                  <span>{lightboxChat.platform === 'whatsapp' ? '💬' : '📸'}</span>
+                <span className={`px-3 py-1 rounded-full text-xs font-bold flex items-center gap-1.5 ${
+                  lightboxChat.platform === 'whatsapp'
+                    ? 'bg-emerald-500/15 text-emerald-300 border border-emerald-500/30'
+                    : lightboxChat.platform === 'facebook'
+                    ? 'bg-blue-600/15 text-blue-300 border border-blue-500/30'
+                    : 'bg-gradient-to-r from-pink-500/15 via-rose-500/15 to-amber-500/15 text-rose-300 border border-rose-500/30'
+                }`}>
+                  <span>{lightboxChat.platform === 'whatsapp' ? '💬' : lightboxChat.platform === 'facebook' ? '🌐' : '📸'}</span>
                   <span>{lightboxChat.platform_name || 'محادثة موثقة'}</span>
                 </span>
                 <div>
