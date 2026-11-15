@@ -174,13 +174,11 @@ const Footer = () => {
             </form>
 
             <div className="pt-2">
-              <span className="text-[11px] text-slate-500 block mb-1.5">طرق الدفع والتقسيط المعتمدة:</span>
-              <div className="flex flex-wrap gap-2 text-[10px] text-slate-400 font-semibold">
-                <span className="bg-slate-900 px-2.5 py-1 rounded border border-slate-800">مدى Mada</span>
-                <span className="bg-slate-900 px-2.5 py-1 rounded border border-slate-800">Apple Pay</span>
-                <span className="bg-slate-900 px-2.5 py-1 rounded border border-slate-800">Visa / Mastercard</span>
-                <span className="bg-slate-900 px-2.5 py-1 rounded border border-slate-800">تمارا Tamara</span>
-                <span className="bg-slate-900 px-2.5 py-1 rounded border border-slate-800">تابي Tabby</span>
+              <span className="text-[11px] text-slate-500 block mb-1.5">طريقة الدفع المعتمدة:</span>
+              <div className="flex flex-wrap gap-2 text-[11px] text-amber-300 font-semibold">
+                <span className="bg-amber-500/10 px-3 py-1 rounded-lg border border-amber-500/30 flex items-center gap-1.5">
+                  💵 الدفع عند الاستلام نقداً (Cash on Delivery)
+                </span>
               </div>
             </div>
           </div>
@@ -190,6 +188,10 @@ const Footer = () => {
         <div className="pt-8 flex flex-col md:flex-row items-center justify-between gap-4 text-xs text-slate-500">
           <div className="flex items-center gap-2">
             <span>© {new Date().getFullYear()} كون بيرفيوم (Koon Perfume). جميع الحقوق محفوظة.</span>
+            <span>•</span>
+            <Link to="/admin" className="text-slate-500 hover:text-amber-400 transition font-mono">
+              لوحة الإدارة 🪐
+            </Link>
           </div>
 
           <div className="flex items-center gap-4 text-slate-400">

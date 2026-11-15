@@ -7,11 +7,14 @@ import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import pg from 'pg';
+import dotenv from 'dotenv';
 import { INITIAL_PRODUCTS } from './seed.js';
 
 const { Pool } = pg;
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
+
+dotenv.config({ path: path.join(__dirname, '../../.env') });
 
 /**
  * Automatically creates and validates tables and seeds products in PostgreSQL/Supabase
@@ -35,9 +38,17 @@ export async function autoMigrateDatabase() {
     const schemaPath = path.join(__dirname, 'schema.sql');
     const sql = fs.readFileSync(schemaPath, 'utf8');
 
-    // 1. Run schema SQL to create table, indexes, and triggers
+    // 1. Run schema SQL to create products table, indexes, and triggers
     await pool.query(sql);
     console.log('✅ تم إنشاء/التحقق من جدول products والفهارس بنجاح تلقائياً في Supabase!');
+
+    // 2. Run admin_schema SQL to create orders and site_settings tables
+    const adminSchemaPath = path.join(__dirname, 'admin_schema.sql');
+    if (fs.existsSync(adminSchemaPath)) {
+      const adminSql = fs.readFileSync(adminSchemaPath, 'utf8');
+      await pool.query(adminSql);
+      console.log('✅ تم إنشاء/التحقق من جداول orders و site_settings بنجاح في Supabase!');
+    }
 
     // 2. Check if products table is empty, and seed if needed
     const countRes = await pool.query('SELECT COUNT(*) FROM public.products;');

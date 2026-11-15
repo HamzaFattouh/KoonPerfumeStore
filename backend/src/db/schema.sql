@@ -90,12 +90,14 @@ CREATE TRIGGER trigger_products_updated_at
 ALTER TABLE public.products ENABLE ROW LEVEL SECURITY;
 
 -- السماح للجمهور بقراءة المنتجات النشطة فقط
+DROP POLICY IF EXISTS "Public can read active products" ON public.products;
 CREATE POLICY "Public can read active products"
     ON public.products
     FOR SELECT
     USING (is_active = true);
 
 -- السماح للمشرفين المصرحين بكامل صلاحيات الإضافة والتعديل والحذف
+DROP POLICY IF EXISTS "Admins have full access" ON public.products;
 CREATE POLICY "Admins have full access"
     ON public.products
     FOR ALL

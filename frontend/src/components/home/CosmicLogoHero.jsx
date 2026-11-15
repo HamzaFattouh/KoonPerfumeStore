@@ -427,15 +427,25 @@ const CosmicLogoHero = () => {
         >
           <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-amber-500/10 border border-amber-500/25 text-amber-300 text-xs font-semibold backdrop-blur-md">
             <Sparkles className="w-3.5 h-3.5 text-amber-400" />
-            <span>دار العطور الفلكية الأولى • توليفات نيش فائقة التركيز</span>
+            <span>
+              {language === 'he' 
+                ? 'בית הבישום הקוסמי הראשון • תמציות נישה בריכוז עילאי' 
+                : 'دار العطور الفلكية الأولى • توليفات نيش فائقة التركيز'}
+            </span>
           </div>
           
           <h1 className="text-3xl sm:text-4xl md:text-5xl font-black text-white tracking-tight leading-tight">
-            عطورٌ نُسجت من <span className="text-transparent bg-clip-text bg-gradient-to-r from-amber-300 via-amber-400 to-amber-500">سديم الكون</span>
+            {language === 'he' ? (
+              <>בשמים שנארגו מ<span className="text-transparent bg-clip-text bg-gradient-to-r from-amber-300 via-amber-400 to-amber-500">ערפיליות היקום</span></>
+            ) : (
+              <>عطورٌ نُسجت من <span className="text-transparent bg-clip-text bg-gradient-to-r from-amber-300 via-amber-400 to-amber-500">سديم الكون</span></>
+            )}
           </h1>
 
           <p className="text-xs sm:text-sm text-slate-300/90 leading-relaxed max-w-lg mx-auto">
-            نجمع بين نفائس الزيوت المعتقة في غراس الفرنسية وسحر الأجرام السماوية لنصنع بصمة عطرية لا تُمحى تدوم لأيام.
+            {language === 'he'
+              ? 'יוקרה בממדים קוסמיים. שמנים נדירים שנרקחו להעניק נוכחות בלתי נשכחת הנשארת לאורך ימים.'
+              : 'نجمع بين نفائس الزيوت المعتقة في غراس الفرنسية وسحر الأجرام السماوية لنصنع بصمة عطرية لا تُمحى تدوم لأيام.'}
           </p>
         </motion.div>
       </div>

@@ -7,6 +7,9 @@ import express from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
 import productRoutes from './routes/productRoutes.js';
+import orderRoutes from './routes/orderRoutes.js';
+import settingsRoutes from './routes/settingsRoutes.js';
+import adminRoutes from './routes/adminRoutes.js';
 import { supabase } from './config/supabase.js';
 import { autoMigrateDatabase } from './db/migrate.js';
 
@@ -37,6 +40,9 @@ app.get('/api/health', (req, res) => {
 
 // API Routes
 app.use('/api/products', productRoutes);
+app.use('/api/orders', orderRoutes);
+app.use('/api/settings', settingsRoutes);
+app.use('/api/admin', adminRoutes);
 
 // Root Welcome Endpoint
 app.get('/', (req, res) => {
