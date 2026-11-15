@@ -102,12 +102,8 @@ const Navbar = () => {
 
   return (
     <>
-      {/* Fixed Navbar Container: hidden during full-screen video, slides in on scroll */}
-      <div className={`fixed top-0 inset-x-0 z-40 transition-all duration-500 ease-in-out ${
-        isHome && !scrolled
-          ? '-translate-y-full opacity-0 pointer-events-none'
-          : 'translate-y-0 opacity-100 pointer-events-auto shadow-2xl'
-      }`}>
+      {/* Fixed Navbar Container */}
+      <div className="fixed top-0 inset-x-0 z-40 transition-all duration-500 ease-in-out translate-y-0 opacity-100 pointer-events-auto shadow-2xl">
         {/* Top Announcement Bar */}
         <div className="bg-gradient-to-r from-slate-950 via-slate-900 to-slate-950 border-b border-amber-500/20 text-xs py-2 px-4 text-center text-slate-300 flex items-center justify-center gap-4">
           <div className="flex items-center gap-2">

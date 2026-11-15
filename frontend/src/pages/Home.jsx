@@ -21,7 +21,7 @@ import { getSiteSettings, getCachedSiteSettings } from '../services/adminService
 import { TESTIMONIALS, DEFAULT_SOCIAL_CHATS } from '../data/products';
 import ProductCard from '../components/products/ProductCard';
 import { useLanguage } from '../context/LanguageContext';
-import CosmicLogoHero from '../components/home/CosmicLogoHero';
+import PerfumeShelfHero from '../components/home/PerfumeShelfHero';
 
 const Home = () => {
   const { language } = useLanguage();
@@ -111,8 +111,12 @@ const Home = () => {
   return (
     <div className="space-y-20 pb-24 text-slate-100">
       
-      {/* 1. Masterpiece Cosmic Emblem & Brand Hero Section (Controlled from Admin) */}
-      <CosmicLogoHero heroSettings={siteSettings?.hero_section} />
+      {/* 1. Interactive 3D Luxury Perfume Shelf (رف العطور التفاعلي) */}
+      <PerfumeShelfHero
+        products={products}
+        isLoading={isLoadingProducts}
+        heroSettings={siteSettings?.hero_section}
+      />
 
       {/* 2. Curated Luxury Perfumes Showcase (Controlled from Admin) */}
       {showBestsellers && (
