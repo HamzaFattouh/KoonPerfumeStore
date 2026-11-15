@@ -129,11 +129,11 @@ const PerfumeShelfHero = ({ products = [], heroSettings }) => {
   useEffect(() => {
     const updateSpacing = () => {
       if (window.innerWidth < 640) {
-        setSlotSpacing(120);
+        setSlotSpacing(160);
       } else if (window.innerWidth < 1024) {
-        setSlotSpacing(165);
+        setSlotSpacing(225);
       } else {
-        setSlotSpacing(205);
+        setSlotSpacing(285);
       }
     };
     updateSpacing();
@@ -192,23 +192,6 @@ const PerfumeShelfHero = ({ products = [], heroSettings }) => {
         />
       </div>
 
-      {/* Top Compact Brand Header */}
-      <div className="relative z-30 max-w-4xl mx-auto px-4 text-center mb-6 sm:mb-8">
-        <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-amber-500/10 border border-amber-500/25 text-amber-300 text-[11px] font-bold backdrop-blur-md mb-2">
-          <Sparkles className="w-3.5 h-3.5 text-amber-400" />
-          <span>
-            {language === 'ar'
-              ? (activeHero.tagline_ar || 'رف العطور العالمية الفاخرة')
-              : (activeHero.tagline_he || 'מדף הבשמים היוקרתיים בעולם')}
-          </span>
-        </div>
-        <h1 className="text-2xl sm:text-4xl font-black text-white tracking-tight">
-          {language === 'ar'
-            ? (activeHero.title_ar || 'مجموعة العطور العالمية الحصرية')
-            : (activeHero.title_he || 'קולקציית בשמי היוקרה הבלעדית')}
-        </h1>
-      </div>
-
       {/* ========================================================================= */}
       {/* 3D LUXURY PERFUME SHELF STAGE (رف الرندرات ثلاثية الأبعاد)             */}
       {/* ========================================================================= */}
@@ -236,7 +219,7 @@ const PerfumeShelfHero = ({ products = [], heroSettings }) => {
           {/* 3D Perspective Coordinate Stage */}
           <motion.div
             dir="ltr"
-            className="relative h-[300px] sm:h-[365px] lg:h-[405px] w-full flex items-end justify-center overflow-visible"
+            className="relative h-[235px] sm:h-[285px] lg:h-[315px] w-full flex items-end justify-center overflow-visible"
             style={{ perspective: 1300 }}
             drag="x"
             dragConstraints={{ left: 0, right: 0 }}
@@ -295,20 +278,13 @@ const PerfumeShelfHero = ({ products = [], heroSettings }) => {
               </AnimatePresence>
             </div>
 
-            {/* Volumetric Top-Down Studio Spotlight Beam */}
+            {/* Volumetric Soft Studio Spotlight (No Rectangular Edge) */}
             <motion.div
               animate={{
-                background: `radial-gradient(ellipse at 50% 0%, ${activePerfume.glow} 0%, transparent 70%)`
+                background: `radial-gradient(closest-side, ${activePerfume.glow} 0%, transparent 100%)`
               }}
               transition={{ duration: 0.7 }}
-              className="absolute top-0 left-1/2 -translate-x-1/2 w-[280px] sm:w-[440px] h-full opacity-45 pointer-events-none z-10"
-            />
-
-            {/* Center Spotlight Reflection on Shelf */}
-            <motion.div
-              animate={{ backgroundColor: activePerfume.shelfHighlight }}
-              transition={{ duration: 0.6 }}
-              className="absolute bottom-5 left-1/2 -translate-x-1/2 w-56 sm:w-80 h-6 opacity-50 blur-xl rounded-full pointer-events-none z-10"
+              className="absolute top-0 left-1/2 -translate-x-1/2 w-[500px] sm:w-[740px] h-full opacity-40 pointer-events-none z-10"
             />
 
             {/* 3D Rendered Perfumes Shifting Along the Shelf */}
@@ -318,9 +294,9 @@ const PerfumeShelfHero = ({ products = [], heroSettings }) => {
               const isCenter = diff === 0;
               const isVisible = absDiff <= 2;
 
-              const scale = isCenter ? 1.18 : absDiff === 1 ? 0.78 : absDiff === 2 ? 0.56 : 0.4;
-              const opacity = isCenter ? 1 : absDiff === 1 ? 0.72 : absDiff === 2 ? 0.35 : 0;
-              const yOffset = isCenter ? -14 : absDiff === 1 ? 0 : 12;
+              const scale = isCenter ? 1.1 : absDiff === 1 ? 0.72 : absDiff === 2 ? 0.5 : 0.35;
+              const opacity = isCenter ? 1 : absDiff === 1 ? 0.7 : absDiff === 2 ? 0.32 : 0;
+              const yOffset = isCenter ? -6 : absDiff === 1 ? 2 : 10;
               const rotateY = diff * -16;
               const zIndex = isCenter ? 30 : absDiff === 1 ? 20 : absDiff === 2 ? 10 : 0;
               const filterStyle = isCenter
@@ -380,26 +356,14 @@ const PerfumeShelfHero = ({ products = [], heroSettings }) => {
                       src={item.image}
                       alt={`${item.brand} ${item.model}`}
                       draggable={false}
-                      className="relative z-10 h-[200px] sm:h-[260px] lg:h-[295px] w-auto object-contain select-none transition-all duration-500"
+                      className="relative z-10 h-[155px] sm:h-[195px] lg:h-[220px] w-auto object-contain select-none transition-all duration-500"
                       style={{
                         filter: isCenter
-                          ? 'drop-shadow(0 24px 26px rgba(0,0,0,0.92)) drop-shadow(0 0 18px rgba(251,191,36,0.22))'
-                          : 'drop-shadow(0 16px 18px rgba(0,0,0,0.85))'
+                          ? 'drop-shadow(0 18px 22px rgba(0,0,0,0.85)) drop-shadow(0 0 18px rgba(251,191,36,0.2))'
+                          : 'drop-shadow(0 12px 14px rgba(0,0,0,0.8))'
                       }}
                     />
                   </motion.div>
-
-                  {/* Contact Shadow on Shelf */}
-                  <div
-                    className={`mt-0.5 h-2.5 rounded-full blur-sm transition-all duration-300 ${
-                      isCenter ? 'w-32 sm:w-44 bg-black/90' : 'w-20 bg-black/85'
-                    }`}
-                    style={
-                      isCenter
-                        ? { boxShadow: `0 0 24px 4px ${item.shelfHighlight}` }
-                        : undefined
-                    }
-                  />
                 </motion.div>
               );
             })}
