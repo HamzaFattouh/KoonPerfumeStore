@@ -222,38 +222,74 @@ export async function deleteProduct(id) {
   return false;
 }
 
+const SETTINGS_CACHE_KEY = 'koon_site_settings_cache';
+
+export function getCachedSiteSettings() {
+  try {
+    const raw = localStorage.getItem(SETTINGS_CACHE_KEY);
+    return raw ? JSON.parse(raw) : null;
+  } catch {
+    return null;
+  }
+}
+
+export function setCachedSiteSettings(settings) {
+  try {
+    if (settings && typeof settings === 'object') {
+      localStorage.setItem(SETTINGS_CACHE_KEY, JSON.stringify(settings));
+    }
+  } catch {}
+}
+
 /**
- * Fetch all site settings (Admin & Public)
+ * Fetch all site settings (Admin & Public with Instant Local Cache)
  */
 export async function getSiteSettings() {
+  let result = null;
+
   if (API_BASE) {
     try {
       const res = await fetch(`${API_BASE}/api/settings`);
       if (res.ok) {
         const json = await res.json();
-        if (json.success && json.data) return json.data;
+        if (json.success && json.data) {
+          result = json.data;
+        }
       }
     } catch (e) {}
   }
 
-  if (supabase) {
+  if (!result && supabase) {
     try {
       const { data, error } = await supabase.from('site_settings').select('*');
       if (!error && data) {
         const map = {};
         data.forEach(item => { map[item.key] = item.data; });
-        return map;
+        result = map;
       }
     } catch (e) {}
   }
 
-  return {};
+  if (result) {
+    setCachedSiteSettings(result);
+    return result;
+  }
+
+  return getCachedSiteSettings() || {};
 }
 
 /**
  * Update a specific site section setting (Admin)
  */
 export async function updateSiteSetting(key, data) {
+  // 1. Immediately update synchronous local cache so reload has zero delay
+  try {
+    const cached = getCachedSiteSettings() || {};
+    cached[key] = data;
+    setCachedSiteSettings(cached);
+  } catch {}
+
+  // 2. Persist to Backend API
   if (API_BASE) {
     try {
       const res = await fetch(`${API_BASE}/api/settings/${key}`, {
@@ -271,6 +307,7 @@ export async function updateSiteSetting(key, data) {
     } catch (e) {}
   }
 
+  // 3. Persist to Supabase
   if (supabase) {
     const { data: updated, error } = await supabase
       .from('site_settings')

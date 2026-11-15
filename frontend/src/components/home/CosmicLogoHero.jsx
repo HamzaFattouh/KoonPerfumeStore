@@ -14,9 +14,15 @@ import {
   Award
 } from 'lucide-react';
 import { useLanguage } from '../../context/LanguageContext';
+import { getCachedSiteSettings } from '../../services/adminService';
 
 const CosmicLogoHero = ({ heroSettings }) => {
   const { t, language } = useLanguage();
+  
+  // Instant synchronous cache fallback to prevent any text flashing on reload
+  const activeHero = (heroSettings && Object.keys(heroSettings).length > 0)
+    ? heroSettings
+    : (getCachedSiteSettings()?.hero_section || {});
   
   // Animation state: 'drawing' | 'revealed'
   const [animStage, setAnimStage] = useState('drawing');
@@ -429,21 +435,21 @@ const CosmicLogoHero = ({ heroSettings }) => {
             <Sparkles className="w-3.5 h-3.5 text-amber-400" />
             <span>
               {language === 'he' 
-                ? (heroSettings?.tagline_he || 'בית הבישום הקוסמי הראשון • תמציות נישה בריכוז עילאי') 
-                : (heroSettings?.tagline_ar || 'دار العطور الفلكية الأولى • توليفات نيش فائقة التركيز')}
+                ? (activeHero?.tagline_he || 'בית הבישום הקוסמי הראשון • תמציות נישה בריכוז עילאי') 
+                : (activeHero?.tagline_ar || 'دار العطور الفلكية الأولى • توليفات نيش فائقة التركيز')}
             </span>
           </div>
           
           <h1 className="text-3xl sm:text-4xl md:text-5xl font-black text-white tracking-tight leading-tight">
             {language === 'he' ? (
-              heroSettings?.title_he ? (
-                <span>{heroSettings.title_he}</span>
+              activeHero?.title_he ? (
+                <span>{activeHero.title_he}</span>
               ) : (
                 <>בשמים שנארגו מ<span className="text-transparent bg-clip-text bg-gradient-to-r from-amber-300 via-amber-400 to-amber-500">ערפיליות היקום</span></>
               )
             ) : (
-              heroSettings?.title_ar ? (
-                <span>{heroSettings.title_ar}</span>
+              activeHero?.title_ar ? (
+                <span>{activeHero.title_ar}</span>
               ) : (
                 <>عطورٌ نُسجت من <span className="text-transparent bg-clip-text bg-gradient-to-r from-amber-300 via-amber-400 to-amber-500">سديم الكون</span></>
               )
@@ -452,8 +458,8 @@ const CosmicLogoHero = ({ heroSettings }) => {
 
           <p className="text-xs sm:text-sm text-slate-300/90 leading-relaxed max-w-lg mx-auto">
             {language === 'he'
-              ? (heroSettings?.subtitle_he || 'יוקרה בממדים קוסמיים. שמנים נדירים שנרקחו להעניק נוכחות בלתי נשכחת הנשארת לאורך ימים.')
-              : (heroSettings?.subtitle_ar || 'نجمع بين نفائس الزيوت المعتقة في غراس الفرنسية وسحر الأجرام السماوية لنصنع بصمة عطرية لا تُمحى تدوم لأيام.')}
+              ? (activeHero?.subtitle_he || 'יוקרה בממדים קוסמיים. שמנים נדירים שנרקחו להעניק נוכחות בלתי נשכחת הנשארת לאורך ימים.')
+              : (activeHero?.subtitle_ar || 'نجمع بين نفائس الزيوت المعتقة في غراس الفرنسية وسحر الأجرام السماوية لنصنع بصمة عطرية لا تُمحى تدوم لأيام.')}
           </p>
         </motion.div>
       </div>
@@ -461,9 +467,9 @@ const CosmicLogoHero = ({ heroSettings }) => {
       {/* 4. Luxury Action CTAs & Floating Metrics */}
       <div className="relative z-20 w-full flex flex-col items-center justify-center gap-4 px-4 pt-4">
         {/* Call-to-Action Buttons (Controlled from Admin) */}
-        {(heroSettings?.show_explore_btn !== false || heroSettings?.show_quiz_btn !== false) && (
+        {(activeHero?.show_explore_btn !== false || activeHero?.show_quiz_btn !== false) && (
           <div className="flex flex-wrap items-center justify-center gap-3 sm:gap-4">
-            {heroSettings?.show_explore_btn !== false && (
+            {activeHero?.show_explore_btn !== false && (
               <Link
                 to="/shop"
                 className="px-8 py-3.5 bg-gradient-to-r from-amber-500 via-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-slate-950 font-black text-xs sm:text-sm rounded-xl shadow-xl shadow-amber-500/25 transition-all duration-300 transform hover:-translate-y-0.5 active:scale-95 flex items-center gap-2 cursor-pointer border border-amber-400/40"
@@ -473,7 +479,7 @@ const CosmicLogoHero = ({ heroSettings }) => {
               </Link>
             )}
 
-            {heroSettings?.show_quiz_btn !== false && (
+            {activeHero?.show_quiz_btn !== false && (
               <Link
                 to="/quiz"
                 className="px-6 py-3.5 bg-slate-950/80 hover:bg-slate-900 text-slate-200 hover:text-amber-300 border border-slate-700/80 hover:border-amber-400/50 font-bold text-xs sm:text-sm rounded-xl transition-all duration-300 flex items-center gap-2 backdrop-blur-md cursor-pointer"

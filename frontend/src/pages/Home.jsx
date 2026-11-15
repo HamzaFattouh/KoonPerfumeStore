@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { ArrowLeft, Flame, Star, Copy, Check, Sparkles, Tag, Gift } from 'lucide-react';
 import { getProducts } from '../services/productService';
-import { getSiteSettings } from '../services/adminService';
+import { getSiteSettings, getCachedSiteSettings } from '../services/adminService';
 import { TESTIMONIALS } from '../data/products';
 import ProductCard from '../components/products/ProductCard';
 import { useLanguage } from '../context/LanguageContext';
@@ -15,7 +15,7 @@ const Home = () => {
   const [activeCategory, setActiveCategory] = useState('all');
   const [products, setProducts] = useState([]);
   const [isLoadingProducts, setIsLoadingProducts] = useState(true);
-  const [siteSettings, setSiteSettings] = useState({});
+  const [siteSettings, setSiteSettings] = useState(() => getCachedSiteSettings() || {});
   const [copiedCoupon, setCopiedCoupon] = useState(false);
 
   // Fetch live products & dynamic site settings
