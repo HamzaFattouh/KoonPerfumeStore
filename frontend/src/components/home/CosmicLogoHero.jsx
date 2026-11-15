@@ -87,7 +87,7 @@ const CosmicLogoHero = () => {
   };
 
   const scrollToContent = () => {
-    const target = document.getElementById('brand-pillars');
+    const target = document.getElementById('products-showcase');
     if (target) {
       target.scrollIntoView({ behavior: 'smooth' });
     } else {
