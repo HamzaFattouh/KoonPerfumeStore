@@ -14,7 +14,8 @@ import {
   PhoneCall, 
   User, 
   ChevronDown,
-  Globe
+  Globe,
+  Check
 } from 'lucide-react';
 import { getProducts } from '../../services/productService';
 
@@ -26,11 +27,26 @@ const Navbar = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [scrolled, setScrolled] = useState(false);
   const [allProducts, setAllProducts] = useState([]);
+  const [langDropdownOpen, setLangDropdownOpen] = useState(false);
+  const langDropdownRef = useRef(null);
   const searchInputRef = useRef(null);
   const navigate = useNavigate();
   const location = useLocation();
 
   const isHome = location.pathname === '/';
+
+  // Close language dropdown on click outside
+  useEffect(() => {
+    const handleClickOutside = (e) => {
+      if (langDropdownRef.current && !langDropdownRef.current.contains(e.target)) {
+        setLangDropdownOpen(false);
+      }
+    };
+    if (langDropdownOpen) {
+      document.addEventListener('mousedown', handleClickOutside);
+    }
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, [langDropdownOpen]);
 
   // Load products from DB for live search
   useEffect(() => {
@@ -142,74 +158,74 @@ const Navbar = () => {
               {/* Actions: Language Switcher, Search, Wishlist, Cart, Profile */}
               <div className="flex items-center gap-2 sm:gap-3 shrink-0">
                 
-                {/* 🪐 Bespoke Drawn Arabic & Hebrew Language Emblem Button */}
-                <button
-                  type="button"
-                  onClick={() => setLanguage(language === 'ar' ? 'he' : 'ar')}
-                  className="p-1.5 sm:p-2 rounded-xl transition cursor-pointer relative flex items-center justify-center group bg-slate-900/80 hover:bg-slate-800 border border-slate-700/80 hover:border-amber-400/60 shadow-sm"
-                  title={language === 'ar' ? 'החלף לעברית (Switch to Hebrew)' : 'التبديل إلى العربية (Switch to Arabic)'}
-                  aria-label={language === 'ar' ? 'تغيير اللغة إلى العبرية' : 'שנה שפה לערבית'}
-                >
-                  <svg 
-                    viewBox="0 0 36 36" 
-                    fill="none" 
-                    xmlns="http://www.w3.org/2000/svg"
-                    className="w-7 h-7 transform transition-transform duration-300 group-hover:scale-105"
+                {/* 🌐 Globe Language Switcher with Pop-over Dropdown Window */}
+                <div ref={langDropdownRef} className="relative">
+                  <button
+                    type="button"
+                    onClick={() => setLangDropdownOpen(prev => !prev)}
+                    className={`p-2 sm:p-2.5 rounded-xl transition cursor-pointer relative flex items-center justify-center group border ${
+                      langDropdownOpen 
+                        ? 'bg-slate-800 text-amber-400 border-amber-400/80 shadow-md shadow-amber-500/20' 
+                        : 'text-slate-300 hover:text-amber-400 hover:bg-slate-800/80 border-slate-700/80 hover:border-amber-400/50'
+                    }`}
+                    title={language === 'ar' ? 'تغيير اللغة' : 'בחר שפה'}
+                    aria-label="تغيير اللغة"
                   >
-                    {/* Celestial Outer Orbit Ring */}
-                    <circle cx="18" cy="18" r="16" stroke="url(#goldEmblemGrad)" strokeWidth="1.2" strokeDasharray="3 2" opacity="0.7" />
-                    <circle cx="18" cy="18" r="13" fill="#07080b" stroke="#f59e0b" strokeWidth="1.2" />
-                    
-                    {/* Star Dust points */}
-                    <circle cx="18" cy="2" r="1.2" fill="#fbbf24" />
-                    <circle cx="18" cy="34" r="1.2" fill="#fbbf24" />
-                    <circle cx="2" cy="18" r="1.2" fill="#fbbf24" />
-                    <circle cx="34" cy="18" r="1.2" fill="#fbbf24" />
-                    
-                    {/* Dual Glyph Arabic 'ع' and Hebrew 'ע' Calligraphic Seal */}
-                    <text 
-                      x="11.5" 
-                      y="22.5" 
-                      fontFamily="Cairo, sans-serif" 
-                      fontWeight="900" 
-                      fontSize="12.5" 
-                      fill={language === 'ar' ? '#f59e0b' : '#64748b'}
-                      textAnchor="middle"
-                    >
-                      ع
-                    </text>
-                    <text 
-                      x="18" 
-                      y="21" 
-                      fontFamily="sans-serif" 
-                      fontWeight="300" 
-                      fontSize="10" 
-                      fill="#475569" 
-                      textAnchor="middle"
-                    >
-                      |
-                    </text>
-                    <text 
-                      x="24.5" 
-                      y="22.5" 
-                      fontFamily="sans-serif" 
-                      fontWeight="900" 
-                      fontSize="12.5" 
-                      fill={language === 'he' ? '#f59e0b' : '#64748b'}
-                      textAnchor="middle"
-                    >
-                      ע
-                    </text>
+                    <Globe className="w-5 h-5 text-amber-400 group-hover:scale-110 transition-transform" />
+                    <span className="absolute -bottom-1 -right-1 w-4 h-4 rounded-full bg-slate-950 border border-amber-500/70 text-amber-300 text-[10px] font-black flex items-center justify-center leading-none shadow-sm">
+                      {language === 'ar' ? 'ع' : 'ע'}
+                    </span>
+                  </button>
 
-                    <defs>
-                      <linearGradient id="goldEmblemGrad" x1="0" y1="0" x2="36" y2="36" gradientUnits="userSpaceOnUse">
-                        <stop stopColor="#f59e0b" />
-                        <stop offset="0.5" stopColor="#fbbf24" />
-                        <stop offset="1" stopColor="#d97706" />
-                      </linearGradient>
-                    </defs>
-                  </svg>
-                </button>
+                  {/* Small Dropdown Pop-over Window (نافذة اختيار صغيرة بين العربية والعبرية) */}
+                  {langDropdownOpen && (
+                    <div className="absolute top-full mt-2.5 left-0 sm:left-auto sm:right-0 z-50 w-40 bg-slate-950/95 border border-slate-800 rounded-2xl p-1.5 shadow-2xl backdrop-blur-xl animate-fade-in space-y-1">
+                      {/* Arabic Option */}
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setLanguage('ar');
+                          setLangDropdownOpen(false);
+                        }}
+                        className={`w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-xs font-bold transition cursor-pointer ${
+                          language === 'ar'
+                            ? 'bg-amber-500/15 text-amber-400 border border-amber-500/30 shadow-sm'
+                            : 'text-slate-300 hover:text-white hover:bg-slate-900 border border-transparent'
+                        }`}
+                      >
+                        <div className="flex items-center gap-2.5">
+                          <span className="w-5 h-5 rounded-full bg-slate-900 border border-slate-700 flex items-center justify-center text-[10px] font-black text-amber-400">
+                            ع
+                          </span>
+                          <span>العربية</span>
+                        </div>
+                        {language === 'ar' && <Check className="w-4 h-4 text-amber-400" />}
+                      </button>
+
+                      {/* Hebrew Option */}
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setLanguage('he');
+                          setLangDropdownOpen(false);
+                        }}
+                        className={`w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-xs font-bold transition cursor-pointer ${
+                          language === 'he'
+                            ? 'bg-amber-500/15 text-amber-400 border border-amber-500/30 shadow-sm'
+                            : 'text-slate-300 hover:text-white hover:bg-slate-900 border border-transparent'
+                        }`}
+                      >
+                        <div className="flex items-center gap-2.5">
+                          <span className="w-5 h-5 rounded-full bg-slate-900 border border-slate-700 flex items-center justify-center text-[10px] font-black text-amber-400">
+                            ע
+                          </span>
+                          <span>עברית</span>
+                        </div>
+                        {language === 'he' && <Check className="w-4 h-4 text-amber-400" />}
+                      </button>
+                    </div>
+                  )}
+                </div>
 
                 {/* Search Toggle */}
                 <button
