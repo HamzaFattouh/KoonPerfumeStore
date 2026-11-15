@@ -11,68 +11,103 @@ import {
 import { useLanguage } from '../../context/LanguageContext';
 import { getCachedSiteSettings } from '../../services/adminService';
 
-// 7 Standalone Transparent 3D Perfume Bottles (No Background)
+// 7 Standalone 8K Transparent 3D Perfume Bottles with Signature Color Palettes & Monograms
 const LUXURY_3D_PERFUMES = [
   {
     id: 'naxos',
     brand: 'XERJOFF',
-    model: 'XJ 1861 Naxos',
+    monogram: 'XJ',
+    model: 'NAXOS',
+    fullModel: 'XJ 1861 Naxos',
     image: '/perfumes/naxos.png',
-    glow: 'rgba(234, 179, 8, 0.45)',
+    glow: 'rgba(234, 179, 8, 0.55)',
+    secondaryGlow: 'rgba(217, 119, 6, 0.35)',
+    accentHex: '#FBBF24',
+    shelfHighlight: 'rgba(251, 191, 36, 0.55)',
     descriptionAr: 'توليفة إيطالية فاخرة تجمع بين دفء العسل والتبغ مع نفحات اللافندر والبرغموت الإيطالي، في زجاجة ذهبية متجمدة تعكس الفخامة الملكية.',
     descriptionHe: 'ניחוח איטלקי יוקרתי המשלב דבש חם וטבק עם לבנדר וברגמוט, בבקבוק זהוב מרהיב.'
   },
   {
     id: 'symphony',
     brand: 'LOUIS VUITTON',
-    model: 'Symphony',
+    monogram: 'LV',
+    model: 'SYMPHONY',
+    fullModel: 'Symphony',
     image: '/perfumes/symphony.png',
-    glow: 'rgba(192, 132, 252, 0.45)',
+    glow: 'rgba(192, 132, 252, 0.55)',
+    secondaryGlow: 'rgba(232, 121, 249, 0.32)',
+    accentHex: '#D8B4FE',
+    shelfHighlight: 'rgba(192, 132, 252, 0.55)',
     descriptionAr: 'سيمفونية عطرية ناعمة من الجريب فروت والبرغموت والزنجبيل، تتوجها زجاجة بنفسجية منحوتة بغطاء فضي فني من لويس فويتون.',
     descriptionHe: 'סימפוניה עדינה של אשכולית, ברגמוט וג׳ינג׳ר בבקבוק זכוכית סגול עם פקק כסף פיסולי.'
   },
   {
     id: 'chanel-no5',
     brand: 'CHANEL',
-    model: "N°5 L'Eau",
+    monogram: 'N°5',
+    model: "N°5 L'EAU",
+    fullModel: "N°5 L'Eau",
     image: '/perfumes/chanel_no5.png',
-    glow: 'rgba(251, 191, 36, 0.45)',
+    glow: 'rgba(253, 224, 71, 0.48)',
+    secondaryGlow: 'rgba(245, 158, 11, 0.28)',
+    accentHex: '#FDE68A',
+    shelfHighlight: 'rgba(253, 224, 71, 0.50)',
     descriptionAr: 'الأيقونة الباريسية الخالدة بلمسة عصرية مشرقة من الحمضيات والياسمين وخشب الأرز، داخل زجاجة شانيل الكريستالية الكلاسيكية.',
     descriptionHe: 'האייקון הפריזאי הנצחי עם נגיעה רעננה של הדרים, יסמין ועץ ארז בבקבוק הקריסטל הקלאסי.'
   },
   {
     id: 'guidance46',
     brand: 'AMOUAGE',
-    model: 'Guidance 46',
+    monogram: '46',
+    model: 'GUIDANCE 46',
+    fullModel: 'Guidance 46',
     image: '/perfumes/guidance46.png',
-    glow: 'rgba(244, 63, 94, 0.45)',
+    glow: 'rgba(244, 63, 94, 0.55)',
+    secondaryGlow: 'rgba(251, 146, 60, 0.35)',
+    accentHex: '#FDA4AF',
+    shelfHighlight: 'rgba(251, 113, 133, 0.55)',
     descriptionAr: 'تركيز استثنائي يفيض بنفحات الكمثرى والبندق واللبان والورد الدمشقي، بتدرج مرجاني دافئ وشعار أمواج الذهبي الفاخر.',
     descriptionHe: 'תמצית עוצמתית של אגס, אגוזי לוז, לבונה וורד דמשקאי בבקבוק קורל עם סמל זהב מלכותי.'
   },
   {
     id: 'sauvage',
     brand: 'DIOR',
-    model: 'Sauvage Eau de Parfum',
+    monogram: 'CD',
+    model: 'SAUVAGE',
+    fullModel: 'Sauvage Eau de Parfum',
     image: '/perfumes/sauvage.png',
-    glow: 'rgba(56, 189, 248, 0.45)',
+    glow: 'rgba(56, 189, 248, 0.55)',
+    secondaryGlow: 'rgba(37, 99, 235, 0.38)',
+    accentHex: '#7DD3FC',
+    shelfHighlight: 'rgba(56, 189, 248, 0.55)',
     descriptionAr: 'حضور قوي وجذاب يمزج انتعاش البرغموت مع الفلفل الحار والفانيليا الداكنة، في زجاجة ديور الزرقاء الليلية المصقولة.',
     descriptionHe: 'נוכחות עוצמתית המשלבת ברגמוט רענן, פלפל ווניל כהה בבקבוק הכחול-לילי המפורסם של דיור.'
   },
   {
     id: 'oud-wood',
     brand: 'TOM FORD',
-    model: 'Oud Wood',
+    monogram: 'TF',
+    model: 'OUD WOOD',
+    fullModel: 'Oud Wood',
     image: '/perfumes/oud_wood.png',
-    glow: 'rgba(168, 162, 158, 0.42)',
+    glow: 'rgba(217, 119, 6, 0.50)',
+    secondaryGlow: 'rgba(120, 113, 108, 0.35)',
+    accentHex: '#FCD34D',
+    shelfHighlight: 'rgba(217, 119, 6, 0.50)',
     descriptionAr: 'أيقونة العود النادر وخشب الورد والعنبر الدافئ، بتوازن مخملي داكن داخل زجاجة توم فورد الهندسية الفخمة.',
     descriptionHe: 'יצירת מופת של עוד נדיר, עץ ורוד וענבר חם בבקבוק האדריכלי הכהה של טום פורד.'
   },
   {
     id: 'valaya',
     brand: 'PARFUMS de MARLY',
-    model: 'Valaya',
+    monogram: 'PdM',
+    model: 'VALAYA',
+    fullModel: 'Valaya',
     image: '/perfumes/valaya.png',
-    glow: 'rgba(226, 232, 240, 0.42)',
+    glow: 'rgba(226, 232, 240, 0.50)',
+    secondaryGlow: 'rgba(148, 163, 184, 0.30)',
+    accentHex: '#F8FAFC',
+    shelfHighlight: 'rgba(226, 232, 240, 0.50)',
     descriptionAr: 'عبير نقي وأثيري من الخوخ الأبيض وزهر البرتقال والمسك الحريري، في زجاجة عاجية منحوتة مستوحاة من القصور الفرنسية.',
     descriptionHe: 'ניחוח טהור ואוורירי של אפרסק לבן, פריחת תפוז ומושק משיי בבקבוק שנהב מפוסל.'
   }
@@ -143,17 +178,22 @@ const PerfumeShelfHero = ({ products = [], heroSettings }) => {
       onMouseEnter={() => setIsPaused(true)}
       onMouseLeave={() => setIsPaused(false)}
     >
-      {/* Dynamic Colored Ambient Glow matching active center bottle */}
-      <div className="absolute inset-0 pointer-events-none flex items-start justify-center overflow-hidden">
+      {/* Dynamic Dual-Tone 8K Ambient Studio Lighting matching active bottle */}
+      <div className="absolute inset-0 pointer-events-none flex items-center justify-center overflow-hidden">
         <motion.div
           animate={{ backgroundColor: activePerfume.glow }}
-          transition={{ duration: 0.8 }}
-          className="w-[360px] sm:w-[620px] h-[440px] opacity-25 blur-[120px] rounded-full mt-10"
+          transition={{ duration: 0.9 }}
+          className="w-[420px] sm:w-[740px] h-[480px] opacity-30 blur-[140px] rounded-full -mt-12"
+        />
+        <motion.div
+          animate={{ backgroundColor: activePerfume.secondaryGlow }}
+          transition={{ duration: 0.9 }}
+          className="absolute w-[300px] sm:w-[520px] h-[320px] opacity-25 blur-[110px] rounded-full mt-20"
         />
       </div>
 
       {/* Top Compact Brand Header */}
-      <div className="relative z-20 max-w-4xl mx-auto px-4 text-center mb-4">
+      <div className="relative z-30 max-w-4xl mx-auto px-4 text-center mb-6 sm:mb-8">
         <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-amber-500/10 border border-amber-500/25 text-amber-300 text-[11px] font-bold backdrop-blur-md mb-2">
           <Sparkles className="w-3.5 h-3.5 text-amber-400" />
           <span>
@@ -196,8 +236,8 @@ const PerfumeShelfHero = ({ products = [], heroSettings }) => {
           {/* 3D Perspective Coordinate Stage */}
           <motion.div
             dir="ltr"
-            className="relative h-[270px] sm:h-[340px] lg:h-[370px] w-full flex items-end justify-center overflow-visible"
-            style={{ perspective: 1200 }}
+            className="relative h-[300px] sm:h-[365px] lg:h-[405px] w-full flex items-end justify-center overflow-visible"
+            style={{ perspective: 1300 }}
             drag="x"
             dragConstraints={{ left: 0, right: 0 }}
             dragElastic={0.15}
@@ -206,11 +246,69 @@ const PerfumeShelfHero = ({ products = [], heroSettings }) => {
               else if (info.offset.x > 45) prevPerfume();
             }}
           >
-            {/* Center Spotlight Glow on Shelf */}
+            {/* Background Editorial Brand Monogram, Logo & Perfume Name in Perfume Colors */}
+            <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none z-0 overflow-hidden pb-10">
+              <AnimatePresence mode="wait">
+                <motion.div
+                  key={`bg-${activePerfume.id}`}
+                  initial={{ opacity: 0, scale: 0.92, y: 10 }}
+                  animate={{ opacity: 1, scale: 1, y: 0 }}
+                  exit={{ opacity: 0, scale: 1.06, y: -10 }}
+                  transition={{ duration: 0.55, ease: 'easeOut' }}
+                  className="flex flex-col items-center justify-center text-center select-none"
+                >
+                  {/* Luxury House Monogram Crest */}
+                  <div
+                    className="w-16 h-16 sm:w-24 sm:h-24 rounded-full flex items-center justify-center border-2 mb-2 sm:mb-3 backdrop-blur-sm"
+                    style={{
+                      borderColor: activePerfume.accentHex,
+                      color: activePerfume.accentHex,
+                      opacity: 0.28,
+                      boxShadow: `0 0 40px ${activePerfume.glow}`
+                    }}
+                  >
+                    <span className="font-serif font-black text-2xl sm:text-4xl tracking-widest">
+                      {activePerfume.monogram}
+                    </span>
+                  </div>
+
+                  {/* Giant Background Brand Wordmark */}
+                  <span
+                    className="font-serif uppercase tracking-[0.35em] text-xs sm:text-base font-bold mb-1"
+                    style={{ color: activePerfume.accentHex, opacity: 0.45 }}
+                  >
+                    {activePerfume.brand}
+                  </span>
+
+                  {/* Giant Background Perfume Name */}
+                  <span
+                    className="font-serif font-black uppercase tracking-[0.14em] text-4xl sm:text-6xl lg:text-7xl leading-none whitespace-nowrap"
+                    style={{
+                      color: activePerfume.accentHex,
+                      opacity: 0.16,
+                      textShadow: `0 0 50px ${activePerfume.glow}`
+                    }}
+                  >
+                    {activePerfume.model}
+                  </span>
+                </motion.div>
+              </AnimatePresence>
+            </div>
+
+            {/* Volumetric Top-Down Studio Spotlight Beam */}
             <motion.div
-              animate={{ backgroundColor: activePerfume.glow }}
+              animate={{
+                background: `radial-gradient(ellipse at 50% 0%, ${activePerfume.glow} 0%, transparent 70%)`
+              }}
+              transition={{ duration: 0.7 }}
+              className="absolute top-0 left-1/2 -translate-x-1/2 w-[280px] sm:w-[440px] h-full opacity-45 pointer-events-none z-10"
+            />
+
+            {/* Center Spotlight Reflection on Shelf */}
+            <motion.div
+              animate={{ backgroundColor: activePerfume.shelfHighlight }}
               transition={{ duration: 0.6 }}
-              className="absolute bottom-6 left-1/2 -translate-x-1/2 w-64 sm:w-80 h-12 opacity-40 blur-2xl rounded-full pointer-events-none z-10"
+              className="absolute bottom-5 left-1/2 -translate-x-1/2 w-56 sm:w-80 h-6 opacity-50 blur-xl rounded-full pointer-events-none z-10"
             />
 
             {/* 3D Rendered Perfumes Shifting Along the Shelf */}
@@ -226,10 +324,10 @@ const PerfumeShelfHero = ({ products = [], heroSettings }) => {
               const rotateY = diff * -16;
               const zIndex = isCenter ? 30 : absDiff === 1 ? 20 : absDiff === 2 ? 10 : 0;
               const filterStyle = isCenter
-                ? 'brightness(1.08) saturate(1.18) contrast(1.04)'
+                ? 'brightness(1.06) saturate(1.16) contrast(1.08)'
                 : absDiff === 1
-                ? 'brightness(0.45) saturate(0.45)'
-                : 'brightness(0.25) saturate(0.3)';
+                ? 'brightness(0.42) saturate(0.45) contrast(1.02)'
+                : 'brightness(0.24) saturate(0.28)';
 
               return (
                 <motion.div
@@ -293,9 +391,14 @@ const PerfumeShelfHero = ({ products = [], heroSettings }) => {
 
                   {/* Contact Shadow on Shelf */}
                   <div
-                    className={`mt-1 h-2.5 rounded-full blur-sm transition-all duration-300 ${
-                      isCenter ? 'w-32 sm:w-44 bg-amber-400/45' : 'w-20 bg-black/85'
+                    className={`mt-0.5 h-2.5 rounded-full blur-sm transition-all duration-300 ${
+                      isCenter ? 'w-32 sm:w-44 bg-black/90' : 'w-20 bg-black/85'
                     }`}
+                    style={
+                      isCenter
+                        ? { boxShadow: `0 0 24px 4px ${item.shelfHighlight}` }
+                        : undefined
+                    }
                   />
                 </motion.div>
               );
@@ -353,12 +456,15 @@ const PerfumeShelfHero = ({ products = [], heroSettings }) => {
             transition={{ duration: 0.35, ease: 'easeOut' }}
             className="text-center space-y-2.5 px-5 py-5 rounded-3xl bg-slate-950/55 border border-amber-500/20 backdrop-blur-md shadow-xl"
           >
-            <span className="text-[11px] font-serif tracking-[0.25em] text-amber-400 uppercase block">
+            <span
+              className="text-[11px] font-serif tracking-[0.25em] uppercase block transition-colors duration-500"
+              style={{ color: activePerfume.accentHex }}
+            >
               {activePerfume.brand}
             </span>
 
             <h2 className="text-2xl sm:text-3xl font-black text-white">
-              {activePerfume.model}
+              {activePerfume.fullModel}
             </h2>
 
             <p className="text-sm sm:text-base text-slate-300 leading-relaxed max-w-xl mx-auto">
