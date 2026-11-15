@@ -12,3 +12,4 @@ router.get('/:key', getSettingByKey);
 router.put('/:key', updateSetting);
 
 export default router;
+
