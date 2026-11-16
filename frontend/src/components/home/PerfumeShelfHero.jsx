@@ -3,9 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 import {
   ChevronLeft,
-  ChevronRight,
-  Play,
-  Pause
+  ChevronRight
 } from 'lucide-react';
 import { useLanguage } from '../../context/LanguageContext';
 
@@ -213,7 +211,6 @@ const PerfumeShelfHero = ({ products = [] }) => {
   const { language } = useLanguage();
 
   const [activeIndex, setActiveIndex] = useState(0);
-  const [isPaused, setIsPaused] = useState(false);
   const [slotSpacing, setSlotSpacing] = useState(285);
 
   // Responsive horizontal spacing for standalone 3D bottles
@@ -242,14 +239,13 @@ const PerfumeShelfHero = ({ products = [] }) => {
     setActiveIndex((prev) => (prev - 1 + totalItems) % totalItems);
   }, [totalItems]);
 
-  // Auto-advance spotlight from perfume to perfume
+  // Always-active continuous automatic rotation
   useEffect(() => {
-    if (isPaused) return;
     const timer = setInterval(() => {
       nextPerfume();
     }, 4500);
     return () => clearInterval(timer);
-  }, [isPaused, nextPerfume]);
+  }, [nextPerfume]);
 
   // Shortest-path circular offset so selected bottle shifts smoothly into center
   const getOffset = (index) => {
@@ -266,8 +262,6 @@ const PerfumeShelfHero = ({ products = [] }) => {
   return (
     <section
       className="relative w-full min-h-[88dvh] bg-[#0B0A09] text-[#F5F0E8] flex flex-col justify-center pt-28 sm:pt-32 pb-12 overflow-hidden select-none"
-      onMouseEnter={() => setIsPaused(true)}
-      onMouseLeave={() => setIsPaused(false)}
     >
       {/* Cinematic Nighttime Paris Background with Eiffel Tower on Left & Atmospheric Perfume Backdrop */}
       <div
@@ -489,34 +483,6 @@ const PerfumeShelfHero = ({ products = [] }) => {
               );
             })}
           </motion.div>
-
-          {/* Pagination Dots & Auto-Play Control */}
-          <div className="flex items-center justify-center gap-3 mt-4">
-            <button
-              type="button"
-              onClick={() => setIsPaused((p) => !p)}
-              className="p-1.5 rounded-lg bg-[#151310] border border-[#2C2C2C] text-[#F5F0E8]/70 hover:text-[#C5A36A] transition cursor-pointer"
-              title={isPaused ? 'تشغيل التنقل التلقائي' : 'إيقاف التنقل التلقائي'}
-            >
-              {isPaused ? <Play className="w-3.5 h-3.5" /> : <Pause className="w-3.5 h-3.5" />}
-            </button>
-
-            <div className="flex items-center gap-1.5">
-              {LUXURY_3D_PERFUMES.map((p, idx) => (
-                <button
-                  key={p.id}
-                  type="button"
-                  onClick={() => setActiveIndex(idx)}
-                  aria-label={p.fullModel}
-                  className={`h-2 rounded-full transition-all duration-300 cursor-pointer ${
-                    idx === activeIndex
-                      ? 'w-7 bg-[#C5A36A] shadow-sm shadow-[#C5A36A]/50'
-                      : 'w-2 bg-[#2C2C2C] hover:bg-[#C5A36A]/50'
-                  }`}
-                />
-              ))}
-            </div>
-          </div>
         </div>
       </div>
 
