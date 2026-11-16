@@ -22,6 +22,7 @@ import { TESTIMONIALS, DEFAULT_SOCIAL_CHATS } from '../data/products';
 import ProductCard from '../components/products/ProductCard';
 import { useLanguage } from '../context/LanguageContext';
 import PerfumeShelfHero from '../components/home/PerfumeShelfHero';
+import Cinematic3DBottleShowcase from '../components/home/Cinematic3DBottleShowcase';
 import CinematicCollectionsSection from '../components/home/CinematicCollectionsSection';
 
 const Home = () => {
@@ -118,6 +119,9 @@ const Home = () => {
         isLoading={isLoadingProducts}
         heroSettings={siteSettings?.hero_section}
       />
+
+      {/* 1.25 React Three Fiber + Drei + Three.js + GSAP ScrollTrigger 3D Bottle Scene */}
+      <Cinematic3DBottleShowcase />
 
       {/* 1.5 Cinematic Luxury Collections & Scroll-Triggered Storytelling */}
       <CinematicCollectionsSection />

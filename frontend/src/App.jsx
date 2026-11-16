@@ -4,6 +4,7 @@ import { CartProvider } from './context/CartContext';
 import { LanguageProvider } from './context/LanguageContext';
 import { ThemeProvider, useTheme } from './context/ThemeContext';
 import StarBackground from './components/common/StarBackground';
+import SmoothScrollProvider from './components/common/SmoothScrollProvider';
 import Navbar from './components/common/Navbar';
 import Footer from './components/common/Footer';
 import CartDrawer from './components/common/CartDrawer';
@@ -118,8 +119,10 @@ function App() {
       <LanguageProvider>
         <CartProvider>
           <BrowserRouter>
-            <ScrollToTop />
-            <AppLayout />
+            <SmoothScrollProvider>
+              <ScrollToTop />
+              <AppLayout />
+            </SmoothScrollProvider>
           </BrowserRouter>
         </CartProvider>
       </LanguageProvider>

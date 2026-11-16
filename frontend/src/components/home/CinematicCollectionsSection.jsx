@@ -201,3 +201,4 @@ const CinematicCollectionsSection = () => {
 };
 
 export default CinematicCollectionsSection;
+
