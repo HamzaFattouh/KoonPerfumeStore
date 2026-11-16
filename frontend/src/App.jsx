@@ -2,6 +2,7 @@ import React, { useEffect, Suspense, lazy } from 'react';
 import { BrowserRouter, Routes, Route, useLocation } from 'react-router-dom';
 import { CartProvider } from './context/CartContext';
 import { LanguageProvider } from './context/LanguageContext';
+import { ThemeProvider, useTheme } from './context/ThemeContext';
 import StarBackground from './components/common/StarBackground';
 import Navbar from './components/common/Navbar';
 import Footer from './components/common/Footer';
@@ -33,7 +34,10 @@ const AdminDashboard = lazy(() => import('./pages/AdminDashboard'));
 // Elegant fallback during chunk transition
 const RouteLoadingFallback = () => (
   <div className="min-h-[60vh] flex items-center justify-center">
-    <div className="w-8 h-8 rounded-full border-2 border-amber-500/20 border-t-amber-400 animate-spin" />
+    <div
+      className="w-8 h-8 rounded-full border-2 animate-spin"
+      style={{ borderColor: 'var(--kawn-border)', borderTopColor: 'var(--kawn-gold)' }}
+    />
   </div>
 );
 
@@ -49,12 +53,23 @@ const ScrollToTop = () => {
 // Main App Layout Shell
 const AppLayout = () => {
   const location = useLocation();
+  const { isDark } = useTheme();
   const isAdmin = location.pathname.startsWith('/admin');
 
   return (
-    <div className="relative min-h-screen bg-[#07080b] text-slate-100 flex flex-col justify-between selection:bg-amber-500/30 selection:text-amber-200">
-      {/* Cosmic background particles */}
-      <StarBackground />
+    <div
+      className={`relative min-h-screen flex flex-col justify-between transition-colors duration-500 ${
+        isAdmin
+          ? 'bg-[#111111] text-[#F5F0E8]'
+          : `store-shell ${
+              isDark
+                ? 'bg-[#111111] text-[#F5F0E8] selection:bg-[#C5A36A]/30 selection:text-[#F5F0E8]'
+                : 'bg-[#F3EBDD] text-[#29231D] selection:bg-[#A98750]/25 selection:text-[#29231D]'
+            }`
+      }`}
+    >
+      {/* Atmospheric 3D / Particle Environment (Adapts to Dark & Light Mode) */}
+      {!isAdmin && <StarBackground />}
 
       {/* Navigation Bar (hidden in Admin) */}
       {!isAdmin && <Navbar />}
@@ -99,14 +114,16 @@ const AppLayout = () => {
 
 function App() {
   return (
-    <LanguageProvider>
-      <CartProvider>
-        <BrowserRouter>
-          <ScrollToTop />
-          <AppLayout />
-        </BrowserRouter>
-      </CartProvider>
-    </LanguageProvider>
+    <ThemeProvider>
+      <LanguageProvider>
+        <CartProvider>
+          <BrowserRouter>
+            <ScrollToTop />
+            <AppLayout />
+          </BrowserRouter>
+        </CartProvider>
+      </LanguageProvider>
+    </ThemeProvider>
   );
 }
 

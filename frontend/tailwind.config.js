@@ -8,35 +8,45 @@ export default {
   theme: {
     extend: {
       colors: {
+        kawn: {
+          bg: 'var(--kawn-bg)',
+          secondary: 'var(--kawn-bg-secondary)',
+          card: 'var(--kawn-card)',
+          text: 'var(--kawn-text)',
+          muted: 'var(--kawn-text-muted)',
+          gold: 'var(--kawn-gold)',
+          border: 'var(--kawn-border)',
+        },
         cosmic: {
-          950: '#050608',
-          900: '#0a0c10',
-          850: '#0e1118',
-          800: '#141824',
-          700: '#1e2436',
-          600: '#2b334c',
-          border: 'rgba(255, 255, 255, 0.08)',
-          glow: 'rgba(99, 102, 241, 0.15)',
+          950: '#111111',
+          900: '#161616',
+          850: '#1D1D1D',
+          800: '#222222',
+          700: '#2C2C2C',
+          600: '#3D3D3D',
+          border: 'rgba(197, 163, 106, 0.18)',
+          glow: 'rgba(197, 163, 106, 0.15)',
         },
         gold: {
-          300: '#fde047',
-          400: '#facc15',
-          500: '#eab308',
-          600: '#ca8a04',
-          luxury: '#d4af37',
-          glow: 'rgba(212, 175, 55, 0.25)',
+          300: '#E5CFA0',
+          400: '#D4B67D',
+          500: '#C5A36A',
+          600: '#A98750',
+          luxury: '#C5A36A',
+          glow: 'rgba(197, 163, 106, 0.28)',
         },
         silver: {
-          100: '#f8fafc',
-          200: '#e2e8f0',
-          300: '#cbd5e1',
-          400: '#94a3b8',
+          100: '#F5F0E8',
+          200: '#E9DECC',
+          300: '#D5C7B2',
+          400: '#9E9283',
         }
       },
       fontFamily: {
-        cairo: ['Cairo', 'sans-serif'],
-        tajawal: ['Tajawal', 'sans-serif'],
-        serif: ['"Playfair Display"', 'serif'],
+        arabic: ['"IBM Plex Sans Arabic"', 'sans-serif'],
+        hebrew: ['"Heebo"', 'sans-serif'],
+        cairo: ['"IBM Plex Sans Arabic"', '"Heebo"', 'sans-serif'],
+        serif: ['"Playfair Display"', 'Georgia', 'serif'],
       },
       animation: {
         'spin-slow': 'spin 20s linear infinite',
@@ -55,13 +65,12 @@ export default {
         }
       },
       backgroundImage: {
-        'cosmic-gradient': 'radial-gradient(ellipse at top, #181d2e 0%, #0a0c12 50%, #050608 100%)',
-        'gold-gradient': 'linear-gradient(135deg, #f5d061 0%, #d4af37 50%, #997b1a 100%)',
-        'silver-gradient': 'linear-gradient(135deg, #ffffff 0%, #cbd5e1 50%, #64748b 100%)',
+        'cosmic-gradient': 'radial-gradient(ellipse at top, #1D1D1D 0%, #151515 55%, #111111 100%)',
+        'gold-gradient': 'linear-gradient(135deg, #E5CFA0 0%, #C5A36A 50%, #A98750 100%)',
+        'silver-gradient': 'linear-gradient(135deg, #FFFFFF 0%, #E9DECC 50%, #A98750 100%)',
         'card-gradient': 'linear-gradient(180deg, rgba(255, 255, 255, 0.04) 0%, rgba(255, 255, 255, 0.01) 100%)',
       }
     },
   },
   plugins: [],
 }
-

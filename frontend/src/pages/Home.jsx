@@ -22,6 +22,7 @@ import { TESTIMONIALS, DEFAULT_SOCIAL_CHATS } from '../data/products';
 import ProductCard from '../components/products/ProductCard';
 import { useLanguage } from '../context/LanguageContext';
 import PerfumeShelfHero from '../components/home/PerfumeShelfHero';
+import CinematicCollectionsSection from '../components/home/CinematicCollectionsSection';
 
 const Home = () => {
   const { language } = useLanguage();
@@ -117,6 +118,9 @@ const Home = () => {
         isLoading={isLoadingProducts}
         heroSettings={siteSettings?.hero_section}
       />
+
+      {/* 1.5 Cinematic Luxury Collections & Scroll-Triggered Storytelling */}
+      <CinematicCollectionsSection />
 
       {/* 2. Curated Luxury Perfumes Showcase (Controlled from Admin) */}
       {showBestsellers && (
