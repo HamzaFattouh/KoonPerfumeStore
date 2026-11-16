@@ -38,3 +38,4 @@ This skill defines the architecture and best practices for 3D scenes in **KAWN P
 - Set `dpr={[1, 2]}` on `<Canvas>` for crisp Retina rendering without GPU overload.
 - Wrap 3D assets in `<Suspense fallback={null}>`.
 - Dispose geometries/materials or use declarative R3F primitives so WebGL contexts clean up on route changes.
+

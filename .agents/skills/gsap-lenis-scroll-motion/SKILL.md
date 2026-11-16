@@ -44,3 +44,4 @@ gsap.ticker.lagSmoothing(0);
 ## 3. Framer Motion RTL & Theme Rules
 - Prefer vertical (`y`) and scale/opacity transitions or RTL-aware offsets so animations behave identically in Arabic (`ar`) and Hebrew (`he`).
 - Keep `viewport={{ once: true, amount: 0.25 }}` on `whileInView` elements for smooth 60fps scrolling.
+
