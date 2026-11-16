@@ -23,8 +23,12 @@ const StarBackground = () => {
 
     window.addEventListener('resize', handleResize);
 
-    const isMobile = width < 768;
-    const STAR_COUNT = isMobile ? 32 : Math.min(60, Math.floor((width * height) / 19000));
+    const isMobile = width < 768 || (window.matchMedia && window.matchMedia('(pointer: coarse)').matches);
+    if (isMobile) {
+      // On mobile devices, keep atmospheric background CSS gradients and bypass the continuous JS canvas loop (0ms TBT)
+      return;
+    }
+    const STAR_COUNT = Math.min(60, Math.floor((width * height) / 19000));
     let stars = [];
 
     // Theme-aware champagne gold & warm white/ivory particle palette

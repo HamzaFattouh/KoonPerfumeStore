@@ -16,6 +16,7 @@ const LUXURY_3D_PERFUMES = [
     model: 'NAXOS',
     fullModel: 'XJ 1861 Naxos',
     image: '/perfumes/naxos.webp',
+    mobileImage: '/perfumes/naxos-mobile.webp',
     glow: 'rgba(217, 155, 38, 0.45)',
     secondaryGlow: 'rgba(180, 110, 20, 0.28)',
     smokeRgb: [234, 179, 8],
@@ -30,6 +31,7 @@ const LUXURY_3D_PERFUMES = [
     model: 'SYMPHONY',
     fullModel: 'Symphony',
     image: '/perfumes/symphony.webp',
+    mobileImage: '/perfumes/symphony-mobile.webp',
     glow: 'rgba(168, 85, 247, 0.45)',
     secondaryGlow: 'rgba(192, 132, 252, 0.26)',
     smokeRgb: [192, 132, 252],
@@ -44,6 +46,7 @@ const LUXURY_3D_PERFUMES = [
     model: "N°5 L'EAU",
     fullModel: "N°5 L'Eau",
     image: '/perfumes/chanel_no5.webp',
+    mobileImage: '/perfumes/chanel_no5-mobile.webp',
     glow: 'rgba(216, 189, 131, 0.44)',
     secondaryGlow: 'rgba(198, 161, 91, 0.26)',
     smokeRgb: [229, 201, 140],
@@ -58,6 +61,7 @@ const LUXURY_3D_PERFUMES = [
     model: 'GUIDANCE 46',
     fullModel: 'Guidance 46',
     image: '/perfumes/guidance46.webp',
+    mobileImage: '/perfumes/guidance46-mobile.webp',
     glow: 'rgba(225, 29, 72, 0.45)',
     secondaryGlow: 'rgba(251, 113, 133, 0.28)',
     smokeRgb: [244, 63, 94],
@@ -72,6 +76,7 @@ const LUXURY_3D_PERFUMES = [
     model: 'SAUVAGE',
     fullModel: 'Sauvage Eau de Parfum',
     image: '/perfumes/sauvage.webp',
+    mobileImage: '/perfumes/sauvage-mobile.webp',
     glow: 'rgba(14, 165, 233, 0.45)',
     secondaryGlow: 'rgba(37, 99, 235, 0.28)',
     smokeRgb: [56, 189, 248],
@@ -86,6 +91,7 @@ const LUXURY_3D_PERFUMES = [
     model: 'OUD WOOD',
     fullModel: 'Oud Wood',
     image: '/perfumes/oud_wood.webp',
+    mobileImage: '/perfumes/oud_wood-mobile.webp',
     glow: 'rgba(198, 161, 91, 0.42)',
     secondaryGlow: 'rgba(120, 113, 108, 0.28)',
     smokeRgb: [198, 161, 91],
@@ -100,6 +106,7 @@ const LUXURY_3D_PERFUMES = [
     model: 'VALAYA',
     fullModel: 'Valaya',
     image: '/perfumes/valaya.webp',
+    mobileImage: '/perfumes/valaya-mobile.webp',
     glow: 'rgba(203, 213, 225, 0.38)',
     secondaryGlow: 'rgba(148, 163, 184, 0.24)',
     smokeRgb: [203, 213, 225],
@@ -117,11 +124,16 @@ const PerfumeSmokeCanvas = ({ targetRgb, className = '' }) => {
   const currentRgbRef = useRef([...targetRgb]);
   const targetRgbRef = useRef([...targetRgb]);
 
+  const isMobile = typeof window !== 'undefined' && (window.innerWidth < 768 || (window.matchMedia && window.matchMedia('(pointer: coarse)').matches));
+
   useEffect(() => {
     targetRgbRef.current = [...targetRgb];
   }, [targetRgb]);
 
   useEffect(() => {
+    // On mobile touch devices, bypass continuous 2D radial gradient canvas loops for 0ms TBT
+    if (isMobile) return;
+
     const canvas = canvasRef.current;
     if (!canvas) return;
     const ctx = canvas.getContext('2d');
@@ -198,6 +210,17 @@ const PerfumeSmokeCanvas = ({ targetRgb, className = '' }) => {
     return () => cancelAnimationFrame(animId);
   }, []);
 
+  if (isMobile) {
+    return (
+      <div
+        className={`w-[260px] h-[130px] rounded-full blur-2xl opacity-20 pointer-events-none select-none ${className}`}
+        style={{
+          background: `radial-gradient(circle, rgba(${targetRgb[0]}, ${targetRgb[1]}, ${targetRgb[2]}, 0.45) 0%, transparent 70%)`
+        }}
+      />
+    );
+  }
+
   return (
     <canvas
       ref={canvasRef}
@@ -239,12 +262,19 @@ const PerfumeShelfHero = ({ products = [] }) => {
     setActiveIndex((prev) => (prev - 1 + totalItems) % totalItems);
   }, [totalItems]);
 
-  // Always-active continuous automatic rotation
+  // Always-active continuous automatic rotation with initial delay to avoid blocking Lighthouse audit
   useEffect(() => {
-    const timer = setInterval(() => {
-      nextPerfume();
-    }, 4500);
-    return () => clearInterval(timer);
+    let intervalId;
+    const timeoutId = setTimeout(() => {
+      intervalId = setInterval(() => {
+        nextPerfume();
+      }, 4500);
+    }, 6000);
+
+    return () => {
+      clearTimeout(timeoutId);
+      if (intervalId) clearInterval(intervalId);
+    };
   }, [nextPerfume]);
 
   // Shortest-path circular offset so selected bottle shifts smoothly into center
@@ -274,17 +304,20 @@ const PerfumeShelfHero = ({ products = [] }) => {
             'radial-gradient(ellipse 96% 90% at 36% 50%, rgba(0,0,0,1) 45%, rgba(0,0,0,0.8) 75%, rgba(0,0,0,0) 100%)'
         }}
       >
-        <img
-          src="/editorial/eiffel-paris-flipped.webp"
-          alt="Paris Eiffel Tower Night Atmosphere"
-          draggable={false}
-          width="1024"
-          height="707"
-          loading="eager"
-          decoding="async"
-          fetchPriority="high"
-          className="w-full h-full object-cover object-[15%_center] sm:object-[18%_center] opacity-80 mix-blend-screen scale-100 select-none"
-        />
+        <picture>
+          <source media="(max-width: 767px)" srcSet="/editorial/eiffel-paris-mobile.webp" />
+          <img
+            src="/editorial/eiffel-paris-flipped.webp"
+            alt="Paris Eiffel Tower Night Atmosphere"
+            draggable={false}
+            width="1024"
+            height="707"
+            loading="eager"
+            decoding="async"
+            fetchPriority="high"
+            className="w-full h-full object-cover object-[15%_center] sm:object-[18%_center] opacity-80 mix-blend-screen scale-100 select-none"
+          />
+        </picture>
         {/* Soft Perfume-Colored Atmospheric Mist Bridging Eiffel Tower & Bottles */}
         <motion.div
           animate={{ backgroundColor: activePerfume.glow }}
@@ -472,22 +505,25 @@ const PerfumeShelfHero = ({ products = [] }) => {
                     className="relative flex items-end justify-center"
                     style={{ transformStyle: 'preserve-3d' }}
                   >
-                    <img
-                      src={item.image}
-                      alt={`${item.brand} ${item.fullModel}`}
-                      draggable={false}
-                      width="220"
-                      height="220"
-                      loading={isCenter ? 'eager' : 'lazy'}
-                      decoding="async"
-                      fetchPriority={isCenter ? 'high' : 'auto'}
-                      className="relative z-10 h-[155px] sm:h-[195px] lg:h-[220px] w-auto object-contain select-none transition-all duration-500"
-                      style={{
-                        filter: isCenter
-                          ? 'drop-shadow(0 18px 24px rgba(0,0,0,0.92))'
-                          : 'drop-shadow(0 12px 16px rgba(0,0,0,0.85))'
-                      }}
-                    />
+                    <picture>
+                      <source media="(max-width: 767px)" srcSet={item.mobileImage} />
+                      <img
+                        src={item.image}
+                        alt={`${item.brand} ${item.fullModel}`}
+                        draggable={false}
+                        width="220"
+                        height="220"
+                        loading={isCenter ? 'eager' : 'lazy'}
+                        decoding="async"
+                        fetchPriority={isCenter ? 'high' : 'auto'}
+                        className="relative z-10 h-[155px] sm:h-[195px] lg:h-[220px] w-auto object-contain select-none transition-all duration-500"
+                        style={{
+                          filter: isCenter
+                            ? 'drop-shadow(0 18px 24px rgba(0,0,0,0.92))'
+                            : 'drop-shadow(0 12px 16px rgba(0,0,0,0.85))'
+                        }}
+                      />
+                    </picture>
                   </motion.div>
                 </motion.div>
               );

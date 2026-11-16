@@ -11,9 +11,11 @@
     <title>كون بيرفيوم | KOON PERFUME — A Universe of Fragrance</title>
     <meta name="description" content="KOON PERFUME | كون بيرفيوم — A Universe of Fragrance. دار العطور العالمية الفاخرة." />
 
-    <!-- Instant Preload of LCP Hero Perfume Bottle for Sub-second Render -->
-    <link rel="preload" as="image" href="/perfumes/naxos.webp" type="image/webp" fetchpriority="high" />
-    <link rel="preload" as="image" href="/editorial/eiffel-paris-flipped.webp" type="image/webp" fetchpriority="high" />
+    <!-- Instant Responsive Preloads for Sub-second LCP on Mobile and Desktop -->
+    <link rel="preload" as="image" href="/editorial/eiffel-paris-mobile.webp" type="image/webp" media="(max-width: 767px)" fetchpriority="high" />
+    <link rel="preload" as="image" href="/perfumes/naxos-mobile.webp" type="image/webp" media="(max-width: 767px)" fetchpriority="high" />
+    <link rel="preload" as="image" href="/editorial/eiffel-paris-flipped.webp" type="image/webp" media="(min-width: 768px)" fetchpriority="high" />
+    <link rel="preload" as="image" href="/perfumes/naxos.webp" type="image/webp" media="(min-width: 768px)" fetchpriority="high" />
 
     <!-- Instant Theme & Language Hydration to prevent Flash of Unstyled Content -->
     <script>
