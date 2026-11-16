@@ -4,19 +4,16 @@
     <meta charset="UTF-8" />
     <link rel="icon" type="image/jpeg" href="/koon-logo.jpg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>كون بيرفيوم | KAWN PERFUME — A Universe of Fragrance</title>
-    <meta name="description" content="KAWN PERFUME | كون بيرفيوم — A Universe of Fragrance. دار العطور العالمية الفاخرة." />
+    <title>كون بيرفيوم | KOON PERFUME — A Universe of Fragrance</title>
+    <meta name="description" content="KOON PERFUME | كون بيرفيوم — دار العطور العالمية الفاخرة." />
 
-    <!-- Instant Theme & Language Hydration to prevent Flash of Unstyled Content -->
+    <!-- Instant Language & Dark Mode Setup -->
     <script>
       (function () {
         try {
-          var savedTheme = localStorage.getItem('kawn_theme');
-          var prefersLight = window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches;
-          var theme = savedTheme === 'light' || savedTheme === 'dark' ? savedTheme : (prefersLight ? 'light' : 'dark');
-          document.documentElement.setAttribute('data-theme', theme);
-          document.documentElement.classList.remove('light', 'dark');
-          document.documentElement.classList.add(theme);
+          document.documentElement.setAttribute('data-theme', 'dark');
+          document.documentElement.classList.remove('light');
+          document.documentElement.classList.add('dark');
 
           var savedLang = localStorage.getItem('koon_language') || 'ar';
           document.documentElement.lang = savedLang;
@@ -33,7 +30,7 @@
       rel="stylesheet"
     />
   </head>
-  <body class="antialiased overflow-x-hidden min-h-screen transition-colors duration-500">
+  <body class="bg-[#0B0A09] text-[#F5F0E7] antialiased overflow-x-hidden min-h-screen">
     <div id="root"></div>
     <script type="module" src="/src/main.jsx"></script>
   </body>

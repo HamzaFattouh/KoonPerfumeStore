@@ -2,7 +2,7 @@ import React, { useEffect, Suspense, lazy } from 'react';
 import { BrowserRouter, Routes, Route, useLocation } from 'react-router-dom';
 import { CartProvider } from './context/CartContext';
 import { LanguageProvider } from './context/LanguageContext';
-import { ThemeProvider, useTheme } from './context/ThemeContext';
+import { ThemeProvider } from './context/ThemeContext';
 import StarBackground from './components/common/StarBackground';
 import SmoothScrollProvider from './components/common/SmoothScrollProvider';
 import Navbar from './components/common/Navbar';
@@ -35,10 +35,7 @@ const AdminDashboard = lazy(() => import('./pages/AdminDashboard'));
 // Elegant fallback during chunk transition
 const RouteLoadingFallback = () => (
   <div className="min-h-[60vh] flex items-center justify-center">
-    <div
-      className="w-8 h-8 rounded-full border-2 animate-spin"
-      style={{ borderColor: 'var(--kawn-border)', borderTopColor: 'var(--kawn-gold)' }}
-    />
+    <div className="w-8 h-8 rounded-full border-2 border-[#C6A15B]/25 border-t-[#D8BD83] animate-spin" />
   </div>
 );
 
@@ -51,25 +48,14 @@ const ScrollToTop = () => {
   return null;
 };
 
-// Main App Layout Shell
+// Main App Layout Shell — DARK MODE ONLY (#0B0A09 Deep Black, #F5F0E7 Warm White)
 const AppLayout = () => {
   const location = useLocation();
-  const { isDark } = useTheme();
   const isAdmin = location.pathname.startsWith('/admin');
 
   return (
-    <div
-      className={`relative min-h-screen flex flex-col justify-between transition-colors duration-500 ${
-        isAdmin
-          ? 'bg-[#111111] text-[#F5F0E8]'
-          : `store-shell ${
-              isDark
-                ? 'bg-[#111111] text-[#F5F0E8] selection:bg-[#C5A36A]/30 selection:text-[#F5F0E8]'
-                : 'bg-[#F3EBDD] text-[#29231D] selection:bg-[#A98750]/25 selection:text-[#29231D]'
-            }`
-      }`}
-    >
-      {/* Atmospheric 3D / Particle Environment (Adapts to Dark & Light Mode) */}
+    <div className="relative min-h-screen bg-[#0B0A09] text-[#F5F0E7] flex flex-col justify-between selection:bg-[#C6A15B]/30 selection:text-[#F5F0E7]">
+      {/* Atmospheric background particles */}
       {!isAdmin && <StarBackground />}
 
       {/* Navigation Bar (hidden in Admin) */}

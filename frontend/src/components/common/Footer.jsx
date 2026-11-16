@@ -125,7 +125,7 @@ const Footer = () => {
               <h4 className={`text-sm font-bold ${isDark ? 'text-[#F5F0E8]' : 'text-[#29231D]'}`}>
                 {language === 'ar' ? 'دار عطور معتمدة' : 'בית בישום רשמי'}
               </h4>
-              <p className="text-xs opacity-70">KAWN PERFUME</p>
+              <p className="text-xs opacity-70">KOON PERFUME</p>
             </div>
           </div>
         </div>
@@ -142,7 +142,7 @@ const Footer = () => {
             <Link to="/" className="flex items-center gap-3">
               <img
                 src="/koon-logo.jpg"
-                alt="KAWN PERFUME"
+                alt="KOON PERFUME"
                 className={`w-14 h-14 rounded-full object-cover border-2 shadow-lg ${
                   isDark ? 'border-[#C5A36A]/50' : 'border-[#A98750]/60'
                 }`}
@@ -182,7 +182,7 @@ const Footer = () => {
               </div>
               <div className="flex items-center gap-2">
                 <Mail className={`w-4 h-4 shrink-0 ${isDark ? 'text-[#C5A36A]' : 'text-[#A98750]'}`} />
-                <span>care@kawnperfume.com</span>
+                <span>care@koonperfume.com</span>
               </div>
             </div>
 
@@ -306,7 +306,7 @@ const Footer = () => {
           </div>
 
           <div className="font-serif tracking-widest uppercase text-[11px]">
-            KAWN PERFUME · A UNIVERSE OF FRAGRANCE
+            KOON PERFUME · A UNIVERSE OF FRAGRANCE
           </div>
         </div>
       </div>

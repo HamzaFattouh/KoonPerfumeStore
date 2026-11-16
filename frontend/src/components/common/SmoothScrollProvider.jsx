@@ -34,3 +34,4 @@ const SmoothScrollProvider = ({ children }) => {
 };
 
 export default SmoothScrollProvider;
+
