@@ -239,7 +239,7 @@ const PerfumeShelfHero = ({ products = [] }) => {
             }}
           >
             {/* Background Editorial Brand Monogram, Logo & Perfume Name in Perfume Colors */}
-            <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none z-0 overflow-hidden pb-10">
+            <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none z-0 overflow-hidden pb-6 -translate-x-10 sm:-translate-x-16">
               <AnimatePresence mode="wait">
                 <motion.div
                   key={`bg-${activePerfume.id}-${isDark ? 'dark' : 'light'}`}
@@ -251,11 +251,11 @@ const PerfumeShelfHero = ({ products = [] }) => {
                 >
                   {/* Luxury House Monogram Crest */}
                   <div
-                    className="w-14 h-14 sm:w-20 sm:h-20 rounded-full flex items-center justify-center border-2 mb-2 backdrop-blur-sm"
+                    className="w-16 h-16 sm:w-22 sm:h-22 rounded-full flex items-center justify-center border-2 mb-2.5 backdrop-blur-sm"
                     style={{
                       borderColor: activeAccent,
                       color: activeAccent,
-                      opacity: isDark ? 0.3 : 0.38,
+                      opacity: isDark ? 0.55 : 0.65,
                       boxShadow: `0 0 36px ${activePerfume.glow}`
                     }}
                   >
@@ -267,7 +267,7 @@ const PerfumeShelfHero = ({ products = [] }) => {
                   {/* Giant Background Brand Wordmark */}
                   <span
                     className="font-serif uppercase tracking-[0.35em] text-xs sm:text-sm font-bold mb-1"
-                    style={{ color: activeAccent, opacity: isDark ? 0.5 : 0.65 }}
+                    style={{ color: activeAccent, opacity: isDark ? 0.7 : 0.8 }}
                   >
                     {activePerfume.brand}
                   </span>
@@ -277,7 +277,7 @@ const PerfumeShelfHero = ({ products = [] }) => {
                     className="font-serif font-black uppercase tracking-[0.14em] text-4xl sm:text-6xl lg:text-7xl leading-none whitespace-nowrap"
                     style={{
                       color: activeAccent,
-                      opacity: isDark ? 0.17 : 0.2,
+                      opacity: isDark ? 0.26 : 0.3,
                       textShadow: isDark ? `0 0 50px ${activePerfume.glow}` : 'none'
                     }}
                   >
@@ -334,7 +334,7 @@ const PerfumeShelfHero = ({ products = [] }) => {
                   }}
                   initial={false}
                   animate={{
-                    x: diff * slotSpacing,
+                    x: diff * slotSpacing + (isCenter ? 38 : diff > 0 ? 18 : 0),
                     y: yOffset,
                     scale,
                     rotateY,
@@ -352,7 +352,7 @@ const PerfumeShelfHero = ({ products = [] }) => {
                     pointerEvents: isVisible ? 'auto' : 'none',
                     transformStyle: 'preserve-3d'
                   }}
-                  className="absolute bottom-7 left-1/2 -translate-x-1/2 flex flex-col items-center cursor-pointer group origin-bottom"
+                  className="absolute bottom-3 left-1/2 -translate-x-1/2 flex flex-col items-center cursor-pointer group origin-bottom"
                   title={`${item.brand} — ${item.fullModel}`}
                 >
                   {/* Standalone 3D Perfume Bottle (No Background Box / Card) */}
@@ -390,25 +390,6 @@ const PerfumeShelfHero = ({ products = [] }) => {
                 </motion.div>
               );
             })}
-
-            {/* 3D Luxury Shelf Plank (Adapts to Dark Charcoal #111111 & Light Warm Ivory #F3EBDD) */}
-            <div className="absolute bottom-0 inset-x-4 sm:inset-x-10 h-9 pointer-events-none z-20">
-              {isDark ? (
-                <>
-                  <div className="h-3 w-full rounded-t-xl bg-gradient-to-r from-[#111111] via-[#222222] to-[#111111] border-t border-[#C5A36A]/65 shadow-[0_-4px_25px_rgba(197,163,106,0.2)] relative overflow-hidden">
-                    <div className="absolute inset-y-0 left-1/2 -translate-x-1/2 w-72 bg-gradient-to-r from-transparent via-[#C5A36A]/40 to-transparent" />
-                  </div>
-                  <div className="h-4 w-full bg-gradient-to-b from-[#1D1D1D] via-[#151515] to-[#0A0A0A] border-t border-[#C5A36A]/30 border-b border-[#2C2C2C] rounded-b-lg shadow-[0_18px_40px_rgba(0,0,0,0.95)]" />
-                </>
-              ) : (
-                <>
-                  <div className="h-3 w-full rounded-t-xl bg-gradient-to-r from-[#E9DECC] via-[#FFFFFF] to-[#E9DECC] border-t border-[#A98750]/70 shadow-[0_-4px_20px_rgba(169,135,80,0.18)] relative overflow-hidden">
-                    <div className="absolute inset-y-0 left-1/2 -translate-x-1/2 w-72 bg-gradient-to-r from-transparent via-[#A98750]/35 to-transparent" />
-                  </div>
-                  <div className="h-4 w-full bg-gradient-to-b from-[#E9DECC] via-[#DFD1BA] to-[#CFC0A6] border-t border-[#A98750]/40 border-b border-[#A98750]/30 rounded-b-lg shadow-[0_14px_30px_rgba(41,35,29,0.16)]" />
-                </>
-              )}
-            </div>
           </motion.div>
 
           {/* Shelf Pagination Dots & Auto-Play Control */}
