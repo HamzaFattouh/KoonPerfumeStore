@@ -269,28 +269,28 @@ const PerfumeShelfHero = ({ products = [] }) => {
       onMouseEnter={() => setIsPaused(true)}
       onMouseLeave={() => setIsPaused(false)}
     >
-      {/* Horizontally Flipped Nighttime Paris Eiffel Tower on the LEFT, blended with Smoke & Perfumes */}
+      {/* Cinematic Nighttime Paris Background with Eiffel Tower on Left & Atmospheric Perfume Backdrop */}
       <div
         dir="ltr"
-        className="absolute inset-y-0 left-0 w-[62%] sm:w-[50%] lg:w-[44%] pointer-events-none z-10 overflow-hidden"
+        className="absolute inset-0 w-full h-full pointer-events-none z-10 overflow-hidden"
         style={{
           WebkitMaskImage:
-            'radial-gradient(ellipse 92% 84% at 24% 48%, rgba(0,0,0,1) 18%, rgba(0,0,0,0.72) 52%, rgba(0,0,0,0) 92%)',
+            'radial-gradient(ellipse 96% 90% at 36% 50%, rgba(0,0,0,1) 45%, rgba(0,0,0,0.8) 75%, rgba(0,0,0,0) 100%)',
           maskImage:
-            'radial-gradient(ellipse 92% 84% at 24% 48%, rgba(0,0,0,1) 18%, rgba(0,0,0,0.72) 52%, rgba(0,0,0,0) 92%)'
+            'radial-gradient(ellipse 96% 90% at 36% 50%, rgba(0,0,0,1) 45%, rgba(0,0,0,0.8) 75%, rgba(0,0,0,0) 100%)'
         }}
       >
         <img
           src="/editorial/eiffel-paris-flipped.jpg"
-          alt="Paris Eiffel Tower Night"
+          alt="Paris Eiffel Tower Night Atmosphere"
           draggable={false}
-          className="w-full h-full object-cover object-center opacity-75 mix-blend-screen scale-105"
+          className="w-full h-full object-cover object-[15%_center] sm:object-[18%_center] opacity-80 mix-blend-screen scale-100 select-none"
         />
         {/* Soft Perfume-Colored Atmospheric Mist Bridging Eiffel Tower & Bottles */}
         <motion.div
           animate={{ backgroundColor: activePerfume.glow }}
           transition={{ duration: 0.9 }}
-          className="absolute inset-y-1/4 right-0 w-2/3 opacity-25 blur-[90px] rounded-full mix-blend-screen"
+          className="absolute inset-y-1/4 left-1/4 w-1/2 opacity-25 blur-[90px] rounded-full mix-blend-screen"
         />
       </div>
 
