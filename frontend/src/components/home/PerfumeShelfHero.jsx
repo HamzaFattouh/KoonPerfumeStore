@@ -269,6 +269,31 @@ const PerfumeShelfHero = ({ products = [] }) => {
       onMouseEnter={() => setIsPaused(true)}
       onMouseLeave={() => setIsPaused(false)}
     >
+      {/* Horizontally Flipped Nighttime Paris Eiffel Tower on the LEFT, blended with Smoke & Perfumes */}
+      <div
+        dir="ltr"
+        className="absolute inset-y-0 left-0 w-[62%] sm:w-[50%] lg:w-[44%] pointer-events-none z-10 overflow-hidden"
+        style={{
+          WebkitMaskImage:
+            'radial-gradient(ellipse 92% 84% at 24% 48%, rgba(0,0,0,1) 18%, rgba(0,0,0,0.72) 52%, rgba(0,0,0,0) 92%)',
+          maskImage:
+            'radial-gradient(ellipse 92% 84% at 24% 48%, rgba(0,0,0,1) 18%, rgba(0,0,0,0.72) 52%, rgba(0,0,0,0) 92%)'
+        }}
+      >
+        <img
+          src="/editorial/eiffel-paris-flipped.jpg"
+          alt="Paris Eiffel Tower Night"
+          draggable={false}
+          className="w-full h-full object-cover object-center opacity-75 mix-blend-screen scale-105"
+        />
+        {/* Soft Perfume-Colored Atmospheric Mist Bridging Eiffel Tower & Bottles */}
+        <motion.div
+          animate={{ backgroundColor: activePerfume.glow }}
+          transition={{ duration: 0.9 }}
+          className="absolute inset-y-1/4 right-0 w-2/3 opacity-25 blur-[90px] rounded-full mix-blend-screen"
+        />
+      </div>
+
       {/* Dynamic Dual-Tone Ambient Studio Lighting matching active bottle (Not Overexposed) */}
       <div className="absolute inset-0 pointer-events-none flex items-center justify-center overflow-hidden">
         <motion.div
@@ -369,33 +394,13 @@ const PerfumeShelfHero = ({ products = [] }) => {
               </AnimatePresence>
             </div>
 
-            {/* 1. Background Smoke Layer (Behind Eiffel Tower & Bottles) */}
-            <div className="absolute -bottom-4 left-1/2 -translate-x-[58%] pointer-events-none z-10 flex items-center justify-center">
+            {/* Subtle Volumetric Perfume-Colored Smoke Effect Intertwined with Eiffel Tower & Bottles */}
+            <div className="absolute -bottom-4 left-1/2 -translate-x-[58%] pointer-events-none z-15 flex items-center justify-center">
               <PerfumeSmokeCanvas targetRgb={activePerfume.smokeRgb} />
             </div>
 
-            {/* 2. Standalone Transparent Golden Eiffel Tower on the LEFT (No Background) */}
-            <div className="absolute bottom-1 left-[1%] sm:left-[6%] lg:left-[10%] pointer-events-none z-15 flex items-end justify-center">
-              {/* Warm golden & perfume-tinted aura behind tower */}
-              <motion.div
-                animate={{ backgroundColor: activePerfume.glow }}
-                transition={{ duration: 0.9 }}
-                className="absolute inset-x-4 top-10 bottom-4 rounded-full blur-3xl opacity-30"
-              />
-              <img
-                src="/editorial/eiffel-tower-cutout.png"
-                alt="Golden Eiffel Tower Cutout"
-                draggable={false}
-                className="relative z-10 h-[250px] sm:h-[325px] lg:h-[365px] w-auto object-contain select-none opacity-90"
-                style={{
-                  filter:
-                    'drop-shadow(0 18px 28px rgba(0,0,0,0.92)) drop-shadow(0 0 22px rgba(197,163,106,0.28)) brightness(0.95) contrast(1.08)'
-                }}
-              />
-            </div>
-
-            {/* 3. Foreground Smoke Veil Intertwining Eiffel Tower & Perfumes */}
-            <div className="absolute -bottom-6 left-1/2 -translate-x-[62%] pointer-events-none z-25 flex items-center justify-center opacity-55 mix-blend-screen">
+            {/* Secondary Delicate Foreground Smoke Veil Bridging Left Eiffel Tower & Perfumes */}
+            <div className="absolute -bottom-6 left-1/2 -translate-x-[65%] pointer-events-none z-35 flex items-center justify-center opacity-45 mix-blend-screen">
               <PerfumeSmokeCanvas targetRgb={activePerfume.smokeRgb} />
             </div>
 
