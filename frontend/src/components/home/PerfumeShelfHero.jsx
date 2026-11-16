@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 import {
@@ -8,9 +8,8 @@ import {
   Pause
 } from 'lucide-react';
 import { useLanguage } from '../../context/LanguageContext';
-import { useTheme } from '../../context/ThemeContext';
 
-// 7 Standalone 8K Transparent 3D Perfume Bottles with Signature Color Palettes & Monograms
+// 7 Exact-Cropped 8K Glossy Transparent Perfume Bottles (No Background)
 const LUXURY_3D_PERFUMES = [
   {
     id: 'naxos',
@@ -19,10 +18,10 @@ const LUXURY_3D_PERFUMES = [
     model: 'NAXOS',
     fullModel: 'XJ 1861 Naxos',
     image: '/perfumes/naxos.png',
-    glow: 'rgba(197, 163, 106, 0.55)',
-    secondaryGlow: 'rgba(217, 119, 6, 0.32)',
-    accentHex: '#C5A36A',
-    lightAccentHex: '#A98750',
+    glow: 'rgba(217, 155, 38, 0.45)',
+    secondaryGlow: 'rgba(180, 110, 20, 0.28)',
+    smokeRgb: [234, 179, 8],
+    accentHex: '#D8BD83',
     descriptionAr: 'توليفة إيطالية فاخرة تجمع بين دفء العسل والتبغ مع نفحات اللافندر والبرغموت الإيطالي، في زجاجة ذهبية متجمدة تعكس الفخامة الملكية.',
     descriptionHe: 'ניחוח איטלקי יוקרתי המשלב דבש חם וטבק עם לבנדר וברגמוט, בבקבוק זהוב מרהיב.'
   },
@@ -33,10 +32,10 @@ const LUXURY_3D_PERFUMES = [
     model: 'SYMPHONY',
     fullModel: 'Symphony',
     image: '/perfumes/symphony.png',
-    glow: 'rgba(192, 132, 252, 0.52)',
-    secondaryGlow: 'rgba(232, 121, 249, 0.28)',
+    glow: 'rgba(168, 85, 247, 0.45)',
+    secondaryGlow: 'rgba(192, 132, 252, 0.26)',
+    smokeRgb: [192, 132, 252],
     accentHex: '#D8B4FE',
-    lightAccentHex: '#7E22CE',
     descriptionAr: 'سيمفونية عطرية ناعمة من الجريب فروت والبرغموت والزنجبيل، تتوجها زجاجة بنفسجية منحوتة بغطاء فضي فني من لويس فويتون.',
     descriptionHe: 'סימפוניה עדינה של אשכולית, ברגמוט וג׳ינג׳ר בבקבוק זכוכית סגול עם פקק כסף פיסולי.'
   },
@@ -47,10 +46,10 @@ const LUXURY_3D_PERFUMES = [
     model: "N°5 L'EAU",
     fullModel: "N°5 L'Eau",
     image: '/perfumes/chanel_no5.png',
-    glow: 'rgba(197, 163, 106, 0.50)',
-    secondaryGlow: 'rgba(245, 158, 11, 0.28)',
+    glow: 'rgba(216, 189, 131, 0.44)',
+    secondaryGlow: 'rgba(198, 161, 91, 0.26)',
+    smokeRgb: [229, 201, 140],
     accentHex: '#E5CFA0',
-    lightAccentHex: '#A98750',
     descriptionAr: 'الأيقونة الباريسية الخالدة بلمسة عصرية مشرقة من الحمضيات والياسمين وخشب الأرز، داخل زجاجة شانيل الكريستالية الكلاسيكية.',
     descriptionHe: 'האייקון הפריזאי הנצחי עם נגיעה רעננה של הדרים, יסמין ועץ ארז בבקבוק הקריסטל הקלאסי.'
   },
@@ -61,10 +60,10 @@ const LUXURY_3D_PERFUMES = [
     model: 'GUIDANCE 46',
     fullModel: 'Guidance 46',
     image: '/perfumes/guidance46.png',
-    glow: 'rgba(244, 63, 94, 0.50)',
-    secondaryGlow: 'rgba(251, 146, 60, 0.30)',
+    glow: 'rgba(225, 29, 72, 0.45)',
+    secondaryGlow: 'rgba(251, 113, 133, 0.28)',
+    smokeRgb: [244, 63, 94],
     accentHex: '#FDA4AF',
-    lightAccentHex: '#BE123C',
     descriptionAr: 'تركيز استثنائي يفيض بنفحات الكمثرى والبندق واللبان والورد الدمشقي، بتدرج مرجاني دافئ وشعار أمواج الذهبي الفاخر.',
     descriptionHe: 'תמצית עוצמתית של אגס, אגוזי לוז, לבונה וורד דמשקאי בבקבוק קורל עם סמל זהב מלכותי.'
   },
@@ -75,10 +74,10 @@ const LUXURY_3D_PERFUMES = [
     model: 'SAUVAGE',
     fullModel: 'Sauvage Eau de Parfum',
     image: '/perfumes/sauvage.png',
-    glow: 'rgba(56, 189, 248, 0.50)',
-    secondaryGlow: 'rgba(37, 99, 235, 0.32)',
+    glow: 'rgba(14, 165, 233, 0.45)',
+    secondaryGlow: 'rgba(37, 99, 235, 0.28)',
+    smokeRgb: [56, 189, 248],
     accentHex: '#7DD3FC',
-    lightAccentHex: '#0369A1',
     descriptionAr: 'حضور قوي وجذاب يمزج انتعاش البرغموت مع الفلفل الحار والفانيليا الداكنة، في زجاجة ديور الزرقاء الليلية المصقولة.',
     descriptionHe: 'נוכחות עוצמתית המשלבת ברגמוט רענן, פלפל ווניל כהה בבקבוק הכחול-לילי המפורסם של דיור.'
   },
@@ -89,10 +88,10 @@ const LUXURY_3D_PERFUMES = [
     model: 'OUD WOOD',
     fullModel: 'Oud Wood',
     image: '/perfumes/oud_wood.png',
-    glow: 'rgba(197, 163, 106, 0.50)',
-    secondaryGlow: 'rgba(120, 113, 108, 0.32)',
-    accentHex: '#C5A36A',
-    lightAccentHex: '#78350F',
+    glow: 'rgba(198, 161, 91, 0.42)',
+    secondaryGlow: 'rgba(120, 113, 108, 0.28)',
+    smokeRgb: [198, 161, 91],
+    accentHex: '#D8BD83',
     descriptionAr: 'أيقونة العود النادر وخشب الورد والعنبر الدافئ، بتوازن مخملي داكن داخل زجاجة توم فورد الهندسية الفخمة.',
     descriptionHe: 'יצירת מופת של עוד נדיר, עץ ורוד וענבר חם בבקבוק האדריכלי הכהה של טום פורד.'
   },
@@ -103,25 +102,119 @@ const LUXURY_3D_PERFUMES = [
     model: 'VALAYA',
     fullModel: 'Valaya',
     image: '/perfumes/valaya.png',
-    glow: 'rgba(226, 232, 240, 0.48)',
-    secondaryGlow: 'rgba(197, 163, 106, 0.30)',
-    accentHex: '#F5F0E8',
-    lightAccentHex: '#A98750',
+    glow: 'rgba(203, 213, 225, 0.38)',
+    secondaryGlow: 'rgba(148, 163, 184, 0.24)',
+    smokeRgb: [203, 213, 225],
+    accentHex: '#E2E8F0',
     descriptionAr: 'عبير نقي وأثيري من الخوخ الأبيض وزهر البرتقال والمسك الحريري، في زجاجة عاجية منحوتة مستوحاة من القصور الفرنسية.',
     descriptionHe: 'ניחוח טהור ואוורירי של אפרסק לבן, פריחת תפוז ומושק משיי בבקבוק שנהב מפוסל.'
   }
 ];
 
+// ============================================================================
+// SUBTLE VOLUMETRIC PERFUME SMOKE CANVAS (تأثير دخان خفيف متأثر بلون العطر)
+// ============================================================================
+const PerfumeSmokeCanvas = ({ targetRgb }) => {
+  const canvasRef = useRef(null);
+  const currentRgbRef = useRef([...targetRgb]);
+  const targetRgbRef = useRef([...targetRgb]);
+
+  useEffect(() => {
+    targetRgbRef.current = [...targetRgb];
+  }, [targetRgb]);
+
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
+    let animId;
+
+    const width = (canvas.width = 460);
+    const height = (canvas.height = 360);
+
+    // 14 delicate rising & curling smoke wisps around the center bottle
+    const wisps = Array.from({ length: 14 }, (_, i) => ({
+      x: width * 0.5 + (Math.random() - 0.5) * 140,
+      y: height * 0.85 - (i / 14) * height * 0.75,
+      baseX: width * 0.5 + (Math.random() - 0.5) * 110,
+      radius: 42 + (i % 4) * 18,
+      vy: 0.28 + (i % 5) * 0.08,
+      swayAmp: 18 + (i % 4) * 9,
+      swayFreq: 0.008 + (i % 3) * 0.004,
+      phase: i * 1.15,
+      maxAlpha: 0.085 + (i % 3) * 0.025
+    }));
+
+    let tick = 0;
+
+    const render = () => {
+      tick++;
+      ctx.clearRect(0, 0, width, height);
+
+      // Smoothly interpolate smoke RGB toward active perfume color
+      const cur = currentRgbRef.current;
+      const tgt = targetRgbRef.current;
+      cur[0] += (tgt[0] - cur[0]) * 0.05;
+      cur[1] += (tgt[1] - cur[1]) * 0.05;
+      cur[2] += (tgt[2] - cur[2]) * 0.05;
+
+      const r = Math.round(cur[0]);
+      const g = Math.round(cur[1]);
+      const b = Math.round(cur[2]);
+
+      for (let i = 0; i < wisps.length; i++) {
+        const w = wisps[i];
+        w.y -= w.vy;
+        if (w.y < 25) {
+          w.y = height * 0.88;
+          w.baseX = width * 0.5 + (Math.random() - 0.5) * 115;
+        }
+
+        // Normalized vertical life (0 at bottom -> 1 at top)
+        const life = 1 - (w.y - 25) / (height * 0.88 - 25);
+        const fade = life < 0.25 ? life / 0.25 : Math.max(0, 1 - (life - 0.25) / 0.75);
+        const alpha = w.maxAlpha * fade;
+
+        const curX = w.baseX + Math.sin(tick * w.swayFreq + w.phase) * w.swayAmp;
+        const curRadius = w.radius * (0.85 + life * 0.55);
+
+        const grad = ctx.createRadialGradient(curX, w.y, 2, curX, w.y, curRadius);
+        grad.addColorStop(0, `rgba(${r}, ${g}, ${b}, ${alpha})`);
+        grad.addColorStop(0.45, `rgba(${r}, ${g}, ${b}, ${alpha * 0.48})`);
+        grad.addColorStop(1, `rgba(${r}, ${g}, ${b}, 0)`);
+
+        ctx.fillStyle = grad;
+        ctx.beginPath();
+        ctx.arc(curX, w.y, curRadius, 0, Math.PI * 2);
+        ctx.fill();
+      }
+
+      if (!document.hidden) {
+        animId = requestAnimationFrame(render);
+      }
+    };
+
+    animId = requestAnimationFrame(render);
+    return () => cancelAnimationFrame(animId);
+  }, []);
+
+  return (
+    <canvas
+      ref={canvasRef}
+      className="w-[340px] sm:w-[460px] h-[270px] sm:h-[340px] pointer-events-none select-none"
+    />
+  );
+};
+
 const PerfumeShelfHero = ({ products = [] }) => {
   const navigate = useNavigate();
   const { language } = useLanguage();
-  const { isDark } = useTheme();
 
   const [activeIndex, setActiveIndex] = useState(0);
   const [isPaused, setIsPaused] = useState(false);
   const [slotSpacing, setSlotSpacing] = useState(285);
 
-  // Responsive horizontal spacing for standalone 3D bottles on the shelf
+  // Responsive horizontal spacing for standalone 3D bottles
   useEffect(() => {
     const updateSpacing = () => {
       if (window.innerWidth < 640) {
@@ -147,7 +240,7 @@ const PerfumeShelfHero = ({ products = [] }) => {
     setActiveIndex((prev) => (prev - 1 + totalItems) % totalItems);
   }, [totalItems]);
 
-  // Auto-advance spotlight from perfume to perfume along the shelf
+  // Auto-advance spotlight from perfume to perfume
   useEffect(() => {
     if (isPaused) return;
     const timer = setInterval(() => {
@@ -166,35 +259,30 @@ const PerfumeShelfHero = ({ products = [] }) => {
   };
 
   const activePerfume = LUXURY_3D_PERFUMES[activeIndex];
-  const activeAccent = isDark ? activePerfume.accentHex : activePerfume.lightAccentHex;
   const linkedProduct = products[activeIndex % (products.length || 1)] || null;
 
   return (
     <section
-      className="relative w-full min-h-[88dvh] flex flex-col justify-center pt-28 sm:pt-32 pb-12 overflow-hidden select-none transition-colors duration-500"
+      className="relative w-full min-h-[88dvh] bg-[#0B0A09] text-[#F5F0E8] flex flex-col justify-center pt-28 sm:pt-32 pb-12 overflow-hidden select-none"
       onMouseEnter={() => setIsPaused(true)}
       onMouseLeave={() => setIsPaused(false)}
     >
-      {/* Dynamic Dual-Tone 8K Ambient Studio Lighting matching active bottle & theme */}
+      {/* Dynamic Dual-Tone Ambient Studio Lighting matching active bottle (Not Overexposed) */}
       <div className="absolute inset-0 pointer-events-none flex items-center justify-center overflow-hidden">
         <motion.div
           animate={{ backgroundColor: activePerfume.glow }}
           transition={{ duration: 0.9 }}
-          className={`w-[420px] sm:w-[740px] h-[480px] blur-[140px] rounded-full -mt-12 ${
-            isDark ? 'opacity-30' : 'opacity-20'
-          }`}
+          className="w-[380px] sm:w-[680px] h-[440px] opacity-22 blur-[140px] rounded-full -mt-12"
         />
         <motion.div
           animate={{ backgroundColor: activePerfume.secondaryGlow }}
           transition={{ duration: 0.9 }}
-          className={`absolute w-[300px] sm:w-[520px] h-[320px] blur-[110px] rounded-full mt-20 ${
-            isDark ? 'opacity-25' : 'opacity-15'
-          }`}
+          className="absolute w-[280px] sm:w-[480px] h-[300px] opacity-18 blur-[110px] rounded-full mt-20"
         />
       </div>
 
       {/* ========================================================================= */}
-      {/* 3D LUXURY PERFUME SHELF STAGE (رف الرندرات ثلاثية الأبعاد)             */}
+      {/* 3D LUXURY PERFUME SHOWCASE STAGE (بدون رف سفلي + دخان متأثر بلون العطر)    */}
       {/* ========================================================================= */}
       <div className="relative z-20 w-full max-w-7xl mx-auto px-2 sm:px-6 my-2">
         <div className="relative">
@@ -203,11 +291,7 @@ const PerfumeShelfHero = ({ products = [] }) => {
             type="button"
             onClick={language === 'ar' ? nextPerfume : prevPerfume}
             aria-label="العطر السابق"
-            className={`absolute left-1 sm:left-4 top-1/2 -translate-y-1/2 z-40 w-10 h-10 sm:w-12 sm:h-12 rounded-full border flex items-center justify-center backdrop-blur-md transition-all shadow-xl cursor-pointer active:scale-90 ${
-              isDark
-                ? 'bg-[#1D1D1D]/90 hover:bg-[#C5A36A] text-[#F5F0E8] hover:text-[#111111] border-[#C5A36A]/35'
-                : 'bg-[#FFFFFF]/90 hover:bg-[#A98750] text-[#29231D] hover:text-[#FFFFFF] border-[#A98750]/40'
-            }`}
+            className="absolute left-1 sm:left-4 top-1/2 -translate-y-1/2 z-40 w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-[#151310]/90 hover:bg-[#C5A36A] text-[#F5F0E8] hover:text-[#0B0A09] border border-[#C5A36A]/35 flex items-center justify-center backdrop-blur-md transition-all shadow-xl cursor-pointer active:scale-90"
           >
             <ChevronLeft className="w-5 h-5 sm:w-6 sm:h-6" />
           </button>
@@ -216,11 +300,7 @@ const PerfumeShelfHero = ({ products = [] }) => {
             type="button"
             onClick={language === 'ar' ? prevPerfume : nextPerfume}
             aria-label="العطر التالي"
-            className={`absolute right-1 sm:right-4 top-1/2 -translate-y-1/2 z-40 w-10 h-10 sm:w-12 sm:h-12 rounded-full border flex items-center justify-center backdrop-blur-md transition-all shadow-xl cursor-pointer active:scale-90 ${
-              isDark
-                ? 'bg-[#1D1D1D]/90 hover:bg-[#C5A36A] text-[#F5F0E8] hover:text-[#111111] border-[#C5A36A]/35'
-                : 'bg-[#FFFFFF]/90 hover:bg-[#A98750] text-[#29231D] hover:text-[#FFFFFF] border-[#A98750]/40'
-            }`}
+            className="absolute right-1 sm:right-4 top-1/2 -translate-y-1/2 z-40 w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-[#151310]/90 hover:bg-[#C5A36A] text-[#F5F0E8] hover:text-[#0B0A09] border border-[#C5A36A]/35 flex items-center justify-center backdrop-blur-md transition-all shadow-xl cursor-pointer active:scale-90"
           >
             <ChevronRight className="w-5 h-5 sm:w-6 sm:h-6" />
           </button>
@@ -228,7 +308,7 @@ const PerfumeShelfHero = ({ products = [] }) => {
           {/* 3D Perspective Coordinate Stage */}
           <motion.div
             dir="ltr"
-            className="relative h-[235px] sm:h-[285px] lg:h-[315px] w-full flex items-end justify-center overflow-visible"
+            className="relative h-[240px] sm:h-[290px] lg:h-[320px] w-full flex items-end justify-center overflow-visible"
             style={{ perspective: 1300 }}
             drag="x"
             dragConstraints={{ left: 0, right: 0 }}
@@ -242,7 +322,7 @@ const PerfumeShelfHero = ({ products = [] }) => {
             <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none z-0 overflow-hidden pb-6 -translate-x-10 sm:-translate-x-16">
               <AnimatePresence mode="wait">
                 <motion.div
-                  key={`bg-${activePerfume.id}-${isDark ? 'dark' : 'light'}`}
+                  key={`bg-${activePerfume.id}`}
                   initial={{ opacity: 0, scale: 0.92, y: 10 }}
                   animate={{ opacity: 1, scale: 1, y: 0 }}
                   exit={{ opacity: 0, scale: 1.06, y: -10 }}
@@ -251,11 +331,11 @@ const PerfumeShelfHero = ({ products = [] }) => {
                 >
                   {/* Luxury House Monogram Crest */}
                   <div
-                    className="w-16 h-16 sm:w-22 sm:h-22 rounded-full flex items-center justify-center border-2 mb-2.5 backdrop-blur-sm"
+                    className="w-16 h-16 sm:w-20 sm:h-20 rounded-full flex items-center justify-center border-2 mb-2.5 backdrop-blur-sm"
                     style={{
-                      borderColor: activeAccent,
-                      color: activeAccent,
-                      opacity: isDark ? 0.55 : 0.65,
+                      borderColor: activePerfume.accentHex,
+                      color: activePerfume.accentHex,
+                      opacity: 0.55,
                       boxShadow: `0 0 36px ${activePerfume.glow}`
                     }}
                   >
@@ -267,7 +347,7 @@ const PerfumeShelfHero = ({ products = [] }) => {
                   {/* Giant Background Brand Wordmark */}
                   <span
                     className="font-serif uppercase tracking-[0.35em] text-xs sm:text-sm font-bold mb-1"
-                    style={{ color: activeAccent, opacity: isDark ? 0.7 : 0.8 }}
+                    style={{ color: activePerfume.accentHex, opacity: 0.7 }}
                   >
                     {activePerfume.brand}
                   </span>
@@ -276,9 +356,9 @@ const PerfumeShelfHero = ({ products = [] }) => {
                   <span
                     className="font-serif font-black uppercase tracking-[0.14em] text-4xl sm:text-6xl lg:text-7xl leading-none whitespace-nowrap"
                     style={{
-                      color: activeAccent,
-                      opacity: isDark ? 0.26 : 0.3,
-                      textShadow: isDark ? `0 0 50px ${activePerfume.glow}` : 'none'
+                      color: activePerfume.accentHex,
+                      opacity: 0.25,
+                      textShadow: `0 0 50px ${activePerfume.glow}`
                     }}
                   >
                     {activePerfume.model}
@@ -287,40 +367,39 @@ const PerfumeShelfHero = ({ products = [] }) => {
               </AnimatePresence>
             </div>
 
-            {/* Volumetric Soft Studio Spotlight (No Rectangular Edge) */}
+            {/* Subtle Volumetric Perfume-Colored Smoke Effect around Center Bottle */}
+            <div className="absolute bottom-0 left-1/2 -translate-x-1/2 translate-x-[24px] pointer-events-none z-20 flex items-center justify-center">
+              <PerfumeSmokeCanvas targetRgb={activePerfume.smokeRgb} />
+            </div>
+
+            {/* Soft Studio Spotlight (Low-glare, non-overexposed) */}
             <motion.div
               animate={{
                 background: `radial-gradient(closest-side, ${activePerfume.glow} 0%, transparent 100%)`
               }}
               transition={{ duration: 0.7 }}
-              className={`absolute top-0 left-1/2 -translate-x-1/2 w-[500px] sm:w-[740px] h-full pointer-events-none z-10 ${
-                isDark ? 'opacity-40' : 'opacity-25'
-              }`}
+              className="absolute top-0 left-1/2 -translate-x-1/2 w-[480px] sm:w-[700px] h-full opacity-30 pointer-events-none z-10"
             />
 
-            {/* 3D Rendered Perfumes Shifting Along the Shelf */}
+            {/* 7 Exact-Cropped 8K Glossy Perfumes Shifting Smoothly */}
             {LUXURY_3D_PERFUMES.map((item, idx) => {
               const diff = getOffset(idx);
               const absDiff = Math.abs(diff);
               const isCenter = diff === 0;
               const isVisible = absDiff <= 2;
 
-              const scale = isCenter ? 1.1 : absDiff === 1 ? 0.72 : absDiff === 2 ? 0.5 : 0.35;
-              const opacity = isCenter ? 1 : absDiff === 1 ? (isDark ? 0.7 : 0.78) : absDiff === 2 ? 0.35 : 0;
+              const scale = isCenter ? 1.08 : absDiff === 1 ? 0.72 : absDiff === 2 ? 0.5 : 0.35;
+              const opacity = isCenter ? 1 : absDiff === 1 ? 0.68 : absDiff === 2 ? 0.32 : 0;
               const yOffset = isCenter ? -6 : absDiff === 1 ? 2 : 10;
               const rotateY = diff * -16;
               const zIndex = isCenter ? 30 : absDiff === 1 ? 20 : absDiff === 2 ? 10 : 0;
 
-              // Theme-aware lighting filter so side bottles never look muddy on Warm Ivory (#F3EBDD)
+              // Glossy, rich, NON-overexposed filter (بالوان لامعة و غير ساطعة)
               const filterStyle = isCenter
-                ? 'brightness(1.05) saturate(1.14) contrast(1.06)'
-                : isDark
-                ? absDiff === 1
-                  ? 'brightness(0.42) saturate(0.45) contrast(1.02)'
-                  : 'brightness(0.24) saturate(0.28)'
+                ? 'brightness(0.95) saturate(1.14) contrast(1.08)'
                 : absDiff === 1
-                ? 'brightness(0.82) saturate(0.65) opacity(0.85)'
-                : 'brightness(0.72) saturate(0.45) opacity(0.65)';
+                ? 'brightness(0.40) saturate(0.45) contrast(1.04)'
+                : 'brightness(0.22) saturate(0.28)';
 
               return (
                 <motion.div
@@ -355,22 +434,13 @@ const PerfumeShelfHero = ({ products = [] }) => {
                   className="absolute bottom-3 left-1/2 -translate-x-1/2 flex flex-col items-center cursor-pointer group origin-bottom"
                   title={`${item.brand} — ${item.fullModel}`}
                 >
-                  {/* Standalone 3D Perfume Bottle (No Background Box / Card) */}
+                  {/* Standalone Exact-Cropped 8K Perfume Bottle */}
                   <motion.div
                     whileHover={isCenter ? { rotateY: 8, rotateX: -4, y: -6, scale: 1.04 } : { y: -4 }}
                     transition={{ type: 'spring', stiffness: 260, damping: 20 }}
                     className="relative flex items-end justify-center"
                     style={{ transformStyle: 'preserve-3d' }}
                   >
-                    {/* Subtle Rim Aura behind center bottle only */}
-                    {isCenter && (
-                      <div
-                        className={`absolute inset-x-4 top-6 bottom-2 rounded-full blur-2xl pointer-events-none transition-colors duration-700 ${
-                          isDark ? 'opacity-55' : 'opacity-35'
-                        }`}
-                        style={{ backgroundColor: item.glow }}
-                      />
-                    )}
                     <img
                       src={item.image}
                       alt={`${item.brand} ${item.fullModel}`}
@@ -378,12 +448,8 @@ const PerfumeShelfHero = ({ products = [] }) => {
                       className="relative z-10 h-[155px] sm:h-[195px] lg:h-[220px] w-auto object-contain select-none transition-all duration-500"
                       style={{
                         filter: isCenter
-                          ? isDark
-                            ? 'drop-shadow(0 18px 22px rgba(0,0,0,0.85)) drop-shadow(0 0 18px rgba(197,163,106,0.22))'
-                            : 'drop-shadow(0 16px 20px rgba(41,35,29,0.28)) drop-shadow(0 0 14px rgba(169,135,80,0.2))'
-                          : isDark
-                          ? 'drop-shadow(0 12px 14px rgba(0,0,0,0.8))'
-                          : 'drop-shadow(0 10px 12px rgba(41,35,29,0.18))'
+                          ? 'drop-shadow(0 18px 24px rgba(0,0,0,0.92))'
+                          : 'drop-shadow(0 12px 16px rgba(0,0,0,0.85))'
                       }}
                     />
                   </motion.div>
@@ -392,16 +458,12 @@ const PerfumeShelfHero = ({ products = [] }) => {
             })}
           </motion.div>
 
-          {/* Shelf Pagination Dots & Auto-Play Control */}
+          {/* Pagination Dots & Auto-Play Control */}
           <div className="flex items-center justify-center gap-3 mt-4">
             <button
               type="button"
               onClick={() => setIsPaused((p) => !p)}
-              className={`p-1.5 rounded-lg border transition cursor-pointer ${
-                isDark
-                  ? 'bg-[#1D1D1D] border-[#2C2C2C] text-[#F5F0E8]/70 hover:text-[#C5A36A]'
-                  : 'bg-[#FFFFFF] border-[#A98750]/30 text-[#29231D]/70 hover:text-[#A98750]'
-              }`}
+              className="p-1.5 rounded-lg bg-[#151310] border border-[#2C2C2C] text-[#F5F0E8]/70 hover:text-[#C5A36A] transition cursor-pointer"
               title={isPaused ? 'تشغيل التنقل التلقائي' : 'إيقاف التنقل التلقائي'}
             >
               {isPaused ? <Play className="w-3.5 h-3.5" /> : <Pause className="w-3.5 h-3.5" />}
@@ -416,12 +478,8 @@ const PerfumeShelfHero = ({ products = [] }) => {
                   aria-label={p.fullModel}
                   className={`h-2 rounded-full transition-all duration-300 cursor-pointer ${
                     idx === activeIndex
-                      ? isDark
-                        ? 'w-7 bg-[#C5A36A] shadow-sm shadow-[#C5A36A]/50'
-                        : 'w-7 bg-[#A98750] shadow-sm shadow-[#A98750]/40'
-                      : isDark
-                      ? 'w-2 bg-[#2C2C2C] hover:bg-[#C5A36A]/50'
-                      : 'w-2 bg-[#D5C7B2] hover:bg-[#A98750]/60'
+                      ? 'w-7 bg-[#C5A36A] shadow-sm shadow-[#C5A36A]/50'
+                      : 'w-2 bg-[#2C2C2C] hover:bg-[#C5A36A]/50'
                   }`}
                 />
               ))}
@@ -441,28 +499,20 @@ const PerfumeShelfHero = ({ products = [] }) => {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -10 }}
             transition={{ duration: 0.35, ease: 'easeOut' }}
-            className={`text-center space-y-2.5 px-6 py-5 rounded-3xl border backdrop-blur-md shadow-xl transition-colors duration-500 ${
-              isDark
-                ? 'bg-[#222222]/85 border-[#C5A36A]/25 text-[#F5F0E8]'
-                : 'bg-[#FFFFFF]/90 border-[#A98750]/30 text-[#29231D]'
-            }`}
+            className="text-center space-y-2.5 px-6 py-5 rounded-3xl bg-[#1A1714]/90 border border-[#C5A36A]/25 text-[#F5F0E8] backdrop-blur-md shadow-xl"
           >
             <span
               className="text-[11px] font-serif tracking-[0.25em] uppercase block font-bold transition-colors duration-500"
-              style={{ color: activeAccent }}
+              style={{ color: activePerfume.accentHex }}
             >
               {activePerfume.brand}
             </span>
 
-            <h2 className="text-2xl sm:text-3xl font-black">
+            <h2 className="text-2xl sm:text-3xl font-black text-[#F5F0E8]">
               {activePerfume.fullModel}
             </h2>
 
-            <p
-              className={`text-sm sm:text-base leading-relaxed max-w-xl mx-auto ${
-                isDark ? 'text-[#F5F0E8]/80' : 'text-[#29231D]/80'
-              }`}
-            >
+            <p className="text-sm sm:text-base text-[#F5F0E8]/80 leading-relaxed max-w-xl mx-auto">
               {language === 'ar' ? activePerfume.descriptionAr : activePerfume.descriptionHe}
             </p>
           </motion.div>

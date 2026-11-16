@@ -201,27 +201,8 @@ const Navbar = () => {
                 )}
               </nav>
 
-              {/* Actions: Theme Toggle, Language Switcher, Search, Wishlist, Cart, Profile */}
+              {/* Actions: Language Switcher, Search, Wishlist, Cart, Profile (Dark Mode Only) */}
               <div className="flex items-center gap-1.5 sm:gap-2.5 shrink-0">
-                {/* 🌗 Dual Theme Toggle (Dark Mode #111111 <-> Light Mode #F3EBDD) */}
-                <button
-                  type="button"
-                  onClick={toggleTheme}
-                  className={`p-2 sm:p-2.5 rounded-xl transition-all duration-300 cursor-pointer relative flex items-center gap-1.5 border ${
-                    isDark
-                      ? 'bg-[#1D1D1D] text-[#C5A36A] border-[#C5A36A]/35 hover:border-[#C5A36A] hover:bg-[#222222]'
-                      : 'bg-[#E9DECC] text-[#29231D] border-[#A98750]/40 hover:border-[#A98750] hover:bg-[#FFFFFF]'
-                  }`}
-                  title={isDark ? t.theme?.light || 'الوضع النهاري' : t.theme?.dark || 'الوضع الداكن'}
-                  aria-label={t.theme?.toggle || 'تبديل المظهر'}
-                >
-                  {isDark ? (
-                    <Sun className="w-4 h-4 sm:w-5 sm:h-5 text-[#C5A36A] transition-transform duration-300 hover:rotate-45" />
-                  ) : (
-                    <Moon className="w-4 h-4 sm:w-5 sm:h-5 text-[#A98750] transition-transform duration-300 hover:-rotate-12" />
-                  )}
-                </button>
-
                 {/* 🌐 Globe Language Switcher with Native Scripts (العربية / עברית) */}
                 <div ref={langDropdownRef} className="relative">
                   <button
@@ -550,25 +531,8 @@ const Navbar = () => {
                 </button>
               </div>
 
-              {/* Theme & Language Controls inside Mobile Drawer */}
+              {/* Language Controls inside Mobile Drawer (Dark Mode Only) */}
               <div className={`py-4 border-b space-y-3 ${isDark ? 'border-[#222222]' : 'border-[#E9DECC]'}`}>
-                {/* Theme Switcher */}
-                <button
-                  type="button"
-                  onClick={toggleTheme}
-                  className={`w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs font-bold border transition cursor-pointer ${
-                    isDark
-                      ? 'bg-[#1D1D1D] border-[#C5A36A]/35 text-[#F5F0E8]'
-                      : 'bg-[#FFFFFF] border-[#A98750]/35 text-[#29231D]'
-                  }`}
-                >
-                  <span>{isDark ? t.theme?.dark || 'الوضع الداكن' : t.theme?.light || 'الوضع النهاري'}</span>
-                  <span className="flex items-center gap-1.5 text-[#C5A36A]">
-                    {isDark ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4 text-[#A98750]" />}
-                    <span className="text-[11px]">{isDark ? t.theme?.darkSub : t.theme?.lightSub}</span>
-                  </span>
-                </button>
-
                 {/* Language Switcher */}
                 <div className="grid grid-cols-2 gap-2">
                   <button
