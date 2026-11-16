@@ -112,9 +112,9 @@ const LUXURY_3D_PERFUMES = [
 ];
 
 // ============================================================================
-// SUBTLE VOLUMETRIC PERFUME SMOKE CANVAS (تأثير دخان خفيف متأثر بلون العطر)
+// SUBTLE VOLUMETRIC PERFUME SMOKE CANVAS (تأثير دخان خفيف متأثر بلون العطر ومتداخل مع برج إيفل والعطور)
 // ============================================================================
-const PerfumeSmokeCanvas = ({ targetRgb }) => {
+const PerfumeSmokeCanvas = ({ targetRgb, className = '' }) => {
   const canvasRef = useRef(null);
   const currentRgbRef = useRef([...targetRgb]);
   const targetRgbRef = useRef([...targetRgb]);
@@ -129,20 +129,21 @@ const PerfumeSmokeCanvas = ({ targetRgb }) => {
     const ctx = canvas.getContext('2d');
     let animId;
 
-    const width = (canvas.width = 460);
-    const height = (canvas.height = 360);
+    const width = (canvas.width = 720);
+    const height = (canvas.height = 380);
 
-    // 14 delicate rising & curling smoke wisps around the center bottle
-    const wisps = Array.from({ length: 14 }, (_, i) => ({
-      x: width * 0.5 + (Math.random() - 0.5) * 140,
-      y: height * 0.85 - (i / 14) * height * 0.75,
-      baseX: width * 0.5 + (Math.random() - 0.5) * 110,
-      radius: 42 + (i % 4) * 18,
-      vy: 0.28 + (i % 5) * 0.08,
-      swayAmp: 18 + (i % 4) * 9,
-      swayFreq: 0.008 + (i % 3) * 0.004,
+    // 20 delicate rising & drifting smoke wisps bridging the Eiffel Tower on the left and the perfumes
+    const wisps = Array.from({ length: 20 }, (_, i) => ({
+      x: width * 0.15 + (i / 20) * (width * 0.72),
+      y: height * 0.88 - ((i * 37) % 100) * 0.01 * height * 0.75,
+      baseX: width * 0.14 + (i / 20) * (width * 0.72),
+      radius: 48 + (i % 5) * 20,
+      vy: 0.24 + (i % 5) * 0.07,
+      vx: 0.12 + (i % 3) * 0.05,
+      swayAmp: 22 + (i % 4) * 10,
+      swayFreq: 0.007 + (i % 3) * 0.003,
       phase: i * 1.15,
-      maxAlpha: 0.085 + (i % 3) * 0.025
+      maxAlpha: 0.08 + (i % 3) * 0.025
     }));
 
     let tick = 0;
@@ -165,18 +166,19 @@ const PerfumeSmokeCanvas = ({ targetRgb }) => {
       for (let i = 0; i < wisps.length; i++) {
         const w = wisps[i];
         w.y -= w.vy;
+        w.baseX += w.vx * 0.35;
+        if (w.baseX > width * 0.86) w.baseX = width * 0.12;
         if (w.y < 25) {
-          w.y = height * 0.88;
-          w.baseX = width * 0.5 + (Math.random() - 0.5) * 115;
+          w.y = height * 0.9;
         }
 
         // Normalized vertical life (0 at bottom -> 1 at top)
-        const life = 1 - (w.y - 25) / (height * 0.88 - 25);
+        const life = 1 - (w.y - 25) / (height * 0.9 - 25);
         const fade = life < 0.25 ? life / 0.25 : Math.max(0, 1 - (life - 0.25) / 0.75);
         const alpha = w.maxAlpha * fade;
 
         const curX = w.baseX + Math.sin(tick * w.swayFreq + w.phase) * w.swayAmp;
-        const curRadius = w.radius * (0.85 + life * 0.55);
+        const curRadius = w.radius * (0.85 + life * 0.6);
 
         const grad = ctx.createRadialGradient(curX, w.y, 2, curX, w.y, curRadius);
         grad.addColorStop(0, `rgba(${r}, ${g}, ${b}, ${alpha})`);
@@ -201,7 +203,7 @@ const PerfumeSmokeCanvas = ({ targetRgb }) => {
   return (
     <canvas
       ref={canvasRef}
-      className="w-[340px] sm:w-[460px] h-[270px] sm:h-[340px] pointer-events-none select-none"
+      className={`w-[480px] sm:w-[720px] h-[280px] sm:h-[380px] pointer-events-none select-none ${className}`}
     />
   );
 };
@@ -267,6 +269,31 @@ const PerfumeShelfHero = ({ products = [] }) => {
       onMouseEnter={() => setIsPaused(true)}
       onMouseLeave={() => setIsPaused(false)}
     >
+      {/* Horizontally Flipped Nighttime Paris Eiffel Tower on the LEFT, blended with Smoke & Perfumes */}
+      <div
+        dir="ltr"
+        className="absolute inset-y-0 left-0 w-[62%] sm:w-[50%] lg:w-[44%] pointer-events-none z-10 overflow-hidden"
+        style={{
+          WebkitMaskImage:
+            'radial-gradient(ellipse 92% 84% at 24% 48%, rgba(0,0,0,1) 18%, rgba(0,0,0,0.72) 52%, rgba(0,0,0,0) 92%)',
+          maskImage:
+            'radial-gradient(ellipse 92% 84% at 24% 48%, rgba(0,0,0,1) 18%, rgba(0,0,0,0.72) 52%, rgba(0,0,0,0) 92%)'
+        }}
+      >
+        <img
+          src="/editorial/eiffel-paris-flipped.jpg"
+          alt="Paris Eiffel Tower Night"
+          draggable={false}
+          className="w-full h-full object-cover object-center opacity-75 mix-blend-screen scale-105"
+        />
+        {/* Soft Perfume-Colored Atmospheric Mist Bridging Eiffel Tower & Bottles */}
+        <motion.div
+          animate={{ backgroundColor: activePerfume.glow }}
+          transition={{ duration: 0.9 }}
+          className="absolute inset-y-1/4 right-0 w-2/3 opacity-25 blur-[90px] rounded-full mix-blend-screen"
+        />
+      </div>
+
       {/* Dynamic Dual-Tone Ambient Studio Lighting matching active bottle (Not Overexposed) */}
       <div className="absolute inset-0 pointer-events-none flex items-center justify-center overflow-hidden">
         <motion.div
@@ -367,8 +394,13 @@ const PerfumeShelfHero = ({ products = [] }) => {
               </AnimatePresence>
             </div>
 
-            {/* Subtle Volumetric Perfume-Colored Smoke Effect around Center Bottle */}
-            <div className="absolute bottom-0 left-1/2 -translate-x-1/2 translate-x-[24px] pointer-events-none z-20 flex items-center justify-center">
+            {/* Subtle Volumetric Perfume-Colored Smoke Effect Intertwined with Eiffel Tower & Bottles */}
+            <div className="absolute -bottom-4 left-1/2 -translate-x-[58%] pointer-events-none z-15 flex items-center justify-center">
+              <PerfumeSmokeCanvas targetRgb={activePerfume.smokeRgb} />
+            </div>
+
+            {/* Secondary Delicate Foreground Smoke Veil Bridging Left Eiffel Tower & Perfumes */}
+            <div className="absolute -bottom-6 left-1/2 -translate-x-[65%] pointer-events-none z-35 flex items-center justify-center opacity-45 mix-blend-screen">
               <PerfumeSmokeCanvas targetRgb={activePerfume.smokeRgb} />
             </div>
 
