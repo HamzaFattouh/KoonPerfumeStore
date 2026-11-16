@@ -20,6 +20,9 @@ export default defineConfig({
   },
   build: {
     outDir: 'dist',
+    target: 'es2020',
+    cssCodeSplit: true,
+    minify: 'esbuild',
     chunkSizeWarningLimit: 1000,
     rollupOptions: {
       output: {
@@ -31,5 +34,8 @@ export default defineConfig({
         }
       }
     }
+  },
+  esbuild: {
+    legalComments: 'none'
   }
 });

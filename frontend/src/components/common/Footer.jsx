@@ -62,10 +62,10 @@ const Footer = () => {
               <ShieldCheck className="w-6 h-6" />
             </div>
             <div>
-              <h4 className={`text-sm font-bold ${isDark ? 'text-[#F5F0E8]' : 'text-[#29231D]'}`}>
+              <p className={`text-sm font-bold ${isDark ? 'text-[#FAF7F2]' : 'text-[#29231D]'}`}>
                 {language === 'ar' ? 'عطور أصلية 100%' : '100% בשמים מקוריים'}
-              </h4>
-              <p className="text-xs opacity-70">
+              </p>
+              <p className="text-xs opacity-90">
                 {language === 'ar' ? 'زيوت عطرية أوروبية نيش فاخرة' : 'שמני בושם אירופיים יוקרתיים'}
               </p>
             </div>
@@ -82,10 +82,10 @@ const Footer = () => {
               <Truck className="w-6 h-6" />
             </div>
             <div>
-              <h4 className={`text-sm font-bold ${isDark ? 'text-[#F5F0E8]' : 'text-[#29231D]'}`}>
+              <p className={`text-sm font-bold ${isDark ? 'text-[#FAF7F2]' : 'text-[#29231D]'}`}>
                 {language === 'ar' ? 'شحن مبرد وسريع' : 'משלוח מבוקר ומהיר'}
-              </h4>
-              <p className="text-xs opacity-70">
+              </p>
+              <p className="text-xs opacity-90">
                 {language === 'ar' ? 'مجاناً للطلبات فوق 350 ر.س' : 'חינם בהזמנות מעל 350 ₪'}
               </p>
             </div>
@@ -102,10 +102,10 @@ const Footer = () => {
               <RotateCcw className="w-6 h-6" />
             </div>
             <div>
-              <h4 className={`text-sm font-bold ${isDark ? 'text-[#F5F0E8]' : 'text-[#29231D]'}`}>
+              <p className={`text-sm font-bold ${isDark ? 'text-[#FAF7F2]' : 'text-[#29231D]'}`}>
                 {language === 'ar' ? 'ضمان ذهبي للاستبدال' : 'אחריות זהב להחלפה'}
-              </h4>
-              <p className="text-xs opacity-70">
+              </p>
+              <p className="text-xs opacity-90">
                 {language === 'ar' ? 'عينات مجانية لتجربة العطر أولاً' : 'דוגמיות חינם להתנסות'}
               </p>
             </div>
@@ -122,10 +122,10 @@ const Footer = () => {
               <Award className="w-6 h-6" />
             </div>
             <div>
-              <h4 className={`text-sm font-bold ${isDark ? 'text-[#F5F0E8]' : 'text-[#29231D]'}`}>
+              <p className={`text-sm font-bold ${isDark ? 'text-[#FAF7F2]' : 'text-[#29231D]'}`}>
                 {language === 'ar' ? 'دار عطور معتمدة' : 'בית בישום רשמי'}
-              </h4>
-              <p className="text-xs opacity-70">KAWN PERFUME</p>
+              </p>
+              <p className="text-xs opacity-90">KAWN PERFUME</p>
             </div>
           </div>
         </div>

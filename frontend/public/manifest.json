@@ -1,0 +1,23 @@
+{
+  "name": "KOON PERFUME | كون بيرفيوم",
+  "short_name": "KOON",
+  "description": "A Universe of Fragrance — دار العطور العالمية الفاخرة",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#0B0A09",
+  "theme_color": "#0B0A09",
+  "icons": [
+    {
+      "src": "/koon-logo.webp",
+      "sizes": "192x192",
+      "type": "image/webp",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/koon-logo.jpg",
+      "sizes": "512x512",
+      "type": "image/jpeg",
+      "purpose": "any maskable"
+    }
+  ]
+}

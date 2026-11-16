@@ -15,7 +15,7 @@ const LUXURY_3D_PERFUMES = [
     monogram: 'XJ',
     model: 'NAXOS',
     fullModel: 'XJ 1861 Naxos',
-    image: '/perfumes/naxos.png',
+    image: '/perfumes/naxos.webp',
     glow: 'rgba(217, 155, 38, 0.45)',
     secondaryGlow: 'rgba(180, 110, 20, 0.28)',
     smokeRgb: [234, 179, 8],
@@ -29,7 +29,7 @@ const LUXURY_3D_PERFUMES = [
     monogram: 'LV',
     model: 'SYMPHONY',
     fullModel: 'Symphony',
-    image: '/perfumes/symphony.png',
+    image: '/perfumes/symphony.webp',
     glow: 'rgba(168, 85, 247, 0.45)',
     secondaryGlow: 'rgba(192, 132, 252, 0.26)',
     smokeRgb: [192, 132, 252],
@@ -43,7 +43,7 @@ const LUXURY_3D_PERFUMES = [
     monogram: 'N°5',
     model: "N°5 L'EAU",
     fullModel: "N°5 L'Eau",
-    image: '/perfumes/chanel_no5.png',
+    image: '/perfumes/chanel_no5.webp',
     glow: 'rgba(216, 189, 131, 0.44)',
     secondaryGlow: 'rgba(198, 161, 91, 0.26)',
     smokeRgb: [229, 201, 140],
@@ -57,7 +57,7 @@ const LUXURY_3D_PERFUMES = [
     monogram: '46',
     model: 'GUIDANCE 46',
     fullModel: 'Guidance 46',
-    image: '/perfumes/guidance46.png',
+    image: '/perfumes/guidance46.webp',
     glow: 'rgba(225, 29, 72, 0.45)',
     secondaryGlow: 'rgba(251, 113, 133, 0.28)',
     smokeRgb: [244, 63, 94],
@@ -71,7 +71,7 @@ const LUXURY_3D_PERFUMES = [
     monogram: 'CD',
     model: 'SAUVAGE',
     fullModel: 'Sauvage Eau de Parfum',
-    image: '/perfumes/sauvage.png',
+    image: '/perfumes/sauvage.webp',
     glow: 'rgba(14, 165, 233, 0.45)',
     secondaryGlow: 'rgba(37, 99, 235, 0.28)',
     smokeRgb: [56, 189, 248],
@@ -85,7 +85,7 @@ const LUXURY_3D_PERFUMES = [
     monogram: 'TF',
     model: 'OUD WOOD',
     fullModel: 'Oud Wood',
-    image: '/perfumes/oud_wood.png',
+    image: '/perfumes/oud_wood.webp',
     glow: 'rgba(198, 161, 91, 0.42)',
     secondaryGlow: 'rgba(120, 113, 108, 0.28)',
     smokeRgb: [198, 161, 91],
@@ -99,7 +99,7 @@ const LUXURY_3D_PERFUMES = [
     monogram: 'PdM',
     model: 'VALAYA',
     fullModel: 'Valaya',
-    image: '/perfumes/valaya.png',
+    image: '/perfumes/valaya.webp',
     glow: 'rgba(203, 213, 225, 0.38)',
     secondaryGlow: 'rgba(148, 163, 184, 0.24)',
     smokeRgb: [203, 213, 225],
@@ -275,9 +275,14 @@ const PerfumeShelfHero = ({ products = [] }) => {
         }}
       >
         <img
-          src="/editorial/eiffel-paris-flipped.jpg"
+          src="/editorial/eiffel-paris-flipped.webp"
           alt="Paris Eiffel Tower Night Atmosphere"
           draggable={false}
+          width="1024"
+          height="707"
+          loading="eager"
+          decoding="async"
+          fetchPriority="high"
           className="w-full h-full object-cover object-[15%_center] sm:object-[18%_center] opacity-80 mix-blend-screen scale-100 select-none"
         />
         {/* Soft Perfume-Colored Atmospheric Mist Bridging Eiffel Tower & Bottles */}
@@ -471,6 +476,11 @@ const PerfumeShelfHero = ({ products = [] }) => {
                       src={item.image}
                       alt={`${item.brand} ${item.fullModel}`}
                       draggable={false}
+                      width="220"
+                      height="220"
+                      loading={isCenter ? 'eager' : 'lazy'}
+                      decoding="async"
+                      fetchPriority={isCenter ? 'high' : 'auto'}
                       className="relative z-10 h-[155px] sm:h-[195px] lg:h-[220px] w-auto object-contain select-none transition-all duration-500"
                       style={{
                         filter: isCenter
@@ -506,11 +516,11 @@ const PerfumeShelfHero = ({ products = [] }) => {
               {activePerfume.brand}
             </span>
 
-            <h2 className="text-2xl sm:text-3xl font-black text-[#F5F0E8]">
+            <h1 className="text-2xl sm:text-3xl font-black text-[#FAF7F2]">
               {activePerfume.fullModel}
-            </h2>
+            </h1>
 
-            <p className="text-sm sm:text-base text-[#F5F0E8]/80 leading-relaxed max-w-xl mx-auto">
+            <p className="text-sm sm:text-base text-[#FAF7F2] leading-relaxed max-w-xl mx-auto">
               {language === 'ar' ? activePerfume.descriptionAr : activePerfume.descriptionHe}
             </p>
           </motion.div>

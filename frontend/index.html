@@ -2,10 +2,18 @@
 <html lang="ar" dir="rtl" data-theme="dark" class="dark">
   <head>
     <meta charset="UTF-8" />
+    <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests" />
     <link rel="icon" type="image/jpeg" href="/koon-logo.jpg" />
+    <link rel="apple-touch-icon" href="/koon-logo.webp" />
+    <link rel="manifest" href="/manifest.json" />
+    <meta name="theme-color" content="#0B0A09" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>كون بيرفيوم | KAWN PERFUME — A Universe of Fragrance</title>
-    <meta name="description" content="KAWN PERFUME | كون بيرفيوم — A Universe of Fragrance. دار العطور العالمية الفاخرة." />
+    <title>كون بيرفيوم | KOON PERFUME — A Universe of Fragrance</title>
+    <meta name="description" content="KOON PERFUME | كون بيرفيوم — A Universe of Fragrance. دار العطور العالمية الفاخرة." />
+
+    <!-- Instant Preload of LCP Hero Perfume Bottle for Sub-second Render -->
+    <link rel="preload" as="image" href="/perfumes/naxos.webp" type="image/webp" fetchpriority="high" />
+    <link rel="preload" as="image" href="/editorial/eiffel-paris-flipped.webp" type="image/webp" fetchpriority="high" />
 
     <!-- Instant Theme & Language Hydration to prevent Flash of Unstyled Content -->
     <script>
@@ -25,13 +33,26 @@
       })();
     </script>
 
-    <!-- Google Fonts: IBM Plex Sans Arabic (Arabic), Heebo (Hebrew), Playfair Display (Luxury Editorial Serif) -->
+    <!-- Google Fonts: Non-blocking async load with print swap to eliminate Render-Blocking Penalty -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
+      rel="preload"
+      as="style"
+      href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;700;800;900&family=IBM+Plex+Sans+Arabic:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,500;0,600;0,700;0,800;1,600&display=swap"
+    />
+    <link
       href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;700;800;900&family=IBM+Plex+Sans+Arabic:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,500;0,600;0,700;0,800;1,600&display=swap"
       rel="stylesheet"
+      media="print"
+      onload="this.media='all'"
     />
+    <noscript>
+      <link
+        href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;700;800;900&family=IBM+Plex+Sans+Arabic:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,500;0,600;0,700;0,800;1,600&display=swap"
+        rel="stylesheet"
+      />
+    </noscript>
   </head>
   <body class="antialiased overflow-x-hidden min-h-screen transition-colors duration-500">
     <div id="root"></div>

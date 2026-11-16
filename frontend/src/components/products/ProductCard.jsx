@@ -96,8 +96,11 @@ const ProductCard = ({ product }) => {
           <img
             src={product.images?.[0]}
             alt={product.name}
-            className="w-full h-full object-contain rounded-xl transition-transform duration-700 group-hover:scale-105"
+            width="300"
+            height="300"
             loading="lazy"
+            decoding="async"
+            className="w-full h-full object-contain rounded-xl transition-transform duration-700 group-hover:scale-105"
           />
         </Link>
       </div>
@@ -108,7 +111,7 @@ const ProductCard = ({ product }) => {
           {/* Category & Olfactory Family */}
           <div className="flex items-center justify-between text-[11px] mb-1.5 font-medium">
             <span className={isDark ? 'text-[#C5A36A]' : 'text-[#A98750]'}>{product.categoryName}</span>
-            <span className={isDark ? 'text-[#F5F0E8]/60' : 'text-[#29231D]/65'}>{product.scentFamily}</span>
+            <span className={isDark ? 'text-[#FAF7F2]/80' : 'text-[#29231D]/80'}>{product.scentFamily}</span>
           </div>
 
           {/* Product Title */}
@@ -124,7 +127,7 @@ const ProductCard = ({ product }) => {
             </h3>
             <p
               className={`text-[11px] font-serif tracking-widest uppercase mb-2 ${
-                isDark ? 'text-[#F5F0E8]/60' : 'text-[#29231D]/60'
+                isDark ? 'text-[#FAF7F2]/75' : 'text-[#29231D]/75'
               }`}
             >
               {product.nameEn}
@@ -139,7 +142,7 @@ const ProductCard = ({ product }) => {
                 {product.rating}
               </span>
             </div>
-            <span className={`text-[11px] ${isDark ? 'text-[#F5F0E8]/55' : 'text-[#29231D]/55'}`}>
+            <span className={`text-[11px] ${isDark ? 'text-[#FAF7F2]/70' : 'text-[#29231D]/70'}`}>
               ({product.reviewsCount})
             </span>
           </div>

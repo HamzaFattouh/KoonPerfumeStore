@@ -1,32 +1,40 @@
 import { useEffect } from 'react';
-import Lenis from 'lenis';
-import gsap from 'gsap';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
-
-gsap.registerPlugin(ScrollTrigger);
 
 const SmoothScrollProvider = ({ children }) => {
   useEffect(() => {
-    const lenis = new Lenis({
-      duration: 1.15,
-      easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
-      smoothWheel: true,
-      wheelMultiplier: 1,
-      touchMultiplier: 1.5,
-    });
+    // Touch/mobile devices natively support hardware momentum scrolling without JS overhead
+    const isTouch = window.matchMedia('(pointer: coarse)').matches || 'ontouchstart' in window;
+    if (isTouch) return;
 
-    lenis.on('scroll', ScrollTrigger.update);
+    let lenis;
+    let updateTicker;
 
-    const updateTicker = (time) => {
-      lenis.raf(time * 1000);
-    };
+    Promise.all([
+      import('lenis'),
+      import('gsap'),
+      import('gsap/ScrollTrigger')
+    ]).then(([{ default: Lenis }, { default: gsap }, { ScrollTrigger }]) => {
+      gsap.registerPlugin(ScrollTrigger);
 
-    gsap.ticker.add(updateTicker);
-    gsap.ticker.lagSmoothing(0);
+      lenis = new Lenis({
+        duration: 1.15,
+        easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+        smoothWheel: true,
+        wheelMultiplier: 1
+      });
+
+      lenis.on('scroll', ScrollTrigger.update);
+
+      updateTicker = (time) => {
+        lenis.raf(time * 1000);
+      };
+
+      gsap.ticker.add(updateTicker);
+      gsap.ticker.lagSmoothing(0);
+    }).catch(() => {});
 
     return () => {
-      gsap.ticker.remove(updateTicker);
-      lenis.destroy();
+      if (lenis) lenis.destroy();
     };
   }, []);
 
