@@ -4,34 +4,47 @@
 
 @layer base {
   /* ========================================================================= */
-  /* OFFICIAL KOON PERFUME DARK LUXURY IDENTITY (DARK MODE ONLY)               */
-  /* Background: Deep black (#0B0A09)                                          */
-  /* Secondary background: Charcoal (#151310)                                  */
-  /* Primary gold: (#C6A15B)                                                   */
-  /* Champagne gold: (#D8BD83)                                                 */
-  /* Text: Warm white (#F5F0E7)                                                */
+  /* OFFICIAL KAWN PERFUME DUAL THEME DESIGN TOKENS                            */
+  /* Dark Mode:  #111111 (BG), #1D1D1D (Sec), #F5F0E8 (Text), #C5A36A (Gold), #222222 (Card) */
+  /* Light Mode: #F3EBDD (BG), #E9DECC (Sec), #29231D (Text), #A98750 (Gold), #FFFFFF (Card) */
   /* ========================================================================= */
   :root,
-  html {
+  html[data-theme="dark"] {
     color-scheme: dark;
-    --koon-bg: #0B0A09;
-    --koon-bg-secondary: #151310;
-    --koon-card: #1A1714;
-    --koon-text: #F5F0E7;
-    --koon-text-muted: #B6AEA2;
-    --koon-gold: #C6A15B;
-    --koon-champagne: #D8BD83;
-    --koon-border: rgba(198, 161, 91, 0.22);
-    --koon-glass: rgba(21, 19, 16, 0.82);
-    --koon-shadow: rgba(0, 0, 0, 0.82);
+    --kawn-bg: #111111;
+    --kawn-bg-secondary: #1D1D1D;
+    --kawn-text: #F5F0E8;
+    --kawn-text-muted: #B8B0A4;
+    --kawn-gold: #C5A36A;
+    --kawn-gold-hover: #D4B67D;
+    --kawn-card: #222222;
+    --kawn-border: rgba(197, 163, 106, 0.22);
+    --kawn-glass: rgba(29, 29, 29, 0.78);
+    --kawn-shadow: rgba(0, 0, 0, 0.75);
+  }
+
+  html[data-theme="light"] {
+    color-scheme: light;
+    --kawn-bg: #F3EBDD;
+    --kawn-bg-secondary: #E9DECC;
+    --kawn-text: #29231D;
+    --kawn-text-muted: #655A4C;
+    --kawn-gold: #A98750;
+    --kawn-gold-hover: #8F6F3C;
+    --kawn-card: #FFFFFF;
+    --kawn-border: rgba(169, 135, 80, 0.28);
+    --kawn-glass: rgba(243, 235, 221, 0.88);
+    --kawn-shadow: rgba(41, 35, 29, 0.12);
   }
 
   html {
     scroll-behavior: smooth;
-    background-color: #0B0A09;
-    color: #F5F0E7;
+    background-color: var(--kawn-bg);
+    color: var(--kawn-text);
+    transition: background-color 0.45s cubic-bezier(0.4, 0, 0.2, 1), color 0.35s ease;
   }
 
+  /* Language-Specific Luxury Typography */
   html[lang="ar"] {
     font-family: 'IBM Plex Sans Arabic', system-ui, -apple-system, sans-serif;
   }
@@ -41,9 +54,10 @@
   }
 
   body {
-    background-color: #0B0A09;
-    color: #F5F0E7;
+    background-color: var(--kawn-bg);
+    color: var(--kawn-text);
     overflow-x: hidden;
+    transition: background-color 0.45s cubic-bezier(0.4, 0, 0.2, 1), color 0.35s ease;
   }
 
   /* Custom luxury scrollbar */
@@ -52,45 +66,140 @@
     height: 7px;
   }
   ::-webkit-scrollbar-track {
-    background: #0B0A09;
+    background: var(--kawn-bg);
   }
   ::-webkit-scrollbar-thumb {
-    background: #C6A15B;
+    background: var(--kawn-gold);
     border-radius: 9999px;
   }
-  ::-webkit-scrollbar-thumb:hover {
-    background: #D8BD83;
-  }
+}
+
+/* ========================================================================= */
+/* SEMANTIC THEME SURFACES & GLASSMORPHISM                                   */
+/* ========================================================================= */
+.kawn-surface-primary {
+  background-color: var(--kawn-bg);
+  color: var(--kawn-text);
+}
+
+.kawn-surface-secondary {
+  background-color: var(--kawn-bg-secondary);
+  color: var(--kawn-text);
+}
+
+.kawn-card {
+  background-color: var(--kawn-card);
+  color: var(--kawn-text);
+  border: 1px solid var(--kawn-border);
+  box-shadow: 0 14px 34px -10px var(--kawn-shadow);
+  transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.kawn-card:hover {
+  border-color: var(--kawn-gold);
+  transform: translateY(-4px);
 }
 
 .glass-panel {
-  background: rgba(21, 19, 16, 0.8);
+  background: var(--kawn-glass);
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
-  border: 1px solid rgba(198, 161, 91, 0.2);
+  border: 1px solid var(--kawn-border);
 }
 
 .glass-card {
-  background: rgba(26, 23, 20, 0.78);
+  background: var(--kawn-card);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
-  border: 1px solid rgba(198, 161, 91, 0.18);
-  box-shadow: 0 14px 34px -8px rgba(0, 0, 0, 0.75);
+  border: 1px solid var(--kawn-border);
+  box-shadow: 0 12px 30px -8px var(--kawn-shadow);
   transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .glass-card:hover {
-  border-color: rgba(216, 189, 131, 0.55);
+  border-color: var(--kawn-gold);
   transform: translateY(-4px);
-  box-shadow: 0 20px 40px -8px rgba(0, 0, 0, 0.85), 0 0 24px -4px rgba(198, 161, 91, 0.2);
+  box-shadow: 0 18px 36px -8px var(--kawn-shadow);
 }
 
 .gold-glow {
-  box-shadow: 0 0 28px -4px rgba(198, 161, 91, 0.35);
+  box-shadow: 0 0 28px -4px rgba(197, 163, 106, 0.35);
 }
 
 .text-gold-gradient {
-  background: linear-gradient(135deg, #D8BD83 0%, #C6A15B 55%, #9E7B3B 100%);
+  background: linear-gradient(135deg, #E5CFA0 0%, #C5A36A 50%, #A98750 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
+}
+
+html[data-theme="light"] .text-gold-gradient {
+  background: linear-gradient(135deg, #8F6F3C 0%, #A98750 50%, #6E5328 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* ========================================================================= */
+/* COMPREHENSIVE LIGHT MODE ADAPTATION FOR ALL STORE PAGES & COMPONENTS      */
+/* Avoids simple inversion; maps dark slate surfaces to Warm Ivory & Beige   */
+/* ========================================================================= */
+html[data-theme="light"] .store-shell {
+  background-color: #F3EBDD;
+  color: #29231D;
+}
+
+html[data-theme="light"] .store-shell .bg-slate-950,
+html[data-theme="light"] .store-shell .bg-slate-950\/95,
+html[data-theme="light"] .store-shell .bg-slate-950\/90,
+html[data-theme="light"] .store-shell .bg-slate-950\/80,
+html[data-theme="light"] .store-shell .bg-slate-950\/70,
+html[data-theme="light"] .store-shell .bg-slate-950\/60,
+html[data-theme="light"] .store-shell .bg-slate-950\/55 {
+  background-color: rgba(243, 235, 221, 0.94) !important;
+}
+
+html[data-theme="light"] .store-shell .bg-slate-900,
+html[data-theme="light"] .store-shell .bg-slate-900\/90,
+html[data-theme="light"] .store-shell .bg-slate-900\/80,
+html[data-theme="light"] .store-shell .bg-slate-900\/70,
+html[data-theme="light"] .store-shell .bg-slate-900\/60,
+html[data-theme="light"] .store-shell .bg-slate-900\/50,
+html[data-theme="light"] .store-shell .bg-slate-900\/40 {
+  background-color: #FFFFFF !important;
+}
+
+html[data-theme="light"] .store-shell .bg-slate-800,
+html[data-theme="light"] .store-shell .bg-slate-800\/80,
+html[data-theme="light"] .store-shell .bg-slate-800\/60,
+html[data-theme="light"] .store-shell .bg-slate-800\/50 {
+  background-color: #E9DECC !important;
+}
+
+html[data-theme="light"] .store-shell .text-white,
+html[data-theme="light"] .store-shell .text-slate-100,
+html[data-theme="light"] .store-shell .text-slate-200 {
+  color: #29231D !important;
+}
+
+html[data-theme="light"] .store-shell .text-slate-300,
+html[data-theme="light"] .store-shell .text-slate-400 {
+  color: #5C5042 !important;
+}
+
+html[data-theme="light"] .store-shell .text-amber-400,
+html[data-theme="light"] .store-shell .text-amber-300 {
+  color: #A98750 !important;
+}
+
+html[data-theme="light"] .store-shell .border-slate-800,
+html[data-theme="light"] .store-shell .border-slate-800\/80,
+html[data-theme="light"] .store-shell .border-slate-800\/60,
+html[data-theme="light"] .store-shell .border-slate-700,
+html[data-theme="light"] .store-shell .border-slate-700\/80 {
+  border-color: rgba(169, 135, 80, 0.26) !important;
+}
+
+/* Preserve white text on dark/gold CTA buttons and dark imagery overlays */
+html[data-theme="light"] .store-shell .keep-white-text,
+html[data-theme="light"] .store-shell .keep-white-text * {
+  color: #F5F0E8 !important;
 }

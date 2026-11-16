@@ -22,6 +22,7 @@ import { TESTIMONIALS, DEFAULT_SOCIAL_CHATS } from '../data/products';
 import ProductCard from '../components/products/ProductCard';
 import { useLanguage } from '../context/LanguageContext';
 import PerfumeShelfHero from '../components/home/PerfumeShelfHero';
+import Cinematic3DBottleShowcase from '../components/home/Cinematic3DBottleShowcase';
 import CinematicCollectionsSection from '../components/home/CinematicCollectionsSection';
 
 const Home = () => {
@@ -112,12 +113,15 @@ const Home = () => {
   return (
     <div className="space-y-20 pb-24 text-slate-100">
       
-      {/* 1. Interactive 3D Luxury Perfume Showroom Hero (GLB Bottle + Nighttime Paris Eiffel Tower) */}
+      {/* 1. Interactive 3D Luxury Perfume Shelf (رف العطور التفاعلي) */}
       <PerfumeShelfHero
         products={products}
         isLoading={isLoadingProducts}
         heroSettings={siteSettings?.hero_section}
       />
+
+      {/* 1.25 React Three Fiber + Drei + Three.js + GSAP ScrollTrigger 3D Bottle Scene */}
+      <Cinematic3DBottleShowcase />
 
       {/* 1.5 Cinematic Luxury Collections & Scroll-Triggered Storytelling */}
       <CinematicCollectionsSection />

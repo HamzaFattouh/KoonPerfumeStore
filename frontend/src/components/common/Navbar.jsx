@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { Link, NavLink, useNavigate, useLocation } from 'react-router-dom';
 import { useCart } from '../../context/CartContext';
 import { useLanguage } from '../../context/LanguageContext';
+import { useTheme } from '../../context/ThemeContext';
 import {
   ShoppingBag,
   Heart,
@@ -11,13 +12,16 @@ import {
   Sparkles,
   User,
   Globe,
-  Check
+  Check,
+  Sun,
+  Moon
 } from 'lucide-react';
 import { getProducts } from '../../services/productService';
 
 const Navbar = () => {
   const { cartCount, wishlist, setIsCartOpen } = useCart();
   const { language, setLanguage, t } = useLanguage();
+  const { isDark, toggleTheme } = useTheme();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
@@ -102,35 +106,61 @@ const Navbar = () => {
 
   return (
     <>
-      {/* Fixed Navbar Container — Official KOON Dark Luxury Palette (#0B0A09, #151310, #C6A15B, #D8BD83, #F5F0E7) */}
-      <div className="fixed top-0 inset-x-0 z-40 transition-all duration-500 ease-in-out shadow-2xl">
+      {/* Fixed Navbar Container */}
+      <div className="fixed top-0 inset-x-0 z-40 transition-all duration-500 ease-in-out shadow-xl">
         {/* Top Announcement Bar */}
-        <div className="bg-[#0B0A09] border-b border-[#C6A15B]/25 text-xs py-2 px-4 text-center text-[#F5F0E7]/90 flex items-center justify-center gap-4">
+        <div
+          className={`border-b text-xs py-2 px-4 text-center flex items-center justify-center gap-4 transition-colors duration-500 ${
+            isDark
+              ? 'bg-[#111111] border-[#C5A36A]/25 text-[#F5F0E8]/90'
+              : 'bg-[#E9DECC] border-[#A98750]/30 text-[#29231D]'
+          }`}
+        >
           <div className="flex items-center gap-2">
-            <Sparkles className="w-3.5 h-3.5 text-[#D8BD83] animate-pulse" />
+            <Sparkles className={`w-3.5 h-3.5 animate-pulse ${isDark ? 'text-[#C5A36A]' : 'text-[#A98750]'}`} />
             <span className="font-medium">{t.announcement}</span>
           </div>
         </div>
 
         {/* Main Navbar Header */}
-        <header className="bg-[#0B0A09]/92 backdrop-blur-md border-b border-[#C6A15B]/20 text-[#F5F0E7] py-2.5 transition-all">
+        <header
+          className={`backdrop-blur-md border-b py-2.5 transition-colors duration-500 ${
+            isDark
+              ? 'bg-[#111111]/95 border-[#C5A36A]/20 text-[#F5F0E8]'
+              : 'bg-[#F3EBDD]/95 border-[#A98750]/25 text-[#29231D]'
+          }`}
+        >
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="flex items-center justify-between gap-3 sm:gap-4">
-              {/* Brand Identity: KOON | كون بيرفيوم */}
+              {/* Brand Identity: KAWN PERFUME | كون بيرفيوم */}
               <Link to="/" className="flex items-center gap-3 group shrink-0">
-                <div className="relative w-10 h-10 sm:w-11 sm:h-11 rounded-full overflow-hidden border-2 border-[#C6A15B]/55 group-hover:border-[#D8BD83] transition-all shadow-md shrink-0">
+                <div
+                  className={`relative w-10 h-10 sm:w-11 sm:h-11 rounded-full overflow-hidden border-2 transition-all shadow-md shrink-0 ${
+                    isDark
+                      ? 'border-[#C5A36A]/50 group-hover:border-[#C5A36A]'
+                      : 'border-[#A98750]/60 group-hover:border-[#A98750]'
+                  }`}
+                >
                   <img
                     src="/koon-logo.jpg"
-                    alt="KOON PERFUME Logo"
+                    alt="KAWN PERFUME Logo"
                     className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                   />
                 </div>
                 <div className="hidden xl:flex flex-col">
-                  <span className="text-lg font-black tracking-wide text-[#F5F0E7] group-hover:text-[#D8BD83] transition leading-tight">
+                  <span
+                    className={`text-lg font-black tracking-wide transition leading-tight ${
+                      isDark ? 'text-[#F5F0E8] group-hover:text-[#C5A36A]' : 'text-[#29231D] group-hover:text-[#A98750]'
+                    }`}
+                  >
                     {t.brandName}
                   </span>
-                  <span className="text-[10px] font-serif uppercase tracking-[0.25em] text-[#C6A15B]">
-                    KOON · {t.brandTagline || 'A Universe of Fragrance.'}
+                  <span
+                    className={`text-[10px] font-serif uppercase tracking-[0.22em] transition ${
+                      isDark ? 'text-[#C5A36A]' : 'text-[#A98750]'
+                    }`}
+                  >
+                    {t.brandSub} · {t.brandTagline || 'A Universe of Fragrance.'}
                   </span>
                 </div>
               </Link>
@@ -143,7 +173,9 @@ const Navbar = () => {
                       key={link.to}
                       to={link.to}
                       onClick={handleCollectionsClick}
-                      className="text-xs xl:text-sm font-medium transition-colors relative py-1 whitespace-nowrap shrink-0 text-[#F5F0E7]/85 hover:text-[#D8BD83]"
+                      className={`text-xs xl:text-sm font-medium transition-colors relative py-1 whitespace-nowrap shrink-0 ${
+                        isDark ? 'text-[#F5F0E8]/85 hover:text-[#C5A36A]' : 'text-[#29231D]/85 hover:text-[#A98750]'
+                      }`}
                     >
                       {link.label}
                     </Link>
@@ -153,7 +185,13 @@ const Navbar = () => {
                       to={link.to}
                       className={({ isActive }) =>
                         `text-xs xl:text-sm font-medium transition-colors relative py-1 whitespace-nowrap shrink-0 ${
-                          isActive ? 'text-[#D8BD83] font-bold' : 'text-[#F5F0E7]/85 hover:text-[#D8BD83]'
+                          isActive
+                            ? isDark
+                              ? 'text-[#C5A36A] font-bold'
+                              : 'text-[#A98750] font-bold'
+                            : isDark
+                            ? 'text-[#F5F0E8]/85 hover:text-[#C5A36A]'
+                            : 'text-[#29231D]/85 hover:text-[#A98750]'
                         }`
                       }
                     >
@@ -163,8 +201,27 @@ const Navbar = () => {
                 )}
               </nav>
 
-              {/* Actions: Language Switcher, Search, Wishlist, Cart, Profile */}
+              {/* Actions: Theme Toggle, Language Switcher, Search, Wishlist, Cart, Profile */}
               <div className="flex items-center gap-1.5 sm:gap-2.5 shrink-0">
+                {/* 🌗 Dual Theme Toggle (Dark Mode #111111 <-> Light Mode #F3EBDD) */}
+                <button
+                  type="button"
+                  onClick={toggleTheme}
+                  className={`p-2 sm:p-2.5 rounded-xl transition-all duration-300 cursor-pointer relative flex items-center gap-1.5 border ${
+                    isDark
+                      ? 'bg-[#1D1D1D] text-[#C5A36A] border-[#C5A36A]/35 hover:border-[#C5A36A] hover:bg-[#222222]'
+                      : 'bg-[#E9DECC] text-[#29231D] border-[#A98750]/40 hover:border-[#A98750] hover:bg-[#FFFFFF]'
+                  }`}
+                  title={isDark ? t.theme?.light || 'الوضع النهاري' : t.theme?.dark || 'الوضع الداكن'}
+                  aria-label={t.theme?.toggle || 'تبديل المظهر'}
+                >
+                  {isDark ? (
+                    <Sun className="w-4 h-4 sm:w-5 sm:h-5 text-[#C5A36A] transition-transform duration-300 hover:rotate-45" />
+                  ) : (
+                    <Moon className="w-4 h-4 sm:w-5 sm:h-5 text-[#A98750] transition-transform duration-300 hover:-rotate-12" />
+                  )}
+                </button>
+
                 {/* 🌐 Globe Language Switcher with Native Scripts (العربية / עברית) */}
                 <div ref={langDropdownRef} className="relative">
                   <button
@@ -172,20 +229,39 @@ const Navbar = () => {
                     onClick={() => setLangDropdownOpen((prev) => !prev)}
                     className={`p-2 sm:p-2.5 rounded-xl transition cursor-pointer relative flex items-center justify-center group border ${
                       langDropdownOpen
-                        ? 'bg-[#151310] text-[#D8BD83] border-[#D8BD83]'
-                        : 'bg-[#151310] text-[#F5F0E7] border-[#C6A15B]/30 hover:border-[#D8BD83]'
+                        ? isDark
+                          ? 'bg-[#222222] text-[#C5A36A] border-[#C5A36A]'
+                          : 'bg-[#FFFFFF] text-[#A98750] border-[#A98750]'
+                        : isDark
+                        ? 'bg-[#1D1D1D] text-[#F5F0E8] border-[#C5A36A]/30 hover:border-[#C5A36A]'
+                        : 'bg-[#E9DECC] text-[#29231D] border-[#A98750]/35 hover:border-[#A98750]'
                     }`}
                     title={language === 'ar' ? 'تغيير اللغة' : 'בחר שפה'}
                     aria-label="تغيير اللغة"
                   >
-                    <Globe className="w-4 h-4 sm:w-5 sm:h-5 text-[#C6A15B] group-hover:scale-110 transition-transform" />
-                    <span className="absolute -bottom-1 -end-1 w-4 h-4 rounded-full bg-[#0B0A09] border border-[#C6A15B] text-[#D8BD83] text-[10px] font-black flex items-center justify-center leading-none shadow-sm">
+                    <Globe
+                      className={`w-4 h-4 sm:w-5 sm:h-5 group-hover:scale-110 transition-transform ${
+                        isDark ? 'text-[#C5A36A]' : 'text-[#A98750]'
+                      }`}
+                    />
+                    <span
+                      className={`absolute -bottom-1 -end-1 w-4 h-4 rounded-full border text-[10px] font-black flex items-center justify-center leading-none shadow-sm ${
+                        isDark
+                          ? 'bg-[#111111] border-[#C5A36A] text-[#C5A36A]'
+                          : 'bg-[#FFFFFF] border-[#A98750] text-[#29231D]'
+                      }`}
+                    >
                       {language === 'ar' ? 'ع' : 'ע'}
                     </span>
                   </button>
 
+                  {/* Native Script Language Dropdown */}
                   {langDropdownOpen && (
-                    <div className="absolute top-full mt-2.5 end-0 z-50 w-44 rounded-2xl p-1.5 shadow-2xl backdrop-blur-xl space-y-1 border bg-[#151310]/95 border-[#C6A15B]/35">
+                    <div
+                      className={`absolute top-full mt-2.5 end-0 z-50 w-44 rounded-2xl p-1.5 shadow-2xl backdrop-blur-xl space-y-1 border ${
+                        isDark ? 'bg-[#1D1D1D]/95 border-[#C5A36A]/30' : 'bg-[#FFFFFF]/95 border-[#A98750]/35'
+                      }`}
+                    >
                       <button
                         type="button"
                         onClick={() => {
@@ -194,17 +270,25 @@ const Navbar = () => {
                         }}
                         className={`w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-xs font-bold transition cursor-pointer ${
                           language === 'ar'
-                            ? 'bg-[#C6A15B]/20 text-[#D8BD83] border border-[#C6A15B]/45'
-                            : 'text-[#F5F0E7] hover:bg-[#1A1714]'
+                            ? isDark
+                              ? 'bg-[#C5A36A]/20 text-[#C5A36A] border border-[#C5A36A]/40'
+                              : 'bg-[#F3EBDD] text-[#29231D] border border-[#A98750]/50'
+                            : isDark
+                            ? 'text-[#F5F0E8] hover:bg-[#222222]'
+                            : 'text-[#29231D] hover:bg-[#F3EBDD]/60'
                         }`}
                       >
                         <div className="flex items-center gap-2.5">
-                          <span className="w-5 h-5 rounded-full bg-[#0B0A09] border border-[#C6A15B]/50 flex items-center justify-center text-[10px] font-black text-[#D8BD83]">
+                          <span
+                            className={`w-5 h-5 rounded-full border flex items-center justify-center text-[10px] font-black ${
+                              isDark ? 'bg-[#111111] border-[#C5A36A]/50 text-[#C5A36A]' : 'bg-[#E9DECC] border-[#A98750]/50 text-[#A98750]'
+                            }`}
+                          >
                             ع
                           </span>
                           <span className="font-arabic">العربية</span>
                         </div>
-                        {language === 'ar' && <Check className="w-4 h-4 text-[#D8BD83]" />}
+                        {language === 'ar' && <Check className="w-4 h-4 text-[#C5A36A]" />}
                       </button>
 
                       <button
@@ -215,17 +299,25 @@ const Navbar = () => {
                         }}
                         className={`w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-xs font-bold transition cursor-pointer ${
                           language === 'he'
-                            ? 'bg-[#C6A15B]/20 text-[#D8BD83] border border-[#C6A15B]/45'
-                            : 'text-[#F5F0E7] hover:bg-[#1A1714]'
+                            ? isDark
+                              ? 'bg-[#C5A36A]/20 text-[#C5A36A] border border-[#C5A36A]/40'
+                              : 'bg-[#F3EBDD] text-[#29231D] border border-[#A98750]/50'
+                            : isDark
+                            ? 'text-[#F5F0E8] hover:bg-[#222222]'
+                            : 'text-[#29231D] hover:bg-[#F3EBDD]/60'
                         }`}
                       >
                         <div className="flex items-center gap-2.5">
-                          <span className="w-5 h-5 rounded-full bg-[#0B0A09] border border-[#C6A15B]/50 flex items-center justify-center text-[10px] font-black text-[#D8BD83]">
+                          <span
+                            className={`w-5 h-5 rounded-full border flex items-center justify-center text-[10px] font-black ${
+                              isDark ? 'bg-[#111111] border-[#C5A36A]/50 text-[#C5A36A]' : 'bg-[#E9DECC] border-[#A98750]/50 text-[#A98750]'
+                            }`}
+                          >
                             ע
                           </span>
                           <span className="font-hebrew">עברית</span>
                         </div>
-                        {language === 'he' && <Check className="w-4 h-4 text-[#D8BD83]" />}
+                        {language === 'he' && <Check className="w-4 h-4 text-[#C5A36A]" />}
                       </button>
                     </div>
                   )}
@@ -234,7 +326,11 @@ const Navbar = () => {
                 {/* Search Toggle */}
                 <button
                   onClick={() => setSearchOpen(true)}
-                  className="p-2 sm:p-2.5 rounded-xl transition cursor-pointer text-[#F5F0E7] hover:text-[#D8BD83] hover:bg-[#151310]"
+                  className={`p-2 sm:p-2.5 rounded-xl transition cursor-pointer ${
+                    isDark
+                      ? 'text-[#F5F0E8] hover:text-[#C5A36A] hover:bg-[#1D1D1D]'
+                      : 'text-[#29231D] hover:text-[#A98750] hover:bg-[#E9DECC]'
+                  }`}
                   title={t.actions.search}
                   aria-label={t.actions.search}
                 >
@@ -244,7 +340,11 @@ const Navbar = () => {
                 {/* Wishlist Link */}
                 <Link
                   to="/wishlist"
-                  className="relative p-2 sm:p-2.5 rounded-xl transition text-[#F5F0E7] hover:text-rose-400 hover:bg-[#151310]"
+                  className={`relative p-2 sm:p-2.5 rounded-xl transition ${
+                    isDark
+                      ? 'text-[#F5F0E8] hover:text-rose-400 hover:bg-[#1D1D1D]'
+                      : 'text-[#29231D] hover:text-rose-600 hover:bg-[#E9DECC]'
+                  }`}
                   title={t.actions.wishlist}
                   aria-label={t.actions.wishlist}
                 >
@@ -259,7 +359,11 @@ const Navbar = () => {
                 {/* Profile Link */}
                 <Link
                   to="/profile"
-                  className="p-2 sm:p-2.5 rounded-xl transition hidden sm:flex text-[#F5F0E7] hover:text-[#D8BD83] hover:bg-[#151310]"
+                  className={`p-2 sm:p-2.5 rounded-xl transition hidden sm:flex ${
+                    isDark
+                      ? 'text-[#F5F0E8] hover:text-[#C5A36A] hover:bg-[#1D1D1D]'
+                      : 'text-[#29231D] hover:text-[#A98750] hover:bg-[#E9DECC]'
+                  }`}
                   title={t.nav.profile}
                   aria-label={t.nav.profile}
                 >
@@ -269,13 +373,21 @@ const Navbar = () => {
                 {/* Cart Drawer Trigger */}
                 <button
                   onClick={() => setIsCartOpen(true)}
-                  className="flex items-center gap-2.5 px-3 sm:px-3.5 py-2 border rounded-xl transition shadow-sm active:scale-95 cursor-pointer bg-[#C6A15B]/15 hover:bg-[#C6A15B]/25 border-[#C6A15B]/45 text-[#D8BD83]"
+                  className={`flex items-center gap-2.5 px-3 sm:px-3.5 py-2 border rounded-xl transition shadow-sm active:scale-95 cursor-pointer ${
+                    isDark
+                      ? 'bg-[#C5A36A]/15 hover:bg-[#C5A36A]/25 border-[#C5A36A]/45 text-[#C5A36A]'
+                      : 'bg-[#A98750] hover:bg-[#8F6F3C] border-[#A98750] text-[#FFFFFF] keep-white-text'
+                  }`}
                   aria-label={t.actions.cartTitle}
                 >
                   <div className="relative">
                     <ShoppingBag className="w-5 h-5" />
                     {cartCount > 0 && (
-                      <span className="absolute -top-2 -end-2 w-4 h-4 text-[10px] font-black rounded-full flex items-center justify-center bg-[#C6A15B] text-[#0B0A09]">
+                      <span
+                        className={`absolute -top-2 -end-2 w-4 h-4 text-[10px] font-black rounded-full flex items-center justify-center ${
+                          isDark ? 'bg-[#C5A36A] text-[#111111]' : 'bg-[#29231D] text-[#F5F0E8]'
+                        }`}
+                      >
                         {cartCount}
                       </span>
                     )}
@@ -286,7 +398,9 @@ const Navbar = () => {
                 {/* Mobile Menu Button */}
                 <button
                   onClick={() => setMobileMenuOpen(true)}
-                  className="lg:hidden p-2 rounded-xl transition cursor-pointer text-[#F5F0E7] hover:bg-[#151310]"
+                  className={`lg:hidden p-2 rounded-xl transition cursor-pointer ${
+                    isDark ? 'text-[#F5F0E8] hover:bg-[#1D1D1D]' : 'text-[#29231D] hover:bg-[#E9DECC]'
+                  }`}
                   aria-label="القائمة"
                 >
                   <Menu className="w-6 h-6" />
@@ -300,15 +414,21 @@ const Navbar = () => {
       {/* Search Overlay Modal */}
       {searchOpen && (
         <div
-          className="fixed inset-0 z-50 bg-black/80 backdrop-blur-md flex items-start justify-center pt-20 px-4"
+          className="fixed inset-0 z-50 bg-black/75 backdrop-blur-md flex items-start justify-center pt-20 px-4"
           onClick={() => setSearchOpen(false)}
         >
           <div
-            className="w-full max-w-2xl bg-[#151310] border border-[#C6A15B]/35 text-[#F5F0E7] rounded-2xl shadow-2xl overflow-hidden"
+            className={`w-full max-w-2xl border rounded-2xl shadow-2xl overflow-hidden ${
+              isDark ? 'bg-[#1D1D1D] border-[#C5A36A]/30 text-[#F5F0E8]' : 'bg-[#FFFFFF] border-[#A98750]/35 text-[#29231D]'
+            }`}
             onClick={(e) => e.stopPropagation()}
           >
-            <div className="p-4 border-b border-[#C6A15B]/20 flex items-center gap-3">
-              <Search className="w-5 h-5 shrink-0 text-[#C6A15B]" />
+            <div
+              className={`p-4 border-b flex items-center gap-3 ${
+                isDark ? 'border-[#2C2C2C]' : 'border-[#E9DECC]'
+              }`}
+            >
+              <Search className={`w-5 h-5 shrink-0 ${isDark ? 'text-[#C5A36A]' : 'text-[#A98750]'}`} />
               <input
                 ref={searchInputRef}
                 type="text"
@@ -316,12 +436,12 @@ const Navbar = () => {
                 onChange={(e) => setSearchQuery(e.target.value)}
                 placeholder={t.actions.searchPlaceholder}
                 aria-label={t.actions.search}
-                className="w-full bg-transparent text-base focus:outline-none text-[#F5F0E7]"
+                className="w-full bg-transparent text-base focus:outline-none"
               />
               {searchQuery && (
                 <button
                   onClick={() => setSearchQuery('')}
-                  className="text-xs px-2 py-1 rounded border border-[#C6A15B]/30 opacity-75 hover:opacity-100"
+                  className="text-xs px-2 py-1 rounded border opacity-75 hover:opacity-100"
                 >
                   {language === 'ar' ? 'مسح' : 'נקה'}
                 </button>
@@ -334,11 +454,11 @@ const Navbar = () => {
             <div className="max-h-96 overflow-y-auto p-4">
               {searchQuery.trim() === '' ? (
                 <div className="text-center py-8 opacity-80 space-y-2">
-                  <Sparkles className="w-8 h-8 mx-auto text-[#C6A15B]" />
+                  <Sparkles className={`w-8 h-8 mx-auto ${isDark ? 'text-[#C5A36A]' : 'text-[#A98750]'}`} />
                   <p className="text-sm">
                     {language === 'ar'
-                      ? 'اكتب كلمة البحث لاستكشاف عطور KOON الفاخرة'
-                      : 'הקלד מילת חיפוש כדי לגלות בשמי KOON יוקרתיים'}
+                      ? 'اكتب كلمة البحث لاستكشاف العطور الفاخرة'
+                      : 'הקלד מילת חיפוש כדי לגלות בשמי יוקרה'}
                   </p>
                 </div>
               ) : searchResults.length === 0 ? (
@@ -355,17 +475,21 @@ const Navbar = () => {
                     <div
                       key={product.id}
                       onClick={() => handleSearchResultClick(product.id)}
-                      className="flex items-center gap-3 p-2.5 rounded-xl border bg-[#1A1714] hover:border-[#D8BD83] border-[#C6A15B]/20 cursor-pointer transition"
+                      className={`flex items-center gap-3 p-2.5 rounded-xl border cursor-pointer transition ${
+                        isDark
+                          ? 'bg-[#222222] hover:border-[#C5A36A]/60 border-white/10'
+                          : 'bg-[#F3EBDD]/60 hover:border-[#A98750] border-[#A98750]/20'
+                      }`}
                     >
                       <img
-                        src={product.images?.[0]}
+                        src={product.images[0]}
                         alt={product.name}
                         className="w-12 h-12 object-cover rounded-lg shrink-0"
                       />
                       <div className="flex-1 min-w-0">
                         <div className="flex items-center justify-between">
                           <h4 className="text-sm font-bold truncate">{product.name}</h4>
-                          <span className="text-sm font-mono font-bold text-[#D8BD83]">
+                          <span className={`text-sm font-mono font-bold ${isDark ? 'text-[#C5A36A]' : 'text-[#A98750]'}`}>
                             {product.price} {t.currency}
                           </span>
                         </div>
@@ -387,21 +511,33 @@ const Navbar = () => {
       {/* Mobile Menu Drawer */}
       {mobileMenuOpen && (
         <div className="fixed inset-0 z-50 lg:hidden">
-          <div className="fixed inset-0 bg-black/80 backdrop-blur-sm" onClick={() => setMobileMenuOpen(false)} />
-          <div className="fixed inset-y-0 start-0 w-full max-w-xs border-e p-6 flex flex-col justify-between shadow-2xl overflow-y-auto bg-[#0B0A09] border-[#C6A15B]/25 text-[#F5F0E7]">
+          <div className="fixed inset-0 bg-black/75 backdrop-blur-sm" onClick={() => setMobileMenuOpen(false)} />
+          <div
+            className={`fixed inset-y-0 start-0 w-full max-w-xs border-e p-6 flex flex-col justify-between shadow-2xl overflow-y-auto ${
+              isDark
+                ? 'bg-[#111111] border-[#C5A36A]/25 text-[#F5F0E8]'
+                : 'bg-[#F3EBDD] border-[#A98750]/30 text-[#29231D]'
+            }`}
+          >
             <div>
               {/* Header */}
-              <div className="flex items-center justify-between pb-5 border-b border-[#151310]">
+              <div
+                className={`flex items-center justify-between pb-5 border-b ${
+                  isDark ? 'border-[#222222]' : 'border-[#E9DECC]'
+                }`}
+              >
                 <div className="flex items-center gap-3">
                   <img
                     src="/koon-logo.jpg"
-                    alt="KOON PERFUME"
-                    className="w-10 h-10 rounded-full object-cover border border-[#C6A15B]/50"
+                    alt="KAWN PERFUME"
+                    className={`w-10 h-10 rounded-full object-cover border ${
+                      isDark ? 'border-[#C5A36A]/50' : 'border-[#A98750]/60'
+                    }`}
                   />
                   <div>
                     <h3 className="font-bold text-base">{t.brandName}</h3>
-                    <span className="text-[10px] font-serif tracking-widest block text-[#C6A15B]">
-                      KOON PERFUME
+                    <span className={`text-[10px] font-serif tracking-widest block ${isDark ? 'text-[#C5A36A]' : 'text-[#A98750]'}`}>
+                      {t.brandSub}
                     </span>
                   </div>
                 </div>
@@ -414,16 +550,38 @@ const Navbar = () => {
                 </button>
               </div>
 
-              {/* Language Switcher inside Mobile Drawer */}
-              <div className="py-4 border-b border-[#151310]">
+              {/* Theme & Language Controls inside Mobile Drawer */}
+              <div className={`py-4 border-b space-y-3 ${isDark ? 'border-[#222222]' : 'border-[#E9DECC]'}`}>
+                {/* Theme Switcher */}
+                <button
+                  type="button"
+                  onClick={toggleTheme}
+                  className={`w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs font-bold border transition cursor-pointer ${
+                    isDark
+                      ? 'bg-[#1D1D1D] border-[#C5A36A]/35 text-[#F5F0E8]'
+                      : 'bg-[#FFFFFF] border-[#A98750]/35 text-[#29231D]'
+                  }`}
+                >
+                  <span>{isDark ? t.theme?.dark || 'الوضع الداكن' : t.theme?.light || 'الوضع النهاري'}</span>
+                  <span className="flex items-center gap-1.5 text-[#C5A36A]">
+                    {isDark ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4 text-[#A98750]" />}
+                    <span className="text-[11px]">{isDark ? t.theme?.darkSub : t.theme?.lightSub}</span>
+                  </span>
+                </button>
+
+                {/* Language Switcher */}
                 <div className="grid grid-cols-2 gap-2">
                   <button
                     type="button"
                     onClick={() => setLanguage('ar')}
                     className={`flex items-center justify-center gap-2 py-2 px-3 rounded-xl text-xs font-bold border transition cursor-pointer ${
                       language === 'ar'
-                        ? 'bg-[#C6A15B] text-[#0B0A09] border-[#D8BD83]'
-                        : 'bg-[#151310] text-[#F5F0E7] border-[#C6A15B]/25'
+                        ? isDark
+                          ? 'bg-[#C5A36A] text-[#111111] border-[#C5A36A]'
+                          : 'bg-[#A98750] text-[#FFFFFF] border-[#A98750] keep-white-text'
+                        : isDark
+                        ? 'bg-[#1D1D1D] text-[#F5F0E8] border-[#2C2C2C]'
+                        : 'bg-[#FFFFFF] text-[#29231D] border-[#E9DECC]'
                     }`}
                   >
                     <span>ع</span>
@@ -435,8 +593,12 @@ const Navbar = () => {
                     onClick={() => setLanguage('he')}
                     className={`flex items-center justify-center gap-2 py-2 px-3 rounded-xl text-xs font-bold border transition cursor-pointer ${
                       language === 'he'
-                        ? 'bg-[#C6A15B] text-[#0B0A09] border-[#D8BD83]'
-                        : 'bg-[#151310] text-[#F5F0E7] border-[#C6A15B]/25'
+                        ? isDark
+                          ? 'bg-[#C5A36A] text-[#111111] border-[#C5A36A]'
+                          : 'bg-[#A98750] text-[#FFFFFF] border-[#A98750] keep-white-text'
+                        : isDark
+                        ? 'bg-[#1D1D1D] text-[#F5F0E8] border-[#2C2C2C]'
+                        : 'bg-[#FFFFFF] text-[#29231D] border-[#E9DECC]'
                     }`}
                   >
                     <span>ע</span>
@@ -453,7 +615,9 @@ const Navbar = () => {
                       key={link.to}
                       to={link.to}
                       onClick={handleCollectionsClick}
-                      className="block px-4 py-2.5 rounded-xl text-sm font-semibold transition hover:bg-[#151310]"
+                      className={`block px-4 py-2.5 rounded-xl text-sm font-semibold transition ${
+                        isDark ? 'hover:bg-[#1D1D1D]' : 'hover:bg-[#E9DECC]'
+                      }`}
                     >
                       {link.label}
                     </Link>
@@ -465,8 +629,12 @@ const Navbar = () => {
                       className={({ isActive }) =>
                         `block px-4 py-2.5 rounded-xl text-sm font-semibold transition ${
                           isActive
-                            ? 'bg-[#C6A15B]/15 text-[#D8BD83] border border-[#C6A15B]/35'
-                            : 'hover:bg-[#151310]'
+                            ? isDark
+                              ? 'bg-[#C5A36A]/15 text-[#C5A36A] border border-[#C5A36A]/35'
+                              : 'bg-[#E9DECC] text-[#A98750] border border-[#A98750]/40'
+                            : isDark
+                            ? 'hover:bg-[#1D1D1D]'
+                            : 'hover:bg-[#E9DECC]'
                         }`
                       }
                     >
@@ -477,14 +645,18 @@ const Navbar = () => {
                 <NavLink
                   to="/profile"
                   onClick={() => setMobileMenuOpen(false)}
-                  className="block px-4 py-2.5 rounded-xl text-sm font-semibold transition hover:bg-[#151310]"
+                  className={`block px-4 py-2.5 rounded-xl text-sm font-semibold transition ${
+                    isDark ? 'hover:bg-[#1D1D1D]' : 'hover:bg-[#E9DECC]'
+                  }`}
                 >
                   {t.nav.profile}
                 </NavLink>
                 <NavLink
                   to="/faq"
                   onClick={() => setMobileMenuOpen(false)}
-                  className="block px-4 py-2.5 rounded-xl text-sm font-semibold transition hover:bg-[#151310]"
+                  className={`block px-4 py-2.5 rounded-xl text-sm font-semibold transition ${
+                    isDark ? 'hover:bg-[#1D1D1D]' : 'hover:bg-[#E9DECC]'
+                  }`}
                 >
                   {t.nav.faq}
                 </NavLink>

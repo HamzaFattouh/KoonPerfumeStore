@@ -142,7 +142,7 @@ const CinematicCollectionsSection = () => {
               isDark ? 'text-[#C5A36A]' : 'text-[#A98750]'
             }`}
           >
-            KOON PERFUME · A UNIVERSE OF FRAGRANCE
+            KAWN PERFUME · A UNIVERSE OF FRAGRANCE
           </span>
           <h3
             className={`text-2xl sm:text-4xl font-black leading-tight ${
@@ -189,7 +189,7 @@ const CinematicCollectionsSection = () => {
         <div className="lg:col-span-5 h-72 sm:h-80 lg:h-full w-full relative overflow-hidden bg-[#111111]">
           <img
             src="/editorial/floating-mist.jpg"
-            alt="KOON PERFUME Luxury Bottle Reveal"
+            alt="KAWN PERFUME Luxury Bottle Reveal"
             loading="lazy"
             className="w-full h-full object-cover"
           />

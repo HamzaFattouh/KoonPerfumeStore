@@ -1,9 +1,16 @@
 {
-  "announcement": "شحن مجاني للطلبات فوق 350 ر.س | كود الخصم KOON10 لخصم 10% | عينة فاخرة مجاناً مع كل طلب",
+  "announcement": "شحن كوني مجاني للطلبات فوق 350 ر.س | كود الخصم KAWN10 لخصم 10% | عينة فاخرة مجاناً مع كل طلب",
   "brandName": "كون بيرفيوم",
-  "brandSub": "KOON PERFUME",
+  "brandSub": "KAWN PERFUME",
   "brandTagline": "A Universe of Fragrance.",
   "brandTaglineLocal": "عالم من العطور الفاخرة",
+  "theme": {
+    "dark": "الوضع الداكن",
+    "light": "الوضع النهاري",
+    "darkSub": "أسود · ذهبي · فخامة",
+    "lightSub": "عاجي · ذهبي · أناقة",
+    "toggle": "تبديل المظهر"
+  },
   "nav": {
     "home": "الرئيسية",
     "shop": "المتجر",
@@ -33,7 +40,7 @@
     "buyNow": "شراء فوري"
   },
   "collectionsSection": {
-    "eyebrow": "إصدارات دار كون الحصرية · KOON ATELIER",
+    "eyebrow": "إصدارات دار كون الحصرية · KAWN ATELIER",
     "title": "مجموعات صُممت كتحف فنية",
     "subtitle": "توليفات عطرية فرنسية وشرقية فائقة التركيز، معتّقة بعناية لتمنحك حضوراً ملكياً يدوم لأيام.",
     "items": [
@@ -170,3 +177,4 @@
   },
   "currency": "ر.س"
 }
+

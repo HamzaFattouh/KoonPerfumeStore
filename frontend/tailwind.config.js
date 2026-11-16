@@ -8,38 +8,38 @@ export default {
   theme: {
     extend: {
       colors: {
-        koon: {
-          bg: '#0B0A09',
-          secondary: '#151310',
-          card: '#1A1714',
-          text: '#F5F0E7',
-          muted: '#B6AEA2',
-          gold: '#C6A15B',
-          champagne: '#D8BD83',
+        kawn: {
+          bg: 'var(--kawn-bg)',
+          secondary: 'var(--kawn-bg-secondary)',
+          card: 'var(--kawn-card)',
+          text: 'var(--kawn-text)',
+          muted: 'var(--kawn-text-muted)',
+          gold: 'var(--kawn-gold)',
+          border: 'var(--kawn-border)',
         },
         cosmic: {
-          950: '#0B0A09',
-          900: '#100E0C',
-          850: '#151310',
-          800: '#1A1714',
-          700: '#26221D',
-          600: '#38322B',
-          border: 'rgba(198, 161, 91, 0.2)',
-          glow: 'rgba(198, 161, 91, 0.16)',
+          950: '#111111',
+          900: '#161616',
+          850: '#1D1D1D',
+          800: '#222222',
+          700: '#2C2C2C',
+          600: '#3D3D3D',
+          border: 'rgba(197, 163, 106, 0.18)',
+          glow: 'rgba(197, 163, 106, 0.15)',
         },
         gold: {
-          300: '#D8BD83',
-          400: '#C6A15B',
-          500: '#C6A15B',
-          600: '#A68341',
-          luxury: '#C6A15B',
-          glow: 'rgba(198, 161, 91, 0.28)',
+          300: '#E5CFA0',
+          400: '#D4B67D',
+          500: '#C5A36A',
+          600: '#A98750',
+          luxury: '#C5A36A',
+          glow: 'rgba(197, 163, 106, 0.28)',
         },
         silver: {
-          100: '#F5F0E7',
-          200: '#E5DDD0',
-          300: '#C8BEB0',
-          400: '#9B9183',
+          100: '#F5F0E8',
+          200: '#E9DECC',
+          300: '#D5C7B2',
+          400: '#9E9283',
         }
       },
       fontFamily: {
@@ -65,9 +65,9 @@ export default {
         }
       },
       backgroundImage: {
-        'cosmic-gradient': 'radial-gradient(ellipse at top, #151310 0%, #0E0D0B 55%, #0B0A09 100%)',
-        'gold-gradient': 'linear-gradient(135deg, #D8BD83 0%, #C6A15B 50%, #9E7B3B 100%)',
-        'silver-gradient': 'linear-gradient(135deg, #F5F0E7 0%, #D8BD83 50%, #C6A15B 100%)',
+        'cosmic-gradient': 'radial-gradient(ellipse at top, #1D1D1D 0%, #151515 55%, #111111 100%)',
+        'gold-gradient': 'linear-gradient(135deg, #E5CFA0 0%, #C5A36A 50%, #A98750 100%)',
+        'silver-gradient': 'linear-gradient(135deg, #FFFFFF 0%, #E9DECC 50%, #A98750 100%)',
         'card-gradient': 'linear-gradient(180deg, rgba(255, 255, 255, 0.04) 0%, rgba(255, 255, 255, 0.01) 100%)',
       }
     },
