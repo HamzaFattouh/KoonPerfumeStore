@@ -374,34 +374,24 @@ const PerfumeShelfHero = ({ products = [] }) => {
               <PerfumeSmokeCanvas targetRgb={activePerfume.smokeRgb} />
             </div>
 
-            {/* 2. Nighttime Paris & Eiffel Tower on the LEFT (Seamlessly Blended with Site Background) */}
-            <div className="absolute bottom-0 left-0 sm:left-[2%] lg:left-[5%] pointer-events-none z-15 flex items-end justify-start">
-              {/* Warm golden & perfume-tinted ambient aura behind the tower */}
+            {/* 2. Standalone Transparent Golden Eiffel Tower on the LEFT (No Background) */}
+            <div className="absolute bottom-1 left-[1%] sm:left-[6%] lg:left-[10%] pointer-events-none z-15 flex items-end justify-center">
+              {/* Warm golden & perfume-tinted aura behind tower */}
               <motion.div
                 animate={{ backgroundColor: activePerfume.glow }}
                 transition={{ duration: 0.9 }}
-                className="absolute inset-x-2 top-12 bottom-6 rounded-full blur-3xl opacity-35"
+                className="absolute inset-x-4 top-10 bottom-4 rounded-full blur-3xl opacity-30"
               />
-              <div
-                className="relative z-10"
+              <img
+                src="/editorial/eiffel-tower-cutout.png"
+                alt="Golden Eiffel Tower Cutout"
+                draggable={false}
+                className="relative z-10 h-[250px] sm:h-[325px] lg:h-[365px] w-auto object-contain select-none opacity-90"
                 style={{
-                  WebkitMaskImage:
-                    'radial-gradient(ellipse 95% 85% at 30% 55%, black 40%, rgba(0,0,0,0.6) 70%, transparent 100%)',
-                  maskImage:
-                    'radial-gradient(ellipse 95% 85% at 30% 55%, black 40%, rgba(0,0,0,0.6) 70%, transparent 100%)'
+                  filter:
+                    'drop-shadow(0 18px 28px rgba(0,0,0,0.92)) drop-shadow(0 0 22px rgba(197,163,106,0.28)) brightness(0.95) contrast(1.08)'
                 }}
-              >
-                <img
-                  src="/editorial/eiffel-paris-blended.png"
-                  alt="Paris Eiffel Tower Night Atmosphere"
-                  draggable={false}
-                  className="h-[270px] sm:h-[340px] lg:h-[390px] w-auto object-contain select-none opacity-95 mix-blend-screen"
-                  style={{
-                    filter:
-                      'brightness(0.98) contrast(1.12) drop-shadow(0 0 25px rgba(216,189,131,0.25))'
-                  }}
-                />
-              </div>
+              />
             </div>
 
             {/* 3. Foreground Smoke Veil Intertwining Eiffel Tower & Perfumes */}
